@@ -1,0 +1,481 @@
+﻿id,text,true_category,predicted_category,true_kind,predicted_kind
+sales-20-0,Nhận thanh toán hàng hóa đã bán 350.000 đồng,sales,other_income,income,expense
+sales-20-1,"Hôm nay nhận thanh toán hàng hóa đã bán, số tiền 350000 VND, chuyển khoản.",sales,other_income,income,expense
+sales-20-2,"Hôm qua nhận thanh toán hàng hóa đã bán hết 350 nghìn, trả tiền mặt.",sales,sales,income,expense
+sales-20-3,"Ghi giúp tôi: nhận thanh toán hàng hóa đã bán, 350k.",sales,sales,income,expense
+sales-20-4,NHẬN THANH TOÁN HÀNG HÓA ĐÃ BÁN. Tổng cộng: 350000 đồng.,sales,salary,income,expense
+sales-20-5,nhan thanh toan hang hoa da ban 350000 dong,sales,other_income,income,expense
+sales-20-6,nhận thanh toán hàng hóa đã bán - 350k,sales,sales,income,expense
+sales-20-7,nhận thanh toán hàng hóa đã bán - 350000 dong,sales,other_income,income,expense
+sales-20-8,"nhận thanh toán hàng hóa đã bán, tổng 350000 đ",sales,sales,income,expense
+sales-20-9,nhận thanh toán hàng hóa đã bán 350.000 vnd,sales,utilities,income,expense
+sales-20-10,nhận thanh toán hàng hóa đã bán 350 nghìn đồng,sales,other_expense,income,expense
+sales-20-11,Nhan thanh toan hang hoa da ban 350000 dong,sales,other_income,income,expense
+sales-21-0,Bán hoa nhận tiền từ khách 1.200.000 đồng,sales,sales,income,income
+sales-21-1,"Hôm nay bán hoa nhận tiền từ khách, số tiền 1200000 VND, chuyển khoản.",sales,sales,income,income
+sales-21-2,"Hôm qua bán hoa nhận tiền từ khách hết 1200 nghìn, trả tiền mặt.",sales,sales,income,income
+sales-21-3,"Ghi giúp tôi: bán hoa nhận tiền từ khách, 1200k.",sales,sales,income,income
+sales-21-4,BÁN HOA NHẬN TIỀN TỪ KHÁCH. Tổng cộng: 1200000 đồng.,sales,sales,income,income
+sales-21-5,ban hoa nhan tien tu khach 1200000 dong,sales,sales,income,income
+sales-21-6,bán hoa nhận tiền từ khách - 1200k,sales,sales,income,income
+sales-21-7,bán hoa nhận tiền từ khách - 1200000 dong,sales,sales,income,income
+sales-21-8,"bán hoa nhận tiền từ khách, tổng 1200000 đ",sales,sales,income,income
+sales-21-9,bán hoa nhận tiền từ khách 1.200.000 vnd,sales,sales,income,income
+sales-21-10,bán hoa nhận tiên từ khách 1200 nghìn đồng,sales,sales,income,income
+sales-21-11,Ban hoa nhan tien tu khach 1200000 dong,sales,sales,income,income
+sales-22-0,Thu doanh số bán cà phê cuối ngày 150.000 đồng,sales,sales,income,income
+sales-22-1,"Hôm nay thu doanh số bán cà phê cuối ngày, số tiền 150000 VND, chuyển khoản.",sales,sales,income,income
+sales-22-2,"Hôm qua thu doanh số bán cà phê cuối ngày hết 150 nghìn, trả tiền mặt.",sales,sales,income,income
+sales-22-3,"Ghi giúp tôi: thu doanh số bán cà phê cuối ngày, 150k.",sales,sales,income,income
+sales-22-4,THU DOANH SỐ BÁN CÀ PHÊ CUỐI NGÀY. Tổng cộng: 150000 đồng.,sales,sales,income,income
+sales-22-5,thu doanh so ban ca phe cuoi ngay 150000 dong,sales,sales,income,income
+sales-22-6,thu doanh số bán cà phê cuối ngày - 150k,sales,sales,income,income
+sales-22-7,thu doanh số bán cà phê cuối ngày - 150000 dong,sales,sales,income,income
+sales-22-8,"thu doanh số bán cà phê cuối ngày, tổng 150000 đ",sales,sales,income,income
+sales-22-9,thu doanh số bán cà phế cuối ngày 150.000 vnd,sales,sales,income,income
+sales-22-10,thu doanh số bán cà phê cuối ngày 150 nghìn đồng,sales,sales,income,income
+sales-22-11,Thu doanh so ban ca phe cuoi ngay 150000 dong,sales,sales,income,income
+sales-23-0,Tiệm bán sách cho khách thanh toán 85.000 đồng,sales,sales,income,income
+sales-23-1,"Hôm nay tiệm bán sách cho khách thanh toán, số tiền 85000 VND, chuyển khoản.",sales,sales,income,income
+sales-23-2,"Hôm qua tiệm bán sách cho khách thanh toán hết 85 nghìn, trả tiền mặt.",sales,sales,income,income
+sales-23-3,"Ghi giúp tôi: tiệm bán sách cho khách thanh toán, 85k.",sales,sales,income,income
+sales-23-4,TIỆM BÁN SÁCH CHO KHÁCH THANH TOÁN. Tổng cộng: 85000 đồng.,sales,sales,income,income
+sales-23-5,tiem ban sach cho khach thanh toan 85000 dong,sales,sales,income,income
+sales-23-6,tiệm bán sách cho khách thanh toán - 85k,sales,sales,income,income
+sales-23-7,tiệm bán sách cho khách thanh toán - 85000 dong,sales,sales,income,income
+sales-23-8,"tiệm bán sách cho khách thanh toán, tổng 85000 đ",sales,sales,income,income
+sales-23-9,tiệm bán sách cho khách thanh toán 85.000 vnd,sales,sales,income,income
+sales-23-10,tiệm bán sách cho khách thanh toán 85 ngàn đồng,sales,sales,income,income
+sales-23-11,Tiem ban sach cho khach thanh toan 85000 dong,sales,sales,income,income
+service-20-0,Thu tiền công lắp camera 350.000 đồng,service,service,income,income
+service-20-1,"Hôm nay thu tiền công lắp camera, số tiền 350000 VND, chuyển khoản.",service,service,income,income
+service-20-2,"Hôm qua thu tiền công lắp camera hết 350 nghìn, trả tiền mặt.",service,service,income,income
+service-20-3,"Ghi giúp tôi: thu tiền công lắp camera, 350k.",service,service,income,income
+service-20-4,THU TIỀN CÔNG LẮP CAMERA. Tổng cộng: 350000 đồng.,service,service,income,income
+service-20-5,thu tien cong lap camera 350000 dong,service,service,income,income
+service-20-6,thu tiền công lắp camera - 350k,service,service,income,income
+service-20-7,thu tiền công lắp camera - 350000 dong,service,service,income,income
+service-20-8,"thu tiền công lắp camera, tổng 350000 đ",service,service,income,income
+service-20-9,thu tiền công lắp camera 350.000 vnd,service,service,income,income
+service-20-10,thu tiên công lắp camera 350 nghìn đồng,service,service,income,income
+service-20-11,Thu tien cong lap camera 350000 dong,service,service,income,income
+service-21-0,Nhận phí dịch vụ chăm sóc cây 2.500.000 đồng,service,service,income,income
+service-21-1,"Hôm nay nhận phí dịch vụ chăm sóc cây, số tiền 2500000 VND, chuyển khoản.",service,service,income,income
+service-21-2,"Hôm qua nhận phí dịch vụ chăm sóc cây hết 2500 nghìn, trả tiền mặt.",service,service,income,income
+service-21-3,"Ghi giúp tôi: nhận phí dịch vụ chăm sóc cây, 2500k.",service,service,income,income
+service-21-4,NHẬN PHÍ DỊCH VỤ CHĂM SÓC CÂY. Tổng cộng: 2500000 đồng.,service,service,income,income
+service-21-5,nhan phi dich vu cham soc cay 2500000 dong,service,service,income,income
+service-21-6,nhận phí dịch vụ chăm sóc cây - 2500k,service,service,income,income
+service-21-7,nhận phí dịch vụ chăm sóc cây - 2500000 dong,service,service,income,income
+service-21-8,"nhận phí dịch vụ chăm sóc cây, tổng 2500000 đ",service,service,income,income
+service-21-9,nhận phí dịch vụ chăm soc cây 2.500.000 vnd,service,service,income,income
+service-21-10,nhận phí dịch vụ chăm sóc cây 2500 nghìn đồng,service,service,income,income
+service-21-11,Nhan phi dich vu cham soc cay 2500000 dong,service,service,income,income
+service-22-0,Khách thanh toán công thêu áo 1.200.000 đồng,service,service,income,income
+service-22-1,"Hôm nay khách thanh toán công thêu áo, số tiền 1200000 VND, chuyển khoản.",service,service,income,income
+service-22-2,"Hôm qua khách thanh toán công thêu áo hết 1200 nghìn, trả tiền mặt.",service,service,income,income
+service-22-3,"Ghi giúp tôi: khách thanh toán công thêu áo, 1200k.",service,service,income,income
+service-22-4,KHÁCH THANH TOÁN CÔNG THÊU ÁO. Tổng cộng: 1200000 đồng.,service,service,income,income
+service-22-5,khach thanh toan cong theu ao 1200000 dong,service,service,income,income
+service-22-6,khách thanh toán công thêu áo - 1200k,service,service,income,income
+service-22-7,khách thanh toán công thêu áo - 1200000 dong,service,service,income,income
+service-22-8,"khách thanh toán công thêu áo, tổng 1200000 đ",service,service,income,income
+service-22-9,khách thanh toán công thêu áo 1.200.000 vnd,service,service,income,income
+service-22-10,khách thanh toán công thêu áo 1200 nghìn đồng,service,service,income,income
+service-22-11,Khach thanh toan cong theu ao 1200000 dong,service,service,income,income
+service-23-0,Thu tiền làm dịch vụ bảo dưỡng xe 2.500.000 đồng,service,service,income,income
+service-23-1,"Hôm nay thu tiền làm dịch vụ bảo dưỡng xe, số tiền 2500000 VND, chuyển khoản.",service,service,income,income
+service-23-2,"Hôm qua thu tiền làm dịch vụ bảo dưỡng xe hết 2500 nghìn, trả tiền mặt.",service,service,income,income
+service-23-3,"Ghi giúp tôi: thu tiền làm dịch vụ bảo dưỡng xe, 2500k.",service,service,income,income
+service-23-4,THU TIỀN LÀM DỊCH VỤ BẢO DƯỠNG XE. Tổng cộng: 2500000 đồng.,service,service,income,income
+service-23-5,thu tien lam dich vu bao duong xe 2500000 dong,service,service,income,income
+service-23-6,thu tiền làm dịch vụ bảo dưỡng xe - 2500k,service,service,income,income
+service-23-7,thu tiền làm dịch vụ bảo dưỡng xe - 2500000 dong,service,service,income,income
+service-23-8,"thu tiền làm dịch vụ bảo dưỡng xe, tổng 2500000 đ",service,service,income,income
+service-23-9,thu tiền làm dịch vu bảo dừỡng xe 2.500.000 vnd,service,service,income,income
+service-23-10,thu tiến làm dịch vụ bảo dưỡng xe 2500 nghìn đồng,service,service,income,income
+service-23-11,Thu tien lam dich vu bao duong xe 2500000 dong,service,service,income,income
+capital-20-0,Nhận vốn góp từ chị gái 350.000 đồng,capital,capital,income,income
+capital-20-1,"Hôm nay nhận vốn góp từ chị gái, số tiền 350000 VND, chuyển khoản.",capital,capital,income,income
+capital-20-2,"Hôm qua nhận vốn góp từ chị gái hết 350 nghìn, trả tiền mặt.",capital,capital,income,income
+capital-20-3,"Ghi giúp tôi: nhận vốn góp từ chị gái, 350k.",capital,capital,income,income
+capital-20-4,NHẬN VỐN GÓP TỪ CHỊ GÁI. Tổng cộng: 350000 đồng.,capital,capital,income,income
+capital-20-5,nhan von gop tu chi gai 350000 dong,capital,capital,income,income
+capital-20-6,nhận vốn góp từ chị gái - 350k,capital,capital,income,income
+capital-20-7,nhận vốn góp từ chị gái - 350000 dong,capital,capital,income,income
+capital-20-8,"nhận vốn góp từ chị gái, tổng 350000 đ",capital,capital,income,income
+capital-20-9,nhận vốn góp từ chị gái 350.000 vnd,capital,capital,income,income
+capital-20-10,nhận vốn góp từ chị gái 350 nghìn đồng,capital,capital,income,income
+capital-20-11,Nhan von gop tu chi gai 350000 dong,capital,capital,income,income
+capital-21-0,Vay thêm tiền để mở rộng tiệm 350.000 đồng,capital,capital,income,income
+capital-21-1,"Hôm nay vay thêm tiền để mở rộng tiệm, số tiền 350000 VND, chuyển khoản.",capital,capital,income,income
+capital-21-2,"Hôm qua vay thêm tiền để mở rộng tiệm hết 350 nghìn, trả tiền mặt.",capital,capital,income,income
+capital-21-3,"Ghi giúp tôi: vay thêm tiền để mở rộng tiệm, 350k.",capital,capital,income,income
+capital-21-4,VAY THÊM TIỀN ĐỂ MỞ RỘNG TIỆM. Tổng cộng: 350000 đồng.,capital,capital,income,income
+capital-21-5,vay them tien de mo rong tiem 350000 dong,capital,capital,income,income
+capital-21-6,vay thêm tiền để mở rộng tiệm - 350k,capital,capital,income,income
+capital-21-7,vay thêm tiền để mở rộng tiệm - 350000 dong,capital,capital,income,income
+capital-21-8,"vay thêm tiền để mở rộng tiệm, tổng 350000 đ",capital,capital,income,income
+capital-21-9,vay thêm tiền để mở rộng tiệm 350.000 vnd,capital,capital,income,income
+capital-21-10,vay thêm tiền để mở rộng tiêm 350 nghìn đồng,capital,capital,income,income
+capital-21-11,Vay them tien de mo rong tiem 350000 dong,capital,capital,income,income
+capital-22-0,Nhận tiền mượn của bố mẹ làm vốn 650.000 đồng,capital,capital,income,income
+capital-22-1,"Hôm nay nhận tiền mượn của bố mẹ làm vốn, số tiền 650000 VND, chuyển khoản.",capital,capital,income,income
+capital-22-2,"Hôm qua nhận tiền mượn của bố mẹ làm vốn hết 650 nghìn, trả tiền mặt.",capital,capital,income,income
+capital-22-3,"Ghi giúp tôi: nhận tiền mượn của bố mẹ làm vốn, 650k.",capital,capital,income,income
+capital-22-4,NHẬN TIỀN MƯỢN CỦA BỐ MẸ LÀM VỐN. Tổng cộng: 650000 đồng.,capital,capital,income,income
+capital-22-5,nhan tien muon cua bo me lam von 650000 dong,capital,capital,income,income
+capital-22-6,nhận tiền mượn của bố mẹ làm vốn - 650k,capital,capital,income,income
+capital-22-7,nhận tiền mượn của bố mẹ làm vốn - 650000 dong,capital,capital,income,income
+capital-22-8,"nhận tiền mượn của bố mẹ làm vốn, tổng 650000 đ",capital,capital,income,income
+capital-22-9,nhận tiền mượn cua bố mẹ làm vốn 650.000 vnd,capital,capital,income,income
+capital-22-10,nhận tiên mượn của bố mẹ làm von 650 nghìn đồng,capital,capital,income,income
+capital-22-11,Nhan tien muon cua bo me lam von 650000 dong,capital,capital,income,income
+capital-23-0,Chủ cửa hàng góp thêm tiền 650.000 đồng,capital,capital,income,income
+capital-23-1,"Hôm nay chủ cửa hàng góp thêm tiền, số tiền 650000 VND, chuyển khoản.",capital,capital,income,income
+capital-23-2,"Hôm qua chủ cửa hàng góp thêm tiền hết 650 nghìn, trả tiền mặt.",capital,capital,income,income
+capital-23-3,"Ghi giúp tôi: chủ cửa hàng góp thêm tiền, 650k.",capital,capital,income,income
+capital-23-4,CHỦ CỬA HÀNG GÓP THÊM TIỀN. Tổng cộng: 650000 đồng.,capital,capital,income,income
+capital-23-5,chu cua hang gop them tien 650000 dong,capital,capital,income,income
+capital-23-6,chủ cửa hàng góp thêm tiền - 650k,capital,capital,income,income
+capital-23-7,chủ cửa hàng góp thêm tiền - 650000 dong,capital,capital,income,income
+capital-23-8,"chủ cửa hàng góp thêm tiền, tổng 650000 đ",capital,capital,income,income
+capital-23-9,chủ cửa hang góp thêm tiền 650.000 vnd,capital,capital,income,income
+capital-23-10,chủ cửa hàng góp thêm tiền 650 nghìn đồng,capital,capital,income,income
+capital-23-11,Chu cua hang gop them tien 650000 dong,capital,capital,income,income
+other_income-20-0,Thu tiền lãi ngân hàng tháng này 2.500.000 đồng,other_income,other_income,income,income
+other_income-20-1,"Hôm nay thu tiền lãi ngân hàng tháng này, số tiền 2500000 VND, chuyển khoản.",other_income,other_income,income,income
+other_income-20-2,"Hôm qua thu tiền lãi ngân hàng tháng này hết 2500 nghìn, trả tiền mặt.",other_income,other_income,income,income
+other_income-20-3,"Ghi giúp tôi: thu tiền lãi ngân hàng tháng này, 2500k.",other_income,other_income,income,income
+other_income-20-4,THU TIỀN LÃI NGÂN HÀNG THÁNG NÀY. Tổng cộng: 2500000 đồng.,other_income,other_income,income,income
+other_income-20-5,thu tien lai ngan hang thang nay 2500000 dong,other_income,other_income,income,income
+other_income-20-6,thu tiền lãi ngân hàng tháng này - 2500k,other_income,other_income,income,income
+other_income-20-7,thu tiền lãi ngân hàng tháng này - 2500000 dong,other_income,other_income,income,income
+other_income-20-8,"thu tiền lãi ngân hàng tháng này, tổng 2500000 đ",other_income,other_income,income,income
+other_income-20-9,thu tiền lãi ngân hàng tháng này 2.500.000 vnd,other_income,other_income,income,income
+other_income-20-10,thu tiền lãi ngân hàn tháng này 2500 nghìng đồng,other_income,other_income,income,income
+other_income-20-11,Thu tien lai ngan hang thang nay 2500000 dong,other_income,other_income,income,income
+other_income-21-0,Hoàn cọc mặt bằng về quỹ 1.200.000 đồng,other_income,other_income,income,income
+other_income-21-1,"Hôm nay hoàn cọc mặt bằng về quỹ, số tiền 1200000 VND, chuyển khoản.",other_income,other_income,income,income
+other_income-21-2,"Hôm qua hoàn cọc mặt bằng về quỹ hết 1200 nghìn, trả tiền mặt.",other_income,other_income,income,income
+other_income-21-3,"Ghi giúp tôi: hoàn cọc mặt bằng về quỹ, 1200k.",other_income,other_income,income,income
+other_income-21-4,HOÀN CỌC MẶT BẰNG VỀ QUỸ. Tổng cộng: 1200000 đồng.,other_income,other_income,income,income
+other_income-21-5,hoan coc mat bang ve quy 1200000 dong,other_income,other_income,income,income
+other_income-21-6,hoàn cọc mặt bằng về quỹ - 1200k,other_income,other_income,income,income
+other_income-21-7,hoàn cọc mặt bằng về quỹ - 1200000 dong,other_income,other_income,income,income
+other_income-21-8,"hoàn cọc mặt bằng về quỹ, tổng 1200000 đ",other_income,other_income,income,income
+other_income-21-9,hoàn cọc mat bằng về quỹ 1.200.000 vnd,other_income,other_income,income,income
+other_income-21-10,hoàn cọc mặt bằng về quỹ 1200 nghìng đồng,other_income,other_income,income,income
+other_income-21-11,Hoan coc mat bang ve quy 1200000 dong,other_income,other_income,income,income
+other_income-22-0,Nhà bán hàng trả lại khoản thanh toán thừa 85.000 đồng,other_income,other_income,income,income
+other_income-22-1,"Hôm nay nhà bán hàng trả lại khoản thanh toán thừa, số tiền 85000 VND, chuyển khoản.",other_income,other_income,income,income
+other_income-22-2,"Hôm qua nhà bán hàng trả lại khoản thanh toán thừa hết 85 nghìn, trả tiền mặt.",other_income,other_income,income,income
+other_income-22-3,"Ghi giúp tôi: nhà bán hàng trả lại khoản thanh toán thừa, 85k.",other_income,other_income,income,income
+other_income-22-4,NHÀ BÁN HÀNG TRẢ LẠI KHOẢN THANH TOÁN THỪA. Tổng cộng: 85000 đồng.,other_income,other_income,income,income
+other_income-22-5,nha ban hang tra lai khoan thanh toan thua 85000 dong,other_income,other_income,income,income
+other_income-22-6,nhà bán hàng trả lại khoản thanh toán thừa - 85k,other_income,other_income,income,income
+other_income-22-7,nhà bán hàng trả lại khoản thanh toán thừa - 85000 dong,other_income,other_income,income,income
+other_income-22-8,"nhà bán hàng trả lại khoản thanh toán thừa, tổng 85000 đ",other_income,other_income,income,income
+other_income-22-9,nhà bán hàng tra lại khoản thanh toán thừa 85.000 vnd,other_income,other_income,income,income
+other_income-22-10,nhà ban hang trả lại khoản thanh toán thừa 85 nghìn đồng,other_income,other_income,income,income
+other_income-22-11,Nha ban hang tra lai khoan thanh toan thua 85000 dong,other_income,other_income,income,income
+other_income-23-0,Nhận tiền bán bao bì phế liệu 85.000 đồng,other_income,other_income,income,income
+other_income-23-1,"Hôm nay nhận tiền bán bao bì phế liệu, số tiền 85000 VND, chuyển khoản.",other_income,other_income,income,income
+other_income-23-2,"Hôm qua nhận tiền bán bao bì phế liệu hết 85 nghìn, trả tiền mặt.",other_income,other_income,income,income
+other_income-23-3,"Ghi giúp tôi: nhận tiền bán bao bì phế liệu, 85k.",other_income,other_income,income,income
+other_income-23-4,NHẬN TIỀN BÁN BAO BÌ PHẾ LIỆU. Tổng cộng: 85000 đồng.,other_income,other_income,income,income
+other_income-23-5,nhan tien ban bao bi phe lieu 85000 dong,other_income,other_income,income,income
+other_income-23-6,nhận tiền bán bao bì phế liệu - 85k,other_income,other_income,income,income
+other_income-23-7,nhận tiền bán bao bì phế liệu - 85000 dong,other_income,other_income,income,income
+other_income-23-8,"nhận tiền bán bao bì phế liệu, tổng 85000 đ",other_income,other_income,income,income
+other_income-23-9,nhận tiền ban bao bi phế liệu 85.000 vnd,other_income,other_income,income,income
+other_income-23-10,nhận tiên ban bao bì phế liệu 85 nghìn đồng,other_income,other_income,income,income
+other_income-23-11,Nhan tien ban bao bi phe lieu 85000 dong,other_income,other_income,income,income
+materials-20-0,Mua hoa tươi để bán 350.000 đồng,materials,materials,expense,expense
+materials-20-1,"Hôm nay mua hoa tươi để bán, số tiền 350000 VND, chuyển khoản.",materials,materials,expense,expense
+materials-20-2,"Hôm qua mua hoa tươi để bán hết 350 nghìn, trả tiền mặt.",materials,materials,expense,expense
+materials-20-3,"Ghi giúp tôi: mua hoa tươi để bán, 350k.",materials,materials,expense,expense
+materials-20-4,MUA HOA TƯƠI ĐỂ BÁN. Tổng cộng: 350000 đồng.,materials,materials,expense,expense
+materials-20-5,mua hoa tuoi de ban 350000 dong,materials,materials,expense,expense
+materials-20-6,mua hoa tươi để bán - 350k,materials,materials,expense,expense
+materials-20-7,mua hoa tươi để bán - 350000 dong,materials,materials,expense,expense
+materials-20-8,"mua hoa tươi để bán, tổng 350000 đ",materials,materials,expense,expense
+materials-20-9,mua hoa tưoii để bán 350.000 vnd,materials,materials,expense,expense
+materials-20-10,múa hoa tươi để bán 350 nghìn đồng,materials,materials,expense,expense
+materials-20-11,Mua hoa tuoi de ban 350000 dong,materials,materials,expense,expense
+materials-21-0,Nhập sách về tiệm 2.500.000 đồng,materials,materials,expense,expense
+materials-21-1,"Hôm nay nhập sách về tiệm, số tiền 2500000 VND, chuyển khoản.",materials,materials,expense,expense
+materials-21-2,"Hôm qua nhập sách về tiệm hết 2500 nghìn, trả tiền mặt.",materials,materials,expense,expense
+materials-21-3,"Ghi giúp tôi: nhập sách về tiệm, 2500k.",materials,materials,expense,expense
+materials-21-4,NHẬP SÁCH VỀ TIỆM. Tổng cộng: 2500000 đồng.,materials,materials,expense,expense
+materials-21-5,nhap sach ve tiem 2500000 dong,materials,materials,expense,expense
+materials-21-6,nhập sách về tiệm - 2500k,materials,materials,expense,expense
+materials-21-7,nhập sách về tiệm - 2500000 dong,materials,materials,expense,expense
+materials-21-8,"nhập sách về tiệm, tổng 2500000 đ",materials,materials,expense,expense
+materials-21-9,nhap sách về tiệm 2.500.000 vnd,materials,materials,expense,expense
+materials-21-10,nhập sách về tiệm 2500 nghìn đồng,materials,materials,expense,expense
+materials-21-11,Nhap sach ve tiem 2500000 dong,materials,materials,expense,expense
+materials-22-0,Trả tiền nguyên liệu bánh ngọt 1.200.000 đồng,materials,materials,expense,expense
+materials-22-1,"Hôm nay trả tiền nguyên liệu bánh ngọt, số tiền 1200000 VND, chuyển khoản.",materials,materials,expense,expense
+materials-22-2,"Hôm qua trả tiền nguyên liệu bánh ngọt hết 1200 nghìn, trả tiền mặt.",materials,materials,expense,expense
+materials-22-3,"Ghi giúp tôi: trả tiền nguyên liệu bánh ngọt, 1200k.",materials,materials,expense,expense
+materials-22-4,TRẢ TIỀN NGUYÊN LIỆU BÁNH NGỌT. Tổng cộng: 1200000 đồng.,materials,materials,expense,expense
+materials-22-5,tra tien nguyen lieu banh ngot 1200000 dong,materials,materials,expense,expense
+materials-22-6,trả tiền nguyên liệu bánh ngọt - 1200k,materials,materials,expense,expense
+materials-22-7,trả tiền nguyên liệu bánh ngọt - 1200000 dong,materials,materials,expense,expense
+materials-22-8,"trả tiền nguyên liệu bánh ngọt, tổng 1200000 đ",materials,materials,expense,expense
+materials-22-9,trả tiền nguyên liệu banh ngot 1.200.000 vnd,materials,materials,expense,expense
+materials-22-10,tra tiền nguyên liệu bánh ngọt 1200 nghìn đồng,materials,materials,expense,expense
+materials-22-11,Tra tien nguyen lieu banh ngot 1200000 dong,materials,materials,expense,expense
+materials-23-0,Mua trà và siro bổ sung kho 650.000 đồng,materials,materials,expense,expense
+materials-23-1,"Hôm nay mua trà và siro bổ sung kho, số tiền 650000 VND, chuyển khoản.",materials,materials,expense,expense
+materials-23-2,"Hôm qua mua trà và siro bổ sung kho hết 650 nghìn, trả tiền mặt.",materials,materials,expense,expense
+materials-23-3,"Ghi giúp tôi: mua trà và siro bổ sung kho, 650k.",materials,materials,expense,expense
+materials-23-4,MUA TRÀ VÀ SIRO BỔ SUNG KHO. Tổng cộng: 650000 đồng.,materials,materials,expense,expense
+materials-23-5,mua tra va siro bo sung kho 650000 dong,materials,materials,expense,expense
+materials-23-6,mua trà và siro bổ sung kho - 650k,materials,materials,expense,expense
+materials-23-7,mua trà và siro bổ sung kho - 650000 dong,materials,materials,expense,expense
+materials-23-8,"mua trà và siro bổ sung kho, tổng 650000 đ",materials,materials,expense,expense
+materials-23-9,mua trà và siro bổ sung kho 650.000 vnd,materials,materials,expense,expense
+materials-23-10,mùa trà và siro bổ sung kho 650 nghìn đồng,materials,materials,expense,expense
+materials-23-11,Mua tra va siro bo sung kho 650000 dong,materials,materials,expense,expense
+rent-20-0,Chuyển khoản tiền thuê tiệm 85.000 đồng,rent,rent,expense,expense
+rent-20-1,"Hôm nay chuyển khoản tiền thuê tiệm, số tiền 85000 VND, chuyển khoản.",rent,rent,expense,expense
+rent-20-2,"Hôm qua chuyển khoản tiền thuê tiệm hết 85 nghìn, trả tiền mặt.",rent,rent,expense,expense
+rent-20-3,"Ghi giúp tôi: chuyển khoản tiền thuê tiệm, 85k.",rent,rent,expense,expense
+rent-20-4,CHUYỂN KHOẢN TIỀN THUÊ TIỆM. Tổng cộng: 85000 đồng.,rent,rent,expense,expense
+rent-20-5,chuyen khoan tien thue tiem 85000 dong,rent,rent,expense,expense
+rent-20-6,chuyển khoản tiền thuê tiệm - 85k,rent,rent,expense,expense
+rent-20-7,chuyển khoản tiền thuê tiệm - 85000 dong,rent,rent,expense,expense
+rent-20-8,"chuyển khoản tiền thuê tiệm, tổng 85000 đ",rent,rent,expense,expense
+rent-20-9,chuyển khoản tiền thuê tiệm 85.000 vnd,rent,rent,expense,expense
+rent-20-10,chuyển khoản tiền thuê tiem 85 nghìn đồng,rent,rent,expense,expense
+rent-20-11,Chuyen khoan tien thue tiem 85000 dong,rent,rent,expense,expense
+rent-21-0,Nộp tiền thuê vị trí mở quầy 2.500.000 đồng,rent,rent,expense,expense
+rent-21-1,"Hôm nay nộp tiền thuê vị trí mở quầy, số tiền 2500000 VND, chuyển khoản.",rent,rent,expense,expense
+rent-21-2,"Hôm qua nộp tiền thuê vị trí mở quầy hết 2500 nghìn, trả tiền mặt.",rent,rent,expense,expense
+rent-21-3,"Ghi giúp tôi: nộp tiền thuê vị trí mở quầy, 2500k.",rent,rent,expense,expense
+rent-21-4,NỘP TIỀN THUÊ VỊ TRÍ MỞ QUẦY. Tổng cộng: 2500000 đồng.,rent,rent,expense,expense
+rent-21-5,nop tien thue vi tri mo quay 2500000 dong,rent,rent,expense,expense
+rent-21-6,nộp tiền thuê vị trí mở quầy - 2500k,rent,rent,expense,expense
+rent-21-7,nộp tiền thuê vị trí mở quầy - 2500000 dong,rent,rent,expense,expense
+rent-21-8,"nộp tiền thuê vị trí mở quầy, tổng 2500000 đ",rent,rent,expense,expense
+rent-21-9,nộp tiền thuê vị trí mở quầy 2.500.000 vnd,rent,rent,expense,expense
+rent-21-10,nộp tiên thuê vị trí mở quầy 2500 nghìn đồng,rent,rent,expense,expense
+rent-21-11,Nop tien thue vi tri mo quay 2500000 dong,rent,rent,expense,expense
+rent-22-0,Trả phí thuê kho cất hàng 1.200.000 đồng,rent,rent,expense,expense
+rent-22-1,"Hôm nay trả phí thuê kho cất hàng, số tiền 1200000 VND, chuyển khoản.",rent,rent,expense,expense
+rent-22-2,"Hôm qua trả phí thuê kho cất hàng hết 1200 nghìn, trả tiền mặt.",rent,rent,expense,expense
+rent-22-3,"Ghi giúp tôi: trả phí thuê kho cất hàng, 1200k.",rent,rent,expense,expense
+rent-22-4,TRẢ PHÍ THUÊ KHO CẤT HÀNG. Tổng cộng: 1200000 đồng.,rent,rent,expense,expense
+rent-22-5,tra phi thue kho cat hang 1200000 dong,rent,rent,expense,expense
+rent-22-6,trả phí thuê kho cất hàng - 1200k,rent,rent,expense,expense
+rent-22-7,trả phí thuê kho cất hàng - 1200000 dong,rent,rent,expense,expense
+rent-22-8,"trả phí thuê kho cất hàng, tổng 1200000 đ",rent,rent,expense,expense
+rent-22-9,tra phí thuê kho cất hang 1.200.000 vnd,rent,rent,expense,expense
+rent-22-10,trả phí thuê kho cất hàng 1200 nghìng đồng,rent,rent,expense,expense
+rent-22-11,Tra phi thue kho cat hang 1200000 dong,rent,rent,expense,expense
+rent-23-0,Thanh toán mặt bằng cho chủ nhà 650.000 đồng,rent,rent,expense,expense
+rent-23-1,"Hôm nay thanh toán mặt bằng cho chủ nhà, số tiền 650000 VND, chuyển khoản.",rent,rent,expense,expense
+rent-23-2,"Hôm qua thanh toán mặt bằng cho chủ nhà hết 650 nghìn, trả tiền mặt.",rent,rent,expense,expense
+rent-23-3,"Ghi giúp tôi: thanh toán mặt bằng cho chủ nhà, 650k.",rent,rent,expense,expense
+rent-23-4,THANH TOÁN MẶT BẰNG CHO CHỦ NHÀ. Tổng cộng: 650000 đồng.,rent,rent,expense,expense
+rent-23-5,thanh toan mat bang cho chu nha 650000 dong,rent,rent,expense,expense
+rent-23-6,thanh toán mặt bằng cho chủ nhà - 650k,rent,rent,expense,expense
+rent-23-7,thanh toán mặt bằng cho chủ nhà - 650000 dong,rent,rent,expense,expense
+rent-23-8,"thanh toán mặt bằng cho chủ nhà, tổng 650000 đ",rent,rent,expense,expense
+rent-23-9,thanh toan mặt bằng cho chủ nhà 650.000 vnd,rent,rent,expense,expense
+rent-23-10,thanh toán mặt bằng cho chủ nhà 650 nghìn đồng,rent,rent,expense,expense
+rent-23-11,Thanh toan mat bang cho chu nha 650000 dong,rent,rent,expense,expense
+utilities-20-0,Chi phí điện thắp sáng quầy 2.500.000 đồng,utilities,utilities,expense,expense
+utilities-20-1,"Hôm nay chi phí điện thắp sáng quầy, số tiền 2500000 VND, chuyển khoản.",utilities,utilities,expense,expense
+utilities-20-2,"Hôm qua chi phí điện thắp sáng quầy hết 2500 nghìn, trả tiền mặt.",utilities,utilities,expense,expense
+utilities-20-3,"Ghi giúp tôi: chi phí điện thắp sáng quầy, 2500k.",utilities,utilities,expense,expense
+utilities-20-4,CHI PHÍ ĐIỆN THẮP SÁNG QUẦY. Tổng cộng: 2500000 đồng.,utilities,utilities,expense,expense
+utilities-20-5,chi phi dien thap sang quay 2500000 dong,utilities,utilities,expense,expense
+utilities-20-6,chi phí điện thắp sáng quầy - 2500k,utilities,utilities,expense,expense
+utilities-20-7,chi phí điện thắp sáng quầy - 2500000 dong,utilities,utilities,expense,expense
+utilities-20-8,"chi phí điện thắp sáng quầy, tổng 2500000 đ",utilities,utilities,expense,expense
+utilities-20-9,chi phí diện thap sáng quầy 2.500.000 vnd,utilities,utilities,expense,expense
+utilities-20-10,chi phí điện thắp sáng quầy 2500 nghìn đồng,utilities,utilities,expense,expense
+utilities-20-11,Chi phi dien thap sang quay 2500000 dong,utilities,utilities,expense,expense
+utilities-21-0,Thanh toán hóa đơn cấp nước 85.000 đồng,utilities,utilities,expense,expense
+utilities-21-1,"Hôm nay thanh toán hóa đơn cấp nước, số tiền 85000 VND, chuyển khoản.",utilities,utilities,expense,expense
+utilities-21-2,"Hôm qua thanh toán hóa đơn cấp nước hết 85 nghìn, trả tiền mặt.",utilities,utilities,expense,expense
+utilities-21-3,"Ghi giúp tôi: thanh toán hóa đơn cấp nước, 85k.",utilities,utilities,expense,expense
+utilities-21-4,THANH TOÁN HÓA ĐƠN CẤP NƯỚC. Tổng cộng: 85000 đồng.,utilities,utilities,expense,expense
+utilities-21-5,thanh toan hoa don cap nuoc 85000 dong,utilities,utilities,expense,expense
+utilities-21-6,thanh toán hóa đơn cấp nước - 85k,utilities,utilities,expense,expense
+utilities-21-7,thanh toán hóa đơn cấp nước - 85000 dong,utilities,utilities,expense,expense
+utilities-21-8,"thanh toán hóa đơn cấp nước, tổng 85000 đ",utilities,utilities,expense,expense
+utilities-21-9,thanh toán hóa đơn cấp nước 85.000 vnd,utilities,utilities,expense,expense
+utilities-21-10,thanh toán hóa đơn cấp nước 85 nghìn đồng,utilities,utilities,expense,expense
+utilities-21-11,Thanh toan hoa don cap nuoc 85000 dong,utilities,utilities,expense,expense
+utilities-22-0,Trả phí thuê bao mạng cho tiệm 350.000 đồng,utilities,other_expense,expense,expense
+utilities-22-1,"Hôm nay trả phí thuê bao mạng cho tiệm, số tiền 350000 VND, chuyển khoản.",utilities,other_expense,expense,expense
+utilities-22-2,"Hôm qua trả phí thuê bao mạng cho tiệm hết 350 nghìn, trả tiền mặt.",utilities,other_expense,expense,expense
+utilities-22-3,"Ghi giúp tôi: trả phí thuê bao mạng cho tiệm, 350k.",utilities,other_expense,expense,expense
+utilities-22-4,TRẢ PHÍ THUÊ BAO MẠNG CHO TIỆM. Tổng cộng: 350000 đồng.,utilities,other_expense,expense,expense
+utilities-22-5,tra phi thue bao mang cho tiem 350000 dong,utilities,other_expense,expense,expense
+utilities-22-6,trả phí thuê bao mạng cho tiệm - 350k,utilities,other_expense,expense,expense
+utilities-22-7,trả phí thuê bao mạng cho tiệm - 350000 dong,utilities,other_expense,expense,expense
+utilities-22-8,"trả phí thuê bao mạng cho tiệm, tổng 350000 đ",utilities,other_expense,expense,expense
+utilities-22-9,trả phí thuế bao mang cho tiệm 350.000 vnd,utilities,other_expense,expense,expense
+utilities-22-10,trả phí thue bao mạng cho tiệm 350 nghìn đồng,utilities,other_expense,expense,expense
+utilities-22-11,Tra phi thue bao mang cho tiem 350000 dong,utilities,other_expense,expense,expense
+utilities-23-0,Nộp tiền điện nước quán ăn 2.500.000 đồng,utilities,utilities,expense,expense
+utilities-23-1,"Hôm nay nộp tiền điện nước quán ăn, số tiền 2500000 VND, chuyển khoản.",utilities,utilities,expense,expense
+utilities-23-2,"Hôm qua nộp tiền điện nước quán ăn hết 2500 nghìn, trả tiền mặt.",utilities,utilities,expense,expense
+utilities-23-3,"Ghi giúp tôi: nộp tiền điện nước quán ăn, 2500k.",utilities,utilities,expense,expense
+utilities-23-4,NỘP TIỀN ĐIỆN NƯỚC QUÁN ĂN. Tổng cộng: 2500000 đồng.,utilities,utilities,expense,expense
+utilities-23-5,nop tien dien nuoc quan an 2500000 dong,utilities,utilities,expense,expense
+utilities-23-6,nộp tiền điện nước quán ăn - 2500k,utilities,utilities,expense,expense
+utilities-23-7,nộp tiền điện nước quán ăn - 2500000 dong,utilities,utilities,expense,expense
+utilities-23-8,"nộp tiền điện nước quán ăn, tổng 2500000 đ",utilities,utilities,expense,expense
+utilities-23-9,nộp tiền điện nước quán ăn 2.500.000 vnd,utilities,utilities,expense,expense
+utilities-23-10,nộp tiền điện nước quán ăn 2500 nghìng đồng,utilities,utilities,expense,expense
+utilities-23-11,Nop tien dien nuoc quan an 2500000 dong,utilities,utilities,expense,expense
+shipping-20-0,Thanh toán tiền vận tải lô hàng 650.000 đồng,shipping,shipping,expense,expense
+shipping-20-1,"Hôm nay thanh toán tiền vận tải lô hàng, số tiền 650000 VND, chuyển khoản.",shipping,shipping,expense,expense
+shipping-20-2,"Hôm qua thanh toán tiền vận tải lô hàng hết 650 nghìn, trả tiền mặt.",shipping,shipping,expense,expense
+shipping-20-3,"Ghi giúp tôi: thanh toán tiền vận tải lô hàng, 650k.",shipping,shipping,expense,expense
+shipping-20-4,THANH TOÁN TIỀN VẬN TẢI LÔ HÀNG. Tổng cộng: 650000 đồng.,shipping,shipping,expense,expense
+shipping-20-5,thanh toan tien van tai lo hang 650000 dong,shipping,shipping,expense,expense
+shipping-20-6,thanh toán tiền vận tải lô hàng - 650k,shipping,shipping,expense,expense
+shipping-20-7,thanh toán tiền vận tải lô hàng - 650000 dong,shipping,shipping,expense,expense
+shipping-20-8,"thanh toán tiền vận tải lô hàng, tổng 650000 đ",shipping,shipping,expense,expense
+shipping-20-9,thanh toán tiền vận tải lô hàng 650.000 vnd,shipping,shipping,expense,expense
+shipping-20-10,thanh toán tiền vận tải lô hang 650 nghìn đồng,shipping,shipping,expense,expense
+shipping-20-11,Thanh toan tien van tai lo hang 650000 dong,shipping,shipping,expense,expense
+shipping-21-0,Trả bưu phí gửi đơn đi tỉnh 85.000 đồng,shipping,shipping,expense,expense
+shipping-21-1,"Hôm nay trả bưu phí gửi đơn đi tỉnh, số tiền 85000 VND, chuyển khoản.",shipping,shipping,expense,expense
+shipping-21-2,"Hôm qua trả bưu phí gửi đơn đi tỉnh hết 85 nghìn, trả tiền mặt.",shipping,shipping,expense,expense
+shipping-21-3,"Ghi giúp tôi: trả bưu phí gửi đơn đi tỉnh, 85k.",shipping,shipping,expense,expense
+shipping-21-4,TRẢ BƯU PHÍ GỬI ĐƠN ĐI TỈNH. Tổng cộng: 85000 đồng.,shipping,shipping,expense,expense
+shipping-21-5,tra buu phi gui don di tinh 85000 dong,shipping,shipping,expense,expense
+shipping-21-6,trả bưu phí gửi đơn đi tỉnh - 85k,shipping,shipping,expense,expense
+shipping-21-7,trả bưu phí gửi đơn đi tỉnh - 85000 dong,shipping,shipping,expense,expense
+shipping-21-8,"trả bưu phí gửi đơn đi tỉnh, tổng 85000 đ",shipping,shipping,expense,expense
+shipping-21-9,trả bưu phí gửi đơn đi tỉnh 85.000 vnd,shipping,shipping,expense,expense
+shipping-21-10,trả bưu phí gửi đơn đi tỉnh 85 nghìn đồng,shipping,shipping,expense,expense
+shipping-21-11,Tra buu phi gui don di tinh 85000 dong,shipping,shipping,expense,expense
+shipping-22-0,Chi giao hàng tận nơi cho khách 350.000 đồng,shipping,shipping,expense,expense
+shipping-22-1,"Hôm nay chi giao hàng tận nơi cho khách, số tiền 350000 VND, chuyển khoản.",shipping,shipping,expense,expense
+shipping-22-2,"Hôm qua chi giao hàng tận nơi cho khách hết 350 nghìn, trả tiền mặt.",shipping,shipping,expense,expense
+shipping-22-3,"Ghi giúp tôi: chi giao hàng tận nơi cho khách, 350k.",shipping,shipping,expense,expense
+shipping-22-4,CHI GIAO HÀNG TẬN NƠI CHO KHÁCH. Tổng cộng: 350000 đồng.,shipping,shipping,expense,income
+shipping-22-5,chi giao hang tan noi cho khach 350000 dong,shipping,shipping,expense,expense
+shipping-22-6,chi giao hàng tận nơi cho khách - 350k,shipping,shipping,expense,income
+shipping-22-7,chi giao hàng tận nơi cho khách - 350000 dong,shipping,shipping,expense,expense
+shipping-22-8,"chi giao hàng tận nơi cho khách, tổng 350000 đ",shipping,shipping,expense,income
+shipping-22-9,chi giao hàng tan nơi cho khách 350.000 vnd,shipping,shipping,expense,expense
+shipping-22-10,chi giao hàng tận nơi cho khách 350 ngàn đồng,shipping,shipping,expense,expense
+shipping-22-11,Chi giao hang tan noi cho khach 350000 dong,shipping,shipping,expense,expense
+shipping-23-0,Trả phí tài xế giao lô sản phẩm 2.500.000 đồng,shipping,shipping,expense,expense
+shipping-23-1,"Hôm nay trả phí tài xế giao lô sản phẩm, số tiền 2500000 VND, chuyển khoản.",shipping,shipping,expense,expense
+shipping-23-2,"Hôm qua trả phí tài xế giao lô sản phẩm hết 2500 nghìn, trả tiền mặt.",shipping,shipping,expense,expense
+shipping-23-3,"Ghi giúp tôi: trả phí tài xế giao lô sản phẩm, 2500k.",shipping,shipping,expense,expense
+shipping-23-4,TRẢ PHÍ TÀI XẾ GIAO LÔ SẢN PHẨM. Tổng cộng: 2500000 đồng.,shipping,shipping,expense,expense
+shipping-23-5,tra phi tai xe giao lo san pham 2500000 dong,shipping,shipping,expense,expense
+shipping-23-6,trả phí tài xế giao lô sản phẩm - 2500k,shipping,shipping,expense,expense
+shipping-23-7,trả phí tài xế giao lô sản phẩm - 2500000 dong,shipping,shipping,expense,expense
+shipping-23-8,"trả phí tài xế giao lô sản phẩm, tổng 2500000 đ",shipping,shipping,expense,expense
+shipping-23-9,trả phí tài xế giao lố sản phẩm 2.500.000 vnd,shipping,shipping,expense,expense
+shipping-23-10,trả phí tài xế giao lô sản phẩm 2500 nghìn đồng,shipping,shipping,expense,expense
+shipping-23-11,Tra phi tai xe giao lo san pham 2500000 dong,shipping,shipping,expense,expense
+salary-20-0,Chi lương nhân viên pha chế 650.000 đồng,salary,salary,expense,expense
+salary-20-1,"Hôm nay chi lương nhân viên pha chế, số tiền 650000 VND, chuyển khoản.",salary,salary,expense,expense
+salary-20-2,"Hôm qua chi lương nhân viên pha chế hết 650 nghìn, trả tiền mặt.",salary,salary,expense,expense
+salary-20-3,"Ghi giúp tôi: chi lương nhân viên pha chế, 650k.",salary,salary,expense,expense
+salary-20-4,CHI LƯƠNG NHÂN VIÊN PHA CHẾ. Tổng cộng: 650000 đồng.,salary,salary,expense,expense
+salary-20-5,chi luong nhan vien pha che 650000 dong,salary,salary,expense,expense
+salary-20-6,chi lương nhân viên pha chế - 650k,salary,salary,expense,expense
+salary-20-7,chi lương nhân viên pha chế - 650000 dong,salary,salary,expense,expense
+salary-20-8,"chi lương nhân viên pha chế, tổng 650000 đ",salary,salary,expense,expense
+salary-20-9,chi lương nhân viên pha chế 650.000 vnd,salary,salary,expense,expense
+salary-20-10,chi lương nhân viên pha chế 650 nghìn đồng,salary,salary,expense,expense
+salary-20-11,Chi luong nhan vien pha che 650000 dong,salary,salary,expense,expense
+salary-21-0,Thanh toán tiền công lao động thuê 1.200.000 đồng,salary,salary,expense,expense
+salary-21-1,"Hôm nay thanh toán tiền công lao động thuê, số tiền 1200000 VND, chuyển khoản.",salary,salary,expense,expense
+salary-21-2,"Hôm qua thanh toán tiền công lao động thuê hết 1200 nghìn, trả tiền mặt.",salary,rent,expense,expense
+salary-21-3,"Ghi giúp tôi: thanh toán tiền công lao động thuê, 1200k.",salary,rent,expense,expense
+salary-21-4,THANH TOÁN TIỀN CÔNG LAO ĐỘNG THUÊ. Tổng cộng: 1200000 đồng.,salary,salary,expense,expense
+salary-21-5,thanh toan tien cong lao dong thue 1200000 dong,salary,salary,expense,expense
+salary-21-6,thanh toán tiền công lao động thuê - 1200k,salary,rent,expense,expense
+salary-21-7,thanh toán tiền công lao động thuê - 1200000 dong,salary,salary,expense,expense
+salary-21-8,"thanh toán tiền công lao động thuê, tổng 1200000 đ",salary,rent,expense,expense
+salary-21-9,thanh toán tiền cống lao động thuê 1.200.000 vnd,salary,salary,expense,expense
+salary-21-10,thanh toán tiền công lao động thuê 1200 nghìng đồng,salary,salary,expense,expense
+salary-21-11,Thanh toan tien cong lao dong thue 1200000 dong,salary,salary,expense,expense
+salary-22-0,Trả phụ cấp ca tối cho nhân viên 650.000 đồng,salary,salary,expense,expense
+salary-22-1,"Hôm nay trả phụ cấp ca tối cho nhân viên, số tiền 650000 VND, chuyển khoản.",salary,salary,expense,expense
+salary-22-2,"Hôm qua trả phụ cấp ca tối cho nhân viên hết 650 nghìn, trả tiền mặt.",salary,salary,expense,expense
+salary-22-3,"Ghi giúp tôi: trả phụ cấp ca tối cho nhân viên, 650k.",salary,salary,expense,expense
+salary-22-4,TRẢ PHỤ CẤP CA TỐI CHO NHÂN VIÊN. Tổng cộng: 650000 đồng.,salary,salary,expense,expense
+salary-22-5,tra phu cap ca toi cho nhan vien 650000 dong,salary,salary,expense,expense
+salary-22-6,trả phụ cấp ca tối cho nhân viên - 650k,salary,salary,expense,expense
+salary-22-7,trả phụ cấp ca tối cho nhân viên - 650000 dong,salary,salary,expense,expense
+salary-22-8,"trả phụ cấp ca tối cho nhân viên, tổng 650000 đ",salary,salary,expense,expense
+salary-22-9,trả phụ cấp ca tối cho nhấn viến 650.000 vnd,salary,salary,expense,expense
+salary-22-10,trả phụ cấp ca tối cho nhân viên 650 nghìn đồng,salary,salary,expense,expense
+salary-22-11,Tra phu cap ca toi cho nhan vien 650000 dong,salary,salary,expense,expense
+salary-23-0,Chi tiền lương thủ kho 1.200.000 đồng,salary,salary,expense,expense
+salary-23-1,"Hôm nay chi tiền lương thủ kho, số tiền 1200000 VND, chuyển khoản.",salary,salary,expense,expense
+salary-23-2,"Hôm qua chi tiền lương thủ kho hết 1200 nghìn, trả tiền mặt.",salary,salary,expense,expense
+salary-23-3,"Ghi giúp tôi: chi tiền lương thủ kho, 1200k.",salary,salary,expense,expense
+salary-23-4,CHI TIỀN LƯƠNG THỦ KHO. Tổng cộng: 1200000 đồng.,salary,salary,expense,expense
+salary-23-5,chi tien luong thu kho 1200000 dong,salary,salary,expense,expense
+salary-23-6,chi tiền lương thủ kho - 1200k,salary,salary,expense,expense
+salary-23-7,chi tiền lương thủ kho - 1200000 dong,salary,salary,expense,expense
+salary-23-8,"chi tiền lương thủ kho, tổng 1200000 đ",salary,salary,expense,expense
+salary-23-9,chi tiền lương thu kho 1.200.000 vnd,salary,salary,expense,expense
+salary-23-10,chi tiền lướng thủ kho 1200 nghìng đồng,salary,salary,expense,expense
+salary-23-11,Chi tien luong thu kho 1200000 dong,salary,salary,expense,expense
+other_expense-20-0,Thanh toán phí dịch vụ kế toán 350.000 đồng,other_expense,service,expense,expense
+other_expense-20-1,"Hôm nay thanh toán phí dịch vụ kế toán, số tiền 350000 VND, chuyển khoản.",other_expense,service,expense,expense
+other_expense-20-2,"Hôm qua thanh toán phí dịch vụ kế toán hết 350 nghìn, trả tiền mặt.",other_expense,service,expense,expense
+other_expense-20-3,"Ghi giúp tôi: thanh toán phí dịch vụ kế toán, 350k.",other_expense,service,expense,expense
+other_expense-20-4,THANH TOÁN PHÍ DỊCH VỤ KẾ TOÁN. Tổng cộng: 350000 đồng.,other_expense,service,expense,expense
+other_expense-20-5,thanh toan phi dich vu ke toan 350000 dong,other_expense,service,expense,expense
+other_expense-20-6,thanh toán phí dịch vụ kế toán - 350k,other_expense,service,expense,expense
+other_expense-20-7,thanh toán phí dịch vụ kế toán - 350000 dong,other_expense,service,expense,expense
+other_expense-20-8,"thanh toán phí dịch vụ kế toán, tổng 350000 đ",other_expense,service,expense,expense
+other_expense-20-9,thanh toan phí dịch vụ kế toán 350.000 vnd,other_expense,service,expense,expense
+other_expense-20-10,thanh toán phi dịch vụ kế toán 350 nghìn đồng,other_expense,service,expense,expense
+other_expense-20-11,Thanh toan phi dich vu ke toan 350000 dong,other_expense,service,expense,expense
+other_expense-21-0,Trả tiền sửa máy tính của tiệm 2.500.000 đồng,other_expense,other_expense,expense,expense
+other_expense-21-1,"Hôm nay trả tiền sửa máy tính của tiệm, số tiền 2500000 VND, chuyển khoản.",other_expense,other_expense,expense,expense
+other_expense-21-2,"Hôm qua trả tiền sửa máy tính của tiệm hết 2500 nghìn, trả tiền mặt.",other_expense,other_expense,expense,expense
+other_expense-21-3,"Ghi giúp tôi: trả tiền sửa máy tính của tiệm, 2500k.",other_expense,other_expense,expense,expense
+other_expense-21-4,TRẢ TIỀN SỬA MÁY TÍNH CỦA TIỆM. Tổng cộng: 2500000 đồng.,other_expense,other_expense,expense,expense
+other_expense-21-5,tra tien sua may tinh cua tiem 2500000 dong,other_expense,other_expense,expense,expense
+other_expense-21-6,trả tiền sửa máy tính của tiệm - 2500k,other_expense,other_expense,expense,expense
+other_expense-21-7,trả tiền sửa máy tính của tiệm - 2500000 dong,other_expense,other_expense,expense,expense
+other_expense-21-8,"trả tiền sửa máy tính của tiệm, tổng 2500000 đ",other_expense,other_expense,expense,expense
+other_expense-21-9,tra tiền sửa máy tính cua tiệm 2.500.000 vnd,other_expense,other_expense,expense,expense
+other_expense-21-10,tra tiền sửa máy tính của tiêm 2500 nghìn đồng,other_expense,other_expense,expense,expense
+other_expense-21-11,Tra tien sua may tinh cua tiem 2500000 dong,other_expense,other_expense,expense,expense
+other_expense-22-0,Mua camera giám sát cửa hàng 85.000 đồng,other_expense,other_expense,expense,expense
+other_expense-22-1,"Hôm nay mua camera giám sát cửa hàng, số tiền 85000 VND, chuyển khoản.",other_expense,other_expense,expense,expense
+other_expense-22-2,"Hôm qua mua camera giám sát cửa hàng hết 85 nghìn, trả tiền mặt.",other_expense,other_expense,expense,expense
+other_expense-22-3,"Ghi giúp tôi: mua camera giám sát cửa hàng, 85k.",other_expense,other_expense,expense,expense
+other_expense-22-4,MUA CAMERA GIÁM SÁT CỬA HÀNG. Tổng cộng: 85000 đồng.,other_expense,other_expense,expense,expense
+other_expense-22-5,mua camera giam sat cua hang 85000 dong,other_expense,other_expense,expense,expense
+other_expense-22-6,mua camera giám sát cửa hàng - 85k,other_expense,other_expense,expense,expense
+other_expense-22-7,mua camera giám sát cửa hàng - 85000 dong,other_expense,other_expense,expense,expense
+other_expense-22-8,"mua camera giám sát cửa hàng, tổng 85000 đ",other_expense,other_expense,expense,expense
+other_expense-22-9,mua camera giám sát cửa hàng 85.000 vnd,other_expense,other_expense,expense,expense
+other_expense-22-10,mua camera giám sát cửa hang 85 nghìn đồng,other_expense,other_expense,expense,expense
+other_expense-22-11,Mua camera giam sat cua hang 85000 dong,other_expense,other_expense,expense,expense
+other_expense-23-0,Chi phí đăng ký kinh doanh 2.500.000 đồng,other_expense,other_expense,expense,expense
+other_expense-23-1,"Hôm nay chi phí đăng ký kinh doanh, số tiền 2500000 VND, chuyển khoản.",other_expense,other_expense,expense,expense
+other_expense-23-2,"Hôm qua chi phí đăng ký kinh doanh hết 2500 nghìn, trả tiền mặt.",other_expense,other_expense,expense,expense
+other_expense-23-3,"Ghi giúp tôi: chi phí đăng ký kinh doanh, 2500k.",other_expense,other_expense,expense,expense
+other_expense-23-4,CHI PHÍ ĐĂNG KÝ KINH DOANH. Tổng cộng: 2500000 đồng.,other_expense,other_expense,expense,expense
+other_expense-23-5,chi phi dang ky kinh doanh 2500000 dong,other_expense,other_expense,expense,expense
+other_expense-23-6,chi phí đăng ký kinh doanh - 2500k,other_expense,other_expense,expense,expense
+other_expense-23-7,chi phí đăng ký kinh doanh - 2500000 dong,other_expense,other_expense,expense,expense
+other_expense-23-8,"chi phí đăng ký kinh doanh, tổng 2500000 đ",other_expense,other_expense,expense,expense
+other_expense-23-9,chi phi đang ký kinh doanh 2.500.000 vnd,other_expense,other_expense,expense,expense
+other_expense-23-10,chi phí đăng ký kinh doanh 2500 ngàn đồng,other_expense,other_expense,expense,expense
+other_expense-23-11,Chi phi dang ky kinh doanh 2500000 dong,other_expense,other_expense,expense,expense

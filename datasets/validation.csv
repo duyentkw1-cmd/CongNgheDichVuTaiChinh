@@ -1,0 +1,481 @@
+﻿id,text,kind,category,group_id,split,origin
+sales-16-0,Khách đã trả tiền mua chai nước 150.000 đồng,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-1,"Hôm nay khách đã trả tiền mua chai nước, số tiền 150000 VND, chuyển khoản.",income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-2,"Hôm qua khách đã trả tiền mua chai nước hết 150 nghìn, trả tiền mặt.",income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-3,"Ghi giúp tôi: khách đã trả tiền mua chai nước, 150k.",income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-4,KHÁCH ĐÃ TRẢ TIỀN MUA CHAI NƯỚC. Tổng cộng: 150000 đồng.,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-5,khach da tra tien mua chai nuoc 150000 dong,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-6,khách đã trả tiền mua chai nước - 150k,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-7,khách đã trả tiền mua chai nước - 150000 dong,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-8,ghi nhé: khách đã trả tiền mua chai nước 150.000 đồng,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-9,khách đã tra tiền mua chai nừớc 150.000 vnd,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-10,khach da tra tien mua chai nuoc 150000 dong,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-16-11,Hôm qua khách đã trả tiền mua chai nước tốn 150k,income,sales,sales-16,validation,synthetic_authored_template_v2
+sales-17-0,Cửa hàng bán gạo thu được tiền 85.000 đồng,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-1,"Hôm nay cửa hàng bán gạo thu được tiền, số tiền 85000 VND, chuyển khoản.",income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-2,"Hôm qua cửa hàng bán gạo thu được tiền hết 85 nghìn, trả tiền mặt.",income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-3,"Ghi giúp tôi: cửa hàng bán gạo thu được tiền, 85k.",income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-4,CỬA HÀNG BÁN GẠO THU ĐƯỢC TIỀN. Tổng cộng: 85000 đồng.,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-5,cua hang ban gao thu duoc tien 85000 dong,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-6,cửa hàng bán gạo thu được tiền - 85k,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-7,cửa hàng bán gạo thu được tiền - 85000 dong,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-8,ghi nhé: cửa hàng bán gạo thu được tiền 85.000 đồng,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-9,cửa hàng ban gao thu được tiền 85.000 vnd,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-10,cua hang ban gao thu duoc tien 85000 dong,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-17-11,Hôm qua cửa hàng bán gạo thu được tiền tốn 85k,income,sales,sales-17,validation,synthetic_authored_template_v2
+sales-18-0,Tiền thu bán áo đồng phục 85.000 đồng,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-1,"Hôm nay tiền thu bán áo đồng phục, số tiền 85000 VND, chuyển khoản.",income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-2,"Hôm qua tiền thu bán áo đồng phục hết 85 nghìn, trả tiền mặt.",income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-3,"Ghi giúp tôi: tiền thu bán áo đồng phục, 85k.",income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-4,TIỀN THU BÁN ÁO ĐỒNG PHỤC. Tổng cộng: 85000 đồng.,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-5,tien thu ban ao dong phuc 85000 dong,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-6,tiền thu bán áo đồng phục - 85k,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-7,tiền thu bán áo đồng phục - 85000 dong,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-8,ghi nhé: tiền thu bán áo đồng phục 85.000 đồng,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-9,tiền thu bán áo đồng phục 85.000 vnd,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-10,tien thu ban ao dong phuc 85000 dong,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-18-11,Hôm qua tiền thu bán áo đồng phục tốn 85k,income,sales,sales-18,validation,synthetic_authored_template_v2
+sales-19-0,Doanh thu tại quầy trà sữa 2.500.000 đồng,income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-1,"Hôm nay doanh thu tại quầy trà sữa, số tiền 2500000 VND, chuyển khoản.",income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-2,"Hôm qua doanh thu tại quầy trà sữa hết 2500 nghìn, trả tiền mặt.",income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-3,"Ghi giúp tôi: doanh thu tại quầy trà sữa, 2500k.",income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-4,DOANH THU TẠI QUẦY TRÀ SỮA. Tổng cộng: 2500000 đồng.,income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-5,doanh thu tai quay tra sua 2500000 dong,income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-6,doanh thu tại quầy trà sữa - 2500k,income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-7,doanh thu tại quầy trà sữa - 2500000 dong,income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-8,ghi nhé: doanh thu tại quầy trà sữa 2.500.000 đồng,income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-9,doanh thu tại quầy trà sữa 2.500.000 vnd,income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-10,doanh thu tai quay tra sua 2500000 dong,income,sales,sales-19,validation,synthetic_authored_template_v2
+sales-19-11,Hôm qua doanh thu tại quầy trà sữa tốn 2500k,income,sales,sales-19,validation,synthetic_authored_template_v2
+service-16-0,Thu phí sửa khóa cho khách 350.000 đồng,income,service,service-16,validation,synthetic_authored_template_v2
+service-16-1,"Hôm nay thu phí sửa khóa cho khách, số tiền 350000 VND, chuyển khoản.",income,service,service-16,validation,synthetic_authored_template_v2
+service-16-2,"Hôm qua thu phí sửa khóa cho khách hết 350 nghìn, trả tiền mặt.",income,service,service-16,validation,synthetic_authored_template_v2
+service-16-3,"Ghi giúp tôi: thu phí sửa khóa cho khách, 350k.",income,service,service-16,validation,synthetic_authored_template_v2
+service-16-4,THU PHÍ SỬA KHÓA CHO KHÁCH. Tổng cộng: 350000 đồng.,income,service,service-16,validation,synthetic_authored_template_v2
+service-16-5,thu phi sua khoa cho khach 350000 dong,income,service,service-16,validation,synthetic_authored_template_v2
+service-16-6,thu phí sửa khóa cho khách - 350k,income,service,service-16,validation,synthetic_authored_template_v2
+service-16-7,thu phí sửa khóa cho khách - 350000 dong,income,service,service-16,validation,synthetic_authored_template_v2
+service-16-8,ghi nhé: thu phí sửa khóa cho khách 350.000 đồng,income,service,service-16,validation,synthetic_authored_template_v2
+service-16-9,thu phí sửa khóa cho khách 350.000 vnd,income,service,service-16,validation,synthetic_authored_template_v2
+service-16-10,thu phi sua khoa cho khach 350000 dong,income,service,service-16,validation,synthetic_authored_template_v2
+service-16-11,Hôm qua thu phí sửa khóa cho khách tốn 350k,income,service,service-16,validation,synthetic_authored_template_v2
+service-17-0,Tiền công bọc ghế khách vừa trả 150.000 đồng,income,service,service-17,validation,synthetic_authored_template_v2
+service-17-1,"Hôm nay tiền công bọc ghế khách vừa trả, số tiền 150000 VND, chuyển khoản.",income,service,service-17,validation,synthetic_authored_template_v2
+service-17-2,"Hôm qua tiền công bọc ghế khách vừa trả hết 150 nghìn, trả tiền mặt.",income,service,service-17,validation,synthetic_authored_template_v2
+service-17-3,"Ghi giúp tôi: tiền công bọc ghế khách vừa trả, 150k.",income,service,service-17,validation,synthetic_authored_template_v2
+service-17-4,TIỀN CÔNG BỌC GHẾ KHÁCH VỪA TRẢ. Tổng cộng: 150000 đồng.,income,service,service-17,validation,synthetic_authored_template_v2
+service-17-5,tien cong boc ghe khach vua tra 150000 dong,income,service,service-17,validation,synthetic_authored_template_v2
+service-17-6,tiền công bọc ghế khách vừa trả - 150k,income,service,service-17,validation,synthetic_authored_template_v2
+service-17-7,tiền công bọc ghế khách vừa trả - 150000 dong,income,service,service-17,validation,synthetic_authored_template_v2
+service-17-8,ghi nhé: tiền công bọc ghế khách vừa trả 150.000 đồng,income,service,service-17,validation,synthetic_authored_template_v2
+service-17-9,tiền công bọc ghế khách vừa trả 150.000 vnd,income,service,service-17,validation,synthetic_authored_template_v2
+service-17-10,tien cong boc ghe khach vua tra 150000 dong,income,service,service-17,validation,synthetic_authored_template_v2
+service-17-11,Hôm qua tiền công bọc ghế khách vừa trả tốn 150k,income,service,service-17,validation,synthetic_authored_template_v2
+service-18-0,Thu từ dịch vụ gội đầu 1.200.000 đồng,income,service,service-18,validation,synthetic_authored_template_v2
+service-18-1,"Hôm nay thu từ dịch vụ gội đầu, số tiền 1200000 VND, chuyển khoản.",income,service,service-18,validation,synthetic_authored_template_v2
+service-18-2,"Hôm qua thu từ dịch vụ gội đầu hết 1200 nghìn, trả tiền mặt.",income,service,service-18,validation,synthetic_authored_template_v2
+service-18-3,"Ghi giúp tôi: thu từ dịch vụ gội đầu, 1200k.",income,service,service-18,validation,synthetic_authored_template_v2
+service-18-4,THU TỪ DỊCH VỤ GỘI ĐẦU. Tổng cộng: 1200000 đồng.,income,service,service-18,validation,synthetic_authored_template_v2
+service-18-5,thu tu dich vu goi dau 1200000 dong,income,service,service-18,validation,synthetic_authored_template_v2
+service-18-6,thu từ dịch vụ gội đầu - 1200k,income,service,service-18,validation,synthetic_authored_template_v2
+service-18-7,thu từ dịch vụ gội đầu - 1200000 dong,income,service,service-18,validation,synthetic_authored_template_v2
+service-18-8,ghi nhé: thu từ dịch vụ gội đầu 1.200.000 đồng,income,service,service-18,validation,synthetic_authored_template_v2
+service-18-9,thu từ dịch vụ gội đầu 1.200.000 vnd,income,service,service-18,validation,synthetic_authored_template_v2
+service-18-10,thu tu dich vu goi dau 1200000 dong,income,service,service-18,validation,synthetic_authored_template_v2
+service-18-11,Hôm qua thu từ dịch vụ gội đầu tốn 1200k,income,service,service-18,validation,synthetic_authored_template_v2
+service-19-0,Khách trả tiền sửa đồ điện 85.000 đồng,income,service,service-19,validation,synthetic_authored_template_v2
+service-19-1,"Hôm nay khách trả tiền sửa đồ điện, số tiền 85000 VND, chuyển khoản.",income,service,service-19,validation,synthetic_authored_template_v2
+service-19-2,"Hôm qua khách trả tiền sửa đồ điện hết 85 nghìn, trả tiền mặt.",income,service,service-19,validation,synthetic_authored_template_v2
+service-19-3,"Ghi giúp tôi: khách trả tiền sửa đồ điện, 85k.",income,service,service-19,validation,synthetic_authored_template_v2
+service-19-4,KHÁCH TRẢ TIỀN SỬA ĐỒ ĐIỆN. Tổng cộng: 85000 đồng.,income,service,service-19,validation,synthetic_authored_template_v2
+service-19-5,khach tra tien sua do dien 85000 dong,income,service,service-19,validation,synthetic_authored_template_v2
+service-19-6,khách trả tiền sửa đồ điện - 85k,income,service,service-19,validation,synthetic_authored_template_v2
+service-19-7,khách trả tiền sửa đồ điện - 85000 dong,income,service,service-19,validation,synthetic_authored_template_v2
+service-19-8,ghi nhé: khách trả tiền sửa đồ điện 85.000 đồng,income,service,service-19,validation,synthetic_authored_template_v2
+service-19-9,khách trả tiền sửa đồ điện 85.000 vnd,income,service,service-19,validation,synthetic_authored_template_v2
+service-19-10,khach tra tien sua do dien 85000 dong,income,service,service-19,validation,synthetic_authored_template_v2
+service-19-11,Hôm qua khách trả tiền sửa đồ điện tốn 85k,income,service,service-19,validation,synthetic_authored_template_v2
+capital-16-0,Nhận vốn đầu tư từ gia đình 85.000 đồng,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-1,"Hôm nay nhận vốn đầu tư từ gia đình, số tiền 85000 VND, chuyển khoản.",income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-2,"Hôm qua nhận vốn đầu tư từ gia đình hết 85 nghìn, trả tiền mặt.",income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-3,"Ghi giúp tôi: nhận vốn đầu tư từ gia đình, 85k.",income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-4,NHẬN VỐN ĐẦU TƯ TỪ GIA ĐÌNH. Tổng cộng: 85000 đồng.,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-5,nhan von dau tu tu gia dinh 85000 dong,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-6,nhận vốn đầu tư từ gia đình - 85k,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-7,nhận vốn đầu tư từ gia đình - 85000 dong,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-8,ghi nhé: nhận vốn đầu tư từ gia đình 85.000 đồng,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-9,nhận vốn đầu tu từ gia đình 85.000 vnd,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-10,nhan von dau tu tu gia dinh 85000 dong,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-16-11,Hôm qua nhận vốn đầu tư từ gia đình tốn 85k,income,capital,capital-16,validation,synthetic_authored_template_v2
+capital-17-0,Ngân hàng chuyển tiền khoản vay kinh doanh 85.000 đồng,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-1,"Hôm nay ngân hàng chuyển tiền khoản vay kinh doanh, số tiền 85000 VND, chuyển khoản.",income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-2,"Hôm qua ngân hàng chuyển tiền khoản vay kinh doanh hết 85 nghìn, trả tiền mặt.",income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-3,"Ghi giúp tôi: ngân hàng chuyển tiền khoản vay kinh doanh, 85k.",income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-4,NGÂN HÀNG CHUYỂN TIỀN KHOẢN VAY KINH DOANH. Tổng cộng: 85000 đồng.,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-5,ngan hang chuyen tien khoan vay kinh doanh 85000 dong,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-6,ngân hàng chuyển tiền khoản vay kinh doanh - 85k,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-7,ngân hàng chuyển tiền khoản vay kinh doanh - 85000 dong,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-8,ghi nhé: ngân hàng chuyển tiền khoản vay kinh doanh 85.000 đồng,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-9,ngân hàng chuyển tiền khoản vay kinh doanh 85.000 vnd,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-10,ngan hang chuyen tien khoan vay kinh doanh 85000 dong,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-17-11,Hôm qua ngân hàng chuyển tiền khoản vay kinh doanh tốn 85k,income,capital,capital-17,validation,synthetic_authored_template_v2
+capital-18-0,Tiền mượn để duy trì quán 85.000 đồng,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-1,"Hôm nay tiền mượn để duy trì quán, số tiền 85000 VND, chuyển khoản.",income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-2,"Hôm qua tiền mượn để duy trì quán hết 85 nghìn, trả tiền mặt.",income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-3,"Ghi giúp tôi: tiền mượn để duy trì quán, 85k.",income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-4,TIỀN MƯỢN ĐỂ DUY TRÌ QUÁN. Tổng cộng: 85000 đồng.,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-5,tien muon de duy tri quan 85000 dong,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-6,tiền mượn để duy trì quán - 85k,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-7,tiền mượn để duy trì quán - 85000 dong,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-8,ghi nhé: tiền mượn để duy trì quán 85.000 đồng,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-9,tiền mượn để duy trì quán 85.000 vnd,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-10,tien muon de duy tri quan 85000 dong,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-18-11,Hôm qua tiền mượn để duy trì quán tốn 85k,income,capital,capital-18,validation,synthetic_authored_template_v2
+capital-19-0,Bổ sung tiền chủ sở hữu vào quỹ 85.000 đồng,income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-1,"Hôm nay bổ sung tiền chủ sở hữu vào quỹ, số tiền 85000 VND, chuyển khoản.",income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-2,"Hôm qua bổ sung tiền chủ sở hữu vào quỹ hết 85 nghìn, trả tiền mặt.",income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-3,"Ghi giúp tôi: bổ sung tiền chủ sở hữu vào quỹ, 85k.",income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-4,BỔ SUNG TIỀN CHỦ SỞ HỮU VÀO QUỸ. Tổng cộng: 85000 đồng.,income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-5,bo sung tien chu so huu vao quy 85000 dong,income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-6,bổ sung tiền chủ sở hữu vào quỹ - 85k,income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-7,bổ sung tiền chủ sở hữu vào quỹ - 85000 dong,income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-8,ghi nhé: bổ sung tiền chủ sở hữu vào quỹ 85.000 đồng,income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-9,bổ sung tiền chu sở hữu vào quỹ 85.000 vnd,income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-10,bo sung tien chu so huu vao quy 85000 dong,income,capital,capital-19,validation,synthetic_authored_template_v2
+capital-19-11,Hôm qua bổ sung tiền chủ sở hữu vào quỹ tốn 85k,income,capital,capital-19,validation,synthetic_authored_template_v2
+other_income-16-0,Thu thanh lý bàn ghế cũ 650.000 đồng,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-1,"Hôm nay thu thanh lý bàn ghế cũ, số tiền 650000 VND, chuyển khoản.",income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-2,"Hôm qua thu thanh lý bàn ghế cũ hết 650 nghìn, trả tiền mặt.",income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-3,"Ghi giúp tôi: thu thanh lý bàn ghế cũ, 650k.",income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-4,THU THANH LÝ BÀN GHẾ CŨ. Tổng cộng: 650000 đồng.,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-5,thu thanh ly ban ghe cu 650000 dong,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-6,thu thanh lý bàn ghế cũ - 650k,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-7,thu thanh lý bàn ghế cũ - 650000 dong,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-8,ghi nhé: thu thanh lý bàn ghế cũ 650.000 đồng,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-9,thu thanh lý bàn ghế cũ 650.000 vnd,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-10,thu thanh ly ban ghe cu 650000 dong,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-16-11,Hôm qua thu thanh lý bàn ghế cũ tốn 650k,income,other_income,other_income-16,validation,synthetic_authored_template_v2
+other_income-17-0,Nhận khoản bồi hoàn từ bảo hiểm 85.000 đồng,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-1,"Hôm nay nhận khoản bồi hoàn từ bảo hiểm, số tiền 85000 VND, chuyển khoản.",income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-2,"Hôm qua nhận khoản bồi hoàn từ bảo hiểm hết 85 nghìn, trả tiền mặt.",income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-3,"Ghi giúp tôi: nhận khoản bồi hoàn từ bảo hiểm, 85k.",income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-4,NHẬN KHOẢN BỒI HOÀN TỪ BẢO HIỂM. Tổng cộng: 85000 đồng.,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-5,nhan khoan boi hoan tu bao hiem 85000 dong,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-6,nhận khoản bồi hoàn từ bảo hiểm - 85k,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-7,nhận khoản bồi hoàn từ bảo hiểm - 85000 dong,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-8,ghi nhé: nhận khoản bồi hoàn từ bảo hiểm 85.000 đồng,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-9,nhận khoan bồi hoàn từ bảo hiểm 85.000 vnd,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-10,nhan khoan boi hoan tu bao hiem 85000 dong,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-17-11,Hôm qua nhận khoản bồi hoàn từ bảo hiểm tốn 85k,income,other_income,other_income-17,validation,synthetic_authored_template_v2
+other_income-18-0,Người quen trả lại khoản nợ cho tiệm 650.000 đồng,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-1,"Hôm nay người quen trả lại khoản nợ cho tiệm, số tiền 650000 VND, chuyển khoản.",income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-2,"Hôm qua người quen trả lại khoản nợ cho tiệm hết 650 nghìn, trả tiền mặt.",income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-3,"Ghi giúp tôi: người quen trả lại khoản nợ cho tiệm, 650k.",income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-4,NGƯỜI QUEN TRẢ LẠI KHOẢN NỢ CHO TIỆM. Tổng cộng: 650000 đồng.,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-5,nguoi quen tra lai khoan no cho tiem 650000 dong,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-6,người quen trả lại khoản nợ cho tiệm - 650k,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-7,người quen trả lại khoản nợ cho tiệm - 650000 dong,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-8,ghi nhé: người quen trả lại khoản nợ cho tiệm 650.000 đồng,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-9,người quen trả lai khoản nợ cho tiệm 650.000 vnd,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-10,nguoi quen tra lai khoan no cho tiem 650000 dong,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-18-11,Hôm qua người quen trả lại khoản nợ cho tiệm tốn 650k,income,other_income,other_income-18,validation,synthetic_authored_template_v2
+other_income-19-0,Được nhận trợ cấp kinh doanh 1.200.000 đồng,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-1,"Hôm nay được nhận trợ cấp kinh doanh, số tiền 1200000 VND, chuyển khoản.",income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-2,"Hôm qua được nhận trợ cấp kinh doanh hết 1200 nghìn, trả tiền mặt.",income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-3,"Ghi giúp tôi: được nhận trợ cấp kinh doanh, 1200k.",income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-4,ĐƯỢC NHẬN TRỢ CẤP KINH DOANH. Tổng cộng: 1200000 đồng.,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-5,duoc nhan tro cap kinh doanh 1200000 dong,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-6,được nhận trợ cấp kinh doanh - 1200k,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-7,được nhận trợ cấp kinh doanh - 1200000 dong,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-8,ghi nhé: được nhận trợ cấp kinh doanh 1.200.000 đồng,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-9,được nhận trợ cấp kinh doanh 1.200.000 vnd,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-10,duoc nhan tro cap kinh doanh 1200000 dong,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+other_income-19-11,Hôm qua được nhận trợ cấp kinh doanh tốn 1200k,income,other_income,other_income-19,validation,synthetic_authored_template_v2
+materials-16-0,Nhập sữa tươi về pha chế 85.000 đồng,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-1,"Hôm nay nhập sữa tươi về pha chế, số tiền 85000 VND, chuyển khoản.",expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-2,"Hôm qua nhập sữa tươi về pha chế hết 85 nghìn, trả tiền mặt.",expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-3,"Ghi giúp tôi: nhập sữa tươi về pha chế, 85k.",expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-4,NHẬP SỮA TƯƠI VỀ PHA CHẾ. Tổng cộng: 85000 đồng.,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-5,nhap sua tuoi ve pha che 85000 dong,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-6,nhập sữa tươi về pha chế - 85k,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-7,nhập sữa tươi về pha chế - 85000 dong,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-8,ghi nhé: nhập sữa tươi về pha chế 85.000 đồng,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-9,nhập sữa tươi về pha chế 85.000 vnd,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-10,nhap sua tuoi ve pha che 85000 dong,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-16-11,Hôm qua nhập sữa tươi về pha chế tốn 85k,expense,materials,materials-16,validation,synthetic_authored_template_v2
+materials-17-0,Mua gạo và dầu ăn cho bếp quán 350.000 đồng,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-1,"Hôm nay mua gạo và dầu ăn cho bếp quán, số tiền 350000 VND, chuyển khoản.",expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-2,"Hôm qua mua gạo và dầu ăn cho bếp quán hết 350 nghìn, trả tiền mặt.",expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-3,"Ghi giúp tôi: mua gạo và dầu ăn cho bếp quán, 350k.",expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-4,MUA GẠO VÀ DẦU ĂN CHO BẾP QUÁN. Tổng cộng: 350000 đồng.,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-5,mua gao va dau an cho bep quan 350000 dong,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-6,mua gạo và dầu ăn cho bếp quán - 350k,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-7,mua gạo và dầu ăn cho bếp quán - 350000 dong,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-8,ghi nhé: mua gạo và dầu ăn cho bếp quán 350.000 đồng,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-9,mua gạo va dầu ăn cho bếp quán 350.000 vnd,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-10,mua gao va dau an cho bep quan 350000 dong,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-17-11,Hôm qua mua gạo và dầu ăn cho bếp quán tốn 350k,expense,materials,materials-17,validation,synthetic_authored_template_v2
+materials-18-0,Thanh toán hàng hóa nhập từ đại lý 2.500.000 đồng,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-1,"Hôm nay thanh toán hàng hóa nhập từ đại lý, số tiền 2500000 VND, chuyển khoản.",expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-2,"Hôm qua thanh toán hàng hóa nhập từ đại lý hết 2500 nghìn, trả tiền mặt.",expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-3,"Ghi giúp tôi: thanh toán hàng hóa nhập từ đại lý, 2500k.",expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-4,THANH TOÁN HÀNG HÓA NHẬP TỪ ĐẠI LÝ. Tổng cộng: 2500000 đồng.,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-5,thanh toan hang hoa nhap tu dai ly 2500000 dong,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-6,thanh toán hàng hóa nhập từ đại lý - 2500k,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-7,thanh toán hàng hóa nhập từ đại lý - 2500000 dong,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-8,ghi nhé: thanh toán hàng hóa nhập từ đại lý 2.500.000 đồng,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-9,thanh toán hàng hóa nhập từ đai lý 2.500.000 vnd,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-10,thanh toan hang hoa nhap tu dai ly 2500000 dong,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-18-11,Hôm qua thanh toán hàng hóa nhập từ đại lý tốn 2500k,expense,materials,materials-18,validation,synthetic_authored_template_v2
+materials-19-0,Chi mua trân châu làm trà sữa 150.000 đồng,expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-1,"Hôm nay chi mua trân châu làm trà sữa, số tiền 150000 VND, chuyển khoản.",expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-2,"Hôm qua chi mua trân châu làm trà sữa hết 150 nghìn, trả tiền mặt.",expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-3,"Ghi giúp tôi: chi mua trân châu làm trà sữa, 150k.",expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-4,CHI MUA TRÂN CHÂU LÀM TRÀ SỮA. Tổng cộng: 150000 đồng.,expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-5,chi mua tran chau lam tra sua 150000 dong,expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-6,chi mua trân châu làm trà sữa - 150k,expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-7,chi mua trân châu làm trà sữa - 150000 dong,expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-8,ghi nhé: chi mua trân châu làm trà sữa 150.000 đồng,expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-9,chi mua trân châu làm trà sữa 150.000 vnd,expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-10,chi mua tran chau lam tra sua 150000 dong,expense,materials,materials-19,validation,synthetic_authored_template_v2
+materials-19-11,Hôm qua chi mua trân châu làm trà sữa tốn 150k,expense,materials,materials-19,validation,synthetic_authored_template_v2
+rent-16-0,Chi tiền thuê chỗ kinh doanh 150.000 đồng,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-1,"Hôm nay chi tiền thuê chỗ kinh doanh, số tiền 150000 VND, chuyển khoản.",expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-2,"Hôm qua chi tiền thuê chỗ kinh doanh hết 150 nghìn, trả tiền mặt.",expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-3,"Ghi giúp tôi: chi tiền thuê chỗ kinh doanh, 150k.",expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-4,CHI TIỀN THUÊ CHỖ KINH DOANH. Tổng cộng: 150000 đồng.,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-5,chi tien thue cho kinh doanh 150000 dong,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-6,chi tiền thuê chỗ kinh doanh - 150k,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-7,chi tiền thuê chỗ kinh doanh - 150000 dong,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-8,ghi nhé: chi tiền thuê chỗ kinh doanh 150.000 đồng,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-9,chi tiền thuê chỗ kinh doanh 150.000 vnd,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-10,chi tien thue cho kinh doanh 150000 dong,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-16-11,Hôm qua chi tiền thuê chỗ kinh doanh tốn 150k,expense,rent,rent-16,validation,synthetic_authored_template_v2
+rent-17-0,Đóng phí thuê quán ăn 150.000 đồng,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-1,"Hôm nay đóng phí thuê quán ăn, số tiền 150000 VND, chuyển khoản.",expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-2,"Hôm qua đóng phí thuê quán ăn hết 150 nghìn, trả tiền mặt.",expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-3,"Ghi giúp tôi: đóng phí thuê quán ăn, 150k.",expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-4,ĐÓNG PHÍ THUÊ QUÁN ĂN. Tổng cộng: 150000 đồng.,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-5,dong phi thue quan an 150000 dong,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-6,đóng phí thuê quán ăn - 150k,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-7,đóng phí thuê quán ăn - 150000 dong,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-8,ghi nhé: đóng phí thuê quán ăn 150.000 đồng,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-9,đóng phí thuê quán ăn 150.000 vnd,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-10,dong phi thue quan an 150000 dong,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-17-11,Hôm qua đóng phí thuê quán ăn tốn 150k,expense,rent,rent-17,validation,synthetic_authored_template_v2
+rent-18-0,Trả chủ sạp tiền thuê tháng 350.000 đồng,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-1,"Hôm nay trả chủ sạp tiền thuê tháng, số tiền 350000 VND, chuyển khoản.",expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-2,"Hôm qua trả chủ sạp tiền thuê tháng hết 350 nghìn, trả tiền mặt.",expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-3,"Ghi giúp tôi: trả chủ sạp tiền thuê tháng, 350k.",expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-4,TRẢ CHỦ SẠP TIỀN THUÊ THÁNG. Tổng cộng: 350000 đồng.,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-5,tra chu sap tien thue thang 350000 dong,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-6,trả chủ sạp tiền thuê tháng - 350k,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-7,trả chủ sạp tiền thuê tháng - 350000 dong,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-8,ghi nhé: trả chủ sạp tiền thuê tháng 350.000 đồng,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-9,trả chủ sạp tiền thuê tháng 350.000 vnd,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-10,tra chu sap tien thue thang 350000 dong,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-18-11,Hôm qua trả chủ sạp tiền thuê tháng tốn 350k,expense,rent,rent-18,validation,synthetic_authored_template_v2
+rent-19-0,Thanh toán thuê khu bán hàng 150.000 đồng,expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-1,"Hôm nay thanh toán thuê khu bán hàng, số tiền 150000 VND, chuyển khoản.",expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-2,"Hôm qua thanh toán thuê khu bán hàng hết 150 nghìn, trả tiền mặt.",expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-3,"Ghi giúp tôi: thanh toán thuê khu bán hàng, 150k.",expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-4,THANH TOÁN THUÊ KHU BÁN HÀNG. Tổng cộng: 150000 đồng.,expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-5,thanh toan thue khu ban hang 150000 dong,expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-6,thanh toán thuê khu bán hàng - 150k,expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-7,thanh toán thuê khu bán hàng - 150000 dong,expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-8,ghi nhé: thanh toán thuê khu bán hàng 150.000 đồng,expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-9,thanh toan thuế khu bán hàng 150.000 vnd,expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-10,thanh toan thue khu ban hang 150000 dong,expense,rent,rent-19,validation,synthetic_authored_template_v2
+rent-19-11,Hôm qua thanh toán thuê khu bán hàng tốn 150k,expense,rent,rent-19,validation,synthetic_authored_template_v2
+utilities-16-0,Chuyển tiền điện cho điện lực 650.000 đồng,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-1,"Hôm nay chuyển tiền điện cho điện lực, số tiền 650000 VND, chuyển khoản.",expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-2,"Hôm qua chuyển tiền điện cho điện lực hết 650 nghìn, trả tiền mặt.",expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-3,"Ghi giúp tôi: chuyển tiền điện cho điện lực, 650k.",expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-4,CHUYỂN TIỀN ĐIỆN CHO ĐIỆN LỰC. Tổng cộng: 650000 đồng.,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-5,chuyen tien dien cho dien luc 650000 dong,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-6,chuyển tiền điện cho điện lực - 650k,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-7,chuyển tiền điện cho điện lực - 650000 dong,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-8,ghi nhé: chuyển tiền điện cho điện lực 650.000 đồng,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-9,chuyển tiền điện cho điện lực 650.000 vnd,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-10,chuyen tien dien cho dien luc 650000 dong,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-16-11,Hôm qua chuyển tiền điện cho điện lực tốn 650k,expense,utilities,utilities-16,validation,synthetic_authored_template_v2
+utilities-17-0,Thanh toán mạng internet tại quán 650.000 đồng,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-1,"Hôm nay thanh toán mạng internet tại quán, số tiền 650000 VND, chuyển khoản.",expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-2,"Hôm qua thanh toán mạng internet tại quán hết 650 nghìn, trả tiền mặt.",expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-3,"Ghi giúp tôi: thanh toán mạng internet tại quán, 650k.",expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-4,THANH TOÁN MẠNG INTERNET TẠI QUÁN. Tổng cộng: 650000 đồng.,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-5,thanh toan mang internet tai quan 650000 dong,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-6,thanh toán mạng internet tại quán - 650k,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-7,thanh toán mạng internet tại quán - 650000 dong,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-8,ghi nhé: thanh toán mạng internet tại quán 650.000 đồng,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-9,thanh toan mang internet tại quan 650.000 vnd,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-10,thanh toan mang internet tai quan 650000 dong,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-17-11,Hôm qua thanh toán mạng internet tại quán tốn 650k,expense,utilities,utilities-17,validation,synthetic_authored_template_v2
+utilities-18-0,Trả tiền sử dụng nước của tiệm 350.000 đồng,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-1,"Hôm nay trả tiền sử dụng nước của tiệm, số tiền 350000 VND, chuyển khoản.",expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-2,"Hôm qua trả tiền sử dụng nước của tiệm hết 350 nghìn, trả tiền mặt.",expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-3,"Ghi giúp tôi: trả tiền sử dụng nước của tiệm, 350k.",expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-4,TRẢ TIỀN SỬ DỤNG NƯỚC CỦA TIỆM. Tổng cộng: 350000 đồng.,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-5,tra tien su dung nuoc cua tiem 350000 dong,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-6,trả tiền sử dụng nước của tiệm - 350k,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-7,trả tiền sử dụng nước của tiệm - 350000 dong,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-8,ghi nhé: trả tiền sử dụng nước của tiệm 350.000 đồng,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-9,trả tiền sử dụng nước của tiệm 350.000 vnd,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-10,tra tien su dung nuoc cua tiem 350000 dong,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-18-11,Hôm qua trả tiền sử dụng nước của tiệm tốn 350k,expense,utilities,utilities-18,validation,synthetic_authored_template_v2
+utilities-19-0,Đóng cước điện thoại cửa hàng 85.000 đồng,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-1,"Hôm nay đóng cước điện thoại cửa hàng, số tiền 85000 VND, chuyển khoản.",expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-2,"Hôm qua đóng cước điện thoại cửa hàng hết 85 nghìn, trả tiền mặt.",expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-3,"Ghi giúp tôi: đóng cước điện thoại cửa hàng, 85k.",expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-4,ĐÓNG CƯỚC ĐIỆN THOẠI CỬA HÀNG. Tổng cộng: 85000 đồng.,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-5,dong cuoc dien thoai cua hang 85000 dong,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-6,đóng cước điện thoại cửa hàng - 85k,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-7,đóng cước điện thoại cửa hàng - 85000 dong,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-8,ghi nhé: đóng cước điện thoại cửa hàng 85.000 đồng,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-9,đóng cước diện thoại cửa hàng 85.000 vnd,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-10,dong cuoc dien thoai cua hang 85000 dong,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+utilities-19-11,Hôm qua đóng cước điện thoại cửa hàng tốn 85k,expense,utilities,utilities-19,validation,synthetic_authored_template_v2
+shipping-16-0,Chi tiền thuê người giao đơn 650.000 đồng,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-1,"Hôm nay chi tiền thuê người giao đơn, số tiền 650000 VND, chuyển khoản.",expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-2,"Hôm qua chi tiền thuê người giao đơn hết 650 nghìn, trả tiền mặt.",expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-3,"Ghi giúp tôi: chi tiền thuê người giao đơn, 650k.",expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-4,CHI TIỀN THUÊ NGƯỜI GIAO ĐƠN. Tổng cộng: 650000 đồng.,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-5,chi tien thue nguoi giao don 650000 dong,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-6,chi tiền thuê người giao đơn - 650k,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-7,chi tiền thuê người giao đơn - 650000 dong,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-8,ghi nhé: chi tiền thuê người giao đơn 650.000 đồng,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-9,chi tiền thuê người giao đơn 650.000 vnd,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-10,chi tien thue nguoi giao don 650000 dong,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-16-11,Hôm qua chi tiền thuê người giao đơn tốn 650k,expense,shipping,shipping-16,validation,synthetic_authored_template_v2
+shipping-17-0,Thanh toán cước chuyển hàng đường bộ 150.000 đồng,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-1,"Hôm nay thanh toán cước chuyển hàng đường bộ, số tiền 150000 VND, chuyển khoản.",expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-2,"Hôm qua thanh toán cước chuyển hàng đường bộ hết 150 nghìn, trả tiền mặt.",expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-3,"Ghi giúp tôi: thanh toán cước chuyển hàng đường bộ, 150k.",expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-4,THANH TOÁN CƯỚC CHUYỂN HÀNG ĐƯỜNG BỘ. Tổng cộng: 150000 đồng.,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-5,thanh toan cuoc chuyen hang duong bo 150000 dong,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-6,thanh toán cước chuyển hàng đường bộ - 150k,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-7,thanh toán cước chuyển hàng đường bộ - 150000 dong,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-8,ghi nhé: thanh toán cước chuyển hàng đường bộ 150.000 đồng,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-9,thanh toan cước chuyển hang duờng bộ 150.000 vnd,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-10,thanh toan cuoc chuyen hang duong bo 150000 dong,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-17-11,Hôm qua thanh toán cước chuyển hàng đường bộ tốn 150k,expense,shipping,shipping-17,validation,synthetic_authored_template_v2
+shipping-18-0,Trả phí ship cho cửa hàng 1.200.000 đồng,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-1,"Hôm nay trả phí ship cho cửa hàng, số tiền 1200000 VND, chuyển khoản.",expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-2,"Hôm qua trả phí ship cho cửa hàng hết 1200 nghìn, trả tiền mặt.",expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-3,"Ghi giúp tôi: trả phí ship cho cửa hàng, 1200k.",expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-4,TRẢ PHÍ SHIP CHO CỬA HÀNG. Tổng cộng: 1200000 đồng.,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-5,tra phi ship cho cua hang 1200000 dong,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-6,trả phí ship cho cửa hàng - 1200k,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-7,trả phí ship cho cửa hàng - 1200000 dong,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-8,ghi nhé: trả phí ship cho cửa hàng 1.200.000 đồng,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-9,tra phí ship cho cửa hàng 1.200.000 vnd,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-10,tra phi ship cho cua hang 1200000 dong,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-18-11,Hôm qua trả phí ship cho cửa hàng tốn 1200k,expense,shipping,shipping-18,validation,synthetic_authored_template_v2
+shipping-19-0,Chi tiền chở hàng ra bến xe 2.500.000 đồng,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-1,"Hôm nay chi tiền chở hàng ra bến xe, số tiền 2500000 VND, chuyển khoản.",expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-2,"Hôm qua chi tiền chở hàng ra bến xe hết 2500 nghìn, trả tiền mặt.",expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-3,"Ghi giúp tôi: chi tiền chở hàng ra bến xe, 2500k.",expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-4,CHI TIỀN CHỞ HÀNG RA BẾN XE. Tổng cộng: 2500000 đồng.,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-5,chi tien cho hang ra ben xe 2500000 dong,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-6,chi tiền chở hàng ra bến xe - 2500k,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-7,chi tiền chở hàng ra bến xe - 2500000 dong,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-8,ghi nhé: chi tiền chở hàng ra bến xe 2.500.000 đồng,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-9,chi tiền chở hàng ra bến xe 2.500.000 vnd,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-10,chi tien cho hang ra ben xe 2500000 dong,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+shipping-19-11,Hôm qua chi tiền chở hàng ra bến xe tốn 2500k,expense,shipping,shipping-19,validation,synthetic_authored_template_v2
+salary-16-0,Trả lương bạn phụ bán hàng 150.000 đồng,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-1,"Hôm nay trả lương bạn phụ bán hàng, số tiền 150000 VND, chuyển khoản.",expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-2,"Hôm qua trả lương bạn phụ bán hàng hết 150 nghìn, trả tiền mặt.",expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-3,"Ghi giúp tôi: trả lương bạn phụ bán hàng, 150k.",expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-4,TRẢ LƯƠNG BẠN PHỤ BÁN HÀNG. Tổng cộng: 150000 đồng.,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-5,tra luong ban phu ban hang 150000 dong,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-6,trả lương bạn phụ bán hàng - 150k,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-7,trả lương bạn phụ bán hàng - 150000 dong,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-8,ghi nhé: trả lương bạn phụ bán hàng 150.000 đồng,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-9,trả lương bạn phụ bán hàng 150.000 vnd,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-10,tra luong ban phu ban hang 150000 dong,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-16-11,Hôm qua trả lương bạn phụ bán hàng tốn 150k,expense,salary,salary-16,validation,synthetic_authored_template_v2
+salary-17-0,Chi tiền công nhân viên làm thêm 1.200.000 đồng,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-1,"Hôm nay chi tiền công nhân viên làm thêm, số tiền 1200000 VND, chuyển khoản.",expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-2,"Hôm qua chi tiền công nhân viên làm thêm hết 1200 nghìn, trả tiền mặt.",expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-3,"Ghi giúp tôi: chi tiền công nhân viên làm thêm, 1200k.",expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-4,CHI TIỀN CÔNG NHÂN VIÊN LÀM THÊM. Tổng cộng: 1200000 đồng.,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-5,chi tien cong nhan vien lam them 1200000 dong,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-6,chi tiền công nhân viên làm thêm - 1200k,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-7,chi tiền công nhân viên làm thêm - 1200000 dong,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-8,ghi nhé: chi tiền công nhân viên làm thêm 1.200.000 đồng,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-9,chi tiền công nhần viên làm thêm 1.200.000 vnd,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-10,chi tien cong nhan vien lam them 1200000 dong,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-17-11,Hôm qua chi tiền công nhân viên làm thêm tốn 1200k,expense,salary,salary-17,validation,synthetic_authored_template_v2
+salary-18-0,Thanh toán lương tháng của thợ phụ 350.000 đồng,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-1,"Hôm nay thanh toán lương tháng của thợ phụ, số tiền 350000 VND, chuyển khoản.",expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-2,"Hôm qua thanh toán lương tháng của thợ phụ hết 350 nghìn, trả tiền mặt.",expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-3,"Ghi giúp tôi: thanh toán lương tháng của thợ phụ, 350k.",expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-4,THANH TOÁN LƯƠNG THÁNG CỦA THỢ PHỤ. Tổng cộng: 350000 đồng.,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-5,thanh toan luong thang cua tho phu 350000 dong,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-6,thanh toán lương tháng của thợ phụ - 350k,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-7,thanh toán lương tháng của thợ phụ - 350000 dong,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-8,ghi nhé: thanh toán lương tháng của thợ phụ 350.000 đồng,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-9,thanh toán lương tháng của thợ phụ 350.000 vnd,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-10,thanh toan luong thang cua tho phu 350000 dong,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-18-11,Hôm qua thanh toán lương tháng của thợ phụ tốn 350k,expense,salary,salary-18,validation,synthetic_authored_template_v2
+salary-19-0,Trả thưởng người phục vụ quán 350.000 đồng,expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-1,"Hôm nay trả thưởng người phục vụ quán, số tiền 350000 VND, chuyển khoản.",expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-2,"Hôm qua trả thưởng người phục vụ quán hết 350 nghìn, trả tiền mặt.",expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-3,"Ghi giúp tôi: trả thưởng người phục vụ quán, 350k.",expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-4,TRẢ THƯỞNG NGƯỜI PHỤC VỤ QUÁN. Tổng cộng: 350000 đồng.,expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-5,tra thuong nguoi phuc vu quan 350000 dong,expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-6,trả thưởng người phục vụ quán - 350k,expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-7,trả thưởng người phục vụ quán - 350000 dong,expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-8,ghi nhé: trả thưởng người phục vụ quán 350.000 đồng,expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-9,trả thưởng người phục vụ quán 350.000 vnd,expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-10,tra thuong nguoi phuc vu quan 350000 dong,expense,salary,salary-19,validation,synthetic_authored_template_v2
+salary-19-11,Hôm qua trả thưởng người phục vụ quán tốn 350k,expense,salary,salary-19,validation,synthetic_authored_template_v2
+other_expense-16-0,Mua cân điện tử cho quầy 2.500.000 đồng,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-1,"Hôm nay mua cân điện tử cho quầy, số tiền 2500000 VND, chuyển khoản.",expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-2,"Hôm qua mua cân điện tử cho quầy hết 2500 nghìn, trả tiền mặt.",expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-3,"Ghi giúp tôi: mua cân điện tử cho quầy, 2500k.",expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-4,MUA CÂN ĐIỆN TỬ CHO QUẦY. Tổng cộng: 2500000 đồng.,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-5,mua can dien tu cho quay 2500000 dong,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-6,mua cân điện tử cho quầy - 2500k,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-7,mua cân điện tử cho quầy - 2500000 dong,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-8,ghi nhé: mua cân điện tử cho quầy 2.500.000 đồng,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-9,mua cân diện tử cho quầy 2.500.000 vnd,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-10,mua can dien tu cho quay 2500000 dong,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-16-11,Hôm qua mua cân điện tử cho quầy tốn 2500k,expense,other_expense,other_expense-16,validation,synthetic_authored_template_v2
+other_expense-17-0,Chi sửa chữa thiết bị của quán 150.000 đồng,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-1,"Hôm nay chi sửa chữa thiết bị của quán, số tiền 150000 VND, chuyển khoản.",expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-2,"Hôm qua chi sửa chữa thiết bị của quán hết 150 nghìn, trả tiền mặt.",expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-3,"Ghi giúp tôi: chi sửa chữa thiết bị của quán, 150k.",expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-4,CHI SỬA CHỮA THIẾT BỊ CỦA QUÁN. Tổng cộng: 150000 đồng.,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-5,chi sua chua thiet bi cua quan 150000 dong,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-6,chi sửa chữa thiết bị của quán - 150k,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-7,chi sửa chữa thiết bị của quán - 150000 dong,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-8,ghi nhé: chi sửa chữa thiết bị của quán 150.000 đồng,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-9,chi sửa chữa thiết bi của quán 150.000 vnd,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-10,chi sua chua thiet bi cua quan 150000 dong,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-17-11,Hôm qua chi sửa chữa thiết bị của quán tốn 150k,expense,other_expense,other_expense-17,validation,synthetic_authored_template_v2
+other_expense-18-0,Trả phí quảng bá cửa hàng 2.500.000 đồng,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-1,"Hôm nay trả phí quảng bá cửa hàng, số tiền 2500000 VND, chuyển khoản.",expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-2,"Hôm qua trả phí quảng bá cửa hàng hết 2500 nghìn, trả tiền mặt.",expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-3,"Ghi giúp tôi: trả phí quảng bá cửa hàng, 2500k.",expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-4,TRẢ PHÍ QUẢNG BÁ CỬA HÀNG. Tổng cộng: 2500000 đồng.,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-5,tra phi quang ba cua hang 2500000 dong,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-6,trả phí quảng bá cửa hàng - 2500k,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-7,trả phí quảng bá cửa hàng - 2500000 dong,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-8,ghi nhé: trả phí quảng bá cửa hàng 2.500.000 đồng,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-9,trả phí quảng bá cửa hàng 2.500.000 vnd,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-10,tra phi quang ba cua hang 2500000 dong,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-18-11,Hôm qua trả phí quảng bá cửa hàng tốn 2500k,expense,other_expense,other_expense-18,validation,synthetic_authored_template_v2
+other_expense-19-0,Chi tiền mua tủ trưng bày 2.500.000 đồng,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-1,"Hôm nay chi tiền mua tủ trưng bày, số tiền 2500000 VND, chuyển khoản.",expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-2,"Hôm qua chi tiền mua tủ trưng bày hết 2500 nghìn, trả tiền mặt.",expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-3,"Ghi giúp tôi: chi tiền mua tủ trưng bày, 2500k.",expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-4,CHI TIỀN MUA TỦ TRƯNG BÀY. Tổng cộng: 2500000 đồng.,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-5,chi tien mua tu trung bay 2500000 dong,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-6,chi tiền mua tủ trưng bày - 2500k,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-7,chi tiền mua tủ trưng bày - 2500000 dong,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-8,ghi nhé: chi tiền mua tủ trưng bày 2.500.000 đồng,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-9,chi tiền mua tủ trưng bày 2.500.000 vnd,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-10,chi tien mua tu trung bay 2500000 dong,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2
+other_expense-19-11,Hôm qua chi tiền mua tủ trưng bày tốn 2500k,expense,other_expense,other_expense-19,validation,synthetic_authored_template_v2

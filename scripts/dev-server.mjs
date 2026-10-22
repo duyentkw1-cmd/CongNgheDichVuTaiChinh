@@ -1,0 +1,15 @@
+import {spawn,spawnSync} from 'node:child_process';
+import {existsSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const local=path.join(root,'.venv',process.platform==='win32'?'Scripts/python.exe':'bin/python');
+const args=process.argv.slice(2), portIndex=args.indexOf('--port'), hostIndex=args.indexOf('--host');
+const executable=existsSync(local)?local:process.platform==='win32'?'python':'python3';
+const port=portIndex>=0?args[portIndex+1]:'8000';
+const host=hostIndex>=0?args[hostIndex+1]:'127.0.0.1';
+console.log(`Starting FastAPI from ${root}; interpreter ${executable}`);
+const child=spawn(executable,['-m','uvicorn','backend.main:app','--host',host,'--port',port],{cwd:root,stdio:'inherit'});
+child.on('error',e=>{console.error('Python is unavailable. Run start-demo.bat or start-demo.sh first.',e.message);process.exit(1);});
+child.on('exit',code=>process.exit(code??0));
+for(const sig of ['SIGINT','SIGTERM'])process.on(sig,()=>child.kill(sig));

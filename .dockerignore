@@ -1,0 +1,10 @@
+.venv
+frontend/node_modules
+frontend/dist
+data
+qa
+installers
+**/__pycache__
+**/.cache
+.env
+*.zip

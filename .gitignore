@@ -1,0 +1,16 @@
+.env
+.venv/
+**/node_modules/
+data/
+__pycache__/
+*.pyc
+*.tsbuildinfo
+frontend/android/
+frontend/ios/
+qa/
+
+.env-*
+.env.*
+!.env.example
+models/whisper-base/model.bin
+installers/

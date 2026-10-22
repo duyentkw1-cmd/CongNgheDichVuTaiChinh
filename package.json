@@ -1,0 +1,1 @@
+{"name": "so-thu-chi-ai-local", "private": true, "scripts": {"dev": "node scripts/dev-server.mjs"}}

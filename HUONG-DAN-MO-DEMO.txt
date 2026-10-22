@@ -1,0 +1,20 @@
+SO THU CHI AI LOCAL - BAT DAU TAI DAY
+
+1. Cai Python 3.12 64-bit (chon Add python.exe to PATH).
+2. Giai nen toan bo ZIP, mo thu muc so-thu-chi-ai-local.
+3. Bam setup-local.bat. Can Internet de cai thu vien lan dau.
+4. Bam install-ocr-windows.bat va cai Tesseract o duong dan mac dinh.
+5. Bam start-demo.bat, giu cua so terminal mo.
+6. Mo http://localhost:8000, bam Trai nghiem voi du lieu mau.
+
+Tai khoan: demo@sothuchi.vn
+Mat khau: Demo123!
+
+Giao dien mobile co san, khong can cai Node.js neu chi mo demo.
+Khong can khoa API. Model va du lieu huan luyen da co trong ZIP.
+Sau khi cai du thu vien va Tesseract, co the chay offline.
+
+Doc HUONG-DAN-WINDOWS.md de xem chi tiet va xu ly loi.
+Doc HUONG-DAN-HUAN-LUYEN.md de tu huan luyen lai.
+Thu muc datasets: du lieu MO PHONG, khong phai du lieu thuc.
+Hai model phan loai duoc tu huan luyen; Whisper/Tesseract dung model co san.

@@ -1,0 +1,40 @@
+BẢN VÁ OCR 504 - SỔ THU CHI AI LOCAL - 22/10/2026
+
+Đây là bản vá nhỏ dành cho thư mục demo đã cài đặt.
+
+1. Dừng cửa sổ đang chạy start-demo.bat bằng Ctrl+C.
+2. Giải nén Sua-Loi-OCR-504.zip ra một thư mục tạm.
+3. Mở thư mục Sua-Loi-OCR-504 vừa giải nén. Sao chép toàn bộ nội dung
+   bên trong vào thư mục so-thu-chi-ai-local đang dùng, nơi có start-demo.bat
+   và .venv. Chọn Replace the files in the destination khi Windows hỏi.
+   Các thư mục backend, scripts, tests sẽ được gộp vào thư mục tương ứng.
+4. Chạy kiem-tra-ai.bat. Chờ các dòng MODEL OK, VAD OK, WHISPER OK, OCR OK.
+   Nếu có FAILED, chụp cả lỗi gốc ngay phía trên. Khi thiếu pkg_resources,
+   chạy sua-loi-giong-noi.bat rồi kiểm tra lại.
+5. Mở lại start-demo.bat. Trên trình duyệt nhấn Ctrl+F5.
+6. Thử Hình ảnh -> Thử chứng từ mẫu. Thử Giọng nói bằng một câu rõ 5-10 giây.
+
+Bản vá chỉ chứa mã và hướng dẫn; không có thư mục dữ liệu, mô hình hoặc .venv.
+Không cần chạy lại setup chỉ để áp dụng phần sửa OCR này.
+
+ĐÃ SỬA:
+- Lỗi Tesseract từng bị báo nhầm là timeout 504. Chỉ thời gian xử lý vượt
+  30 giây mới là 504. Lỗi chương trình/ngôn ngữ trả 503, kèm lỗi gốc ở terminal.
+- Truyền đường dẫn Tesseract và bộ ngôn ngữ bằng danh sách đối số, không
+  tự chèn dấu nháy. Ảnh được gửi qua stdin, văn bản lấy từ stdout.
+- Kiểm tra đủ vie.traineddata và eng.traineddata.
+- kiem-tra-ai.bat đọc ảnh mẫu thật, đồng thời kiểm tra Whisper và VAD.
+- Thông báo 422 của giọng nói phân biệt bản ghi im lặng và quá ngắn.
+
+VỀ VOICE 422:
+Ảnh người dùng gửi có voice = 422, image = 504. Đây là hai lỗi riêng.
+422 chưa xác định nguyên nhân nếu chưa xem nội dung Response. Khi còn lỗi:
+F12 -> Network -> bấm dòng voice màu đỏ -> Response -> chụp nội dung detail.
+Nghe lại bản ghi và xác nhận có tiếng trước khi nhận dạng.
+
+KIỂM TRA ĐÃ THỰC HIỆN:
+- 4 kiểm thử hồi quy OCR đạt.
+- Ảnh mẫu đọc được 650.000 VND.
+- Whisper nạp và chạy suy luận mẫu, VAD chạy được.
+- Kiểm thử trên Linux/Python 3.12; cần kiểm tra lại trên Windows của bạn.
+  Các kiểm tra hoạt động không phải số đo chất lượng nhận tiếng Việt thực tế.

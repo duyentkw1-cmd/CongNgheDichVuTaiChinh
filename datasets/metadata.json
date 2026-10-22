@@ -1,0 +1,13 @@
+{
+  "origin": "Synthetic educational data, authored seed families + deterministic variants + augmentation v2",
+  "seed": 20261021,
+  "total": 6560,
+  "categories": 10,
+  "split_counts": {
+    "train": 5600,
+    "validation": 480,
+    "test": 480
+  },
+  "group_policy": "A semantic seed and all variants stay in exactly one split. Evaluation is synthetic, not real-world accuracy.",
+  "augmentation": "OCR noise, speech noise, diacritic stripping, word dropout, word shuffle, casual templates"
+}

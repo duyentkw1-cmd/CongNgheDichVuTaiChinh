@@ -1,0 +1,30 @@
+[
+  {
+    "file": "models/whisper-base/model.bin",
+    "description": "Whisper base đa ngôn ngữ đã huấn luyện sẵn",
+    "source": "https://huggingface.co/Systran/faster-whisper-base",
+    "bytes": 145217532,
+    "sha256": "d01c3014881c9c6f3133c182f3d2887eb6ca1c789a7538c5c007196857a0a6a9"
+  },
+  {
+    "file": "models/tessdata/vie.traineddata",
+    "description": "Tesseract tiếng Việt",
+    "source": "https://github.com/tesseract-ocr/tessdata_fast",
+    "bytes": 531275,
+    "sha256": "79df64caf7bcfb2a27df5042ecb6121e196eada34da774956995747636d5bfa1"
+  },
+  {
+    "file": "models/tessdata/eng.traineddata",
+    "description": "Tesseract tiếng Anh",
+    "source": "https://github.com/tesseract-ocr/tessdata_fast",
+    "bytes": 4113088,
+    "sha256": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2"
+  },
+  {
+    "file": "installers/tesseract-setup.exe",
+    "description": "Trình cài Windows từ liên kết UB Mannheim",
+    "source": "https://github.com/tesseract-ocr/tesseract/releases/download/5.5.3/tesseract-ocr-w64-setup-5.5.3.20260724.exe",
+    "bytes": 26573224,
+    "sha256": "bee9e3434bd94fd65387d9be28cd467a41f61b1275383b55b0f59a1331270ae4"
+  }
+]
