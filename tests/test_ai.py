@@ -587,5 +587,36 @@ class RealWorldScenarioTests(unittest.TestCase):
                     f'"{text}" should be expense, got {result["kind"]}')
 
 
+class CompoundTransactionTests(unittest.TestCase):
+    def test_continuous_speech_no_punctuation(self):
+        r = ai.analyze_text('mua 5 kg rau hết 100000đ mua 5 kg thịt hết 200.000đ', stt=True)
+        items = r.get('items', [])
+        self.assertEqual(len(items), 2)
+        self.assertEqual(items[0]['amount'], 100000)
+        self.assertEqual(items[1]['amount'], 200000)
+        self.assertEqual(items[0]['kind'], 'expense')
+        self.assertEqual(items[1]['kind'], 'expense')
+
+    def test_mixed_income_expense_compound(self):
+        r = ai.analyze_text('Mua 5kg thịt hết 100k, bán 1kg rau được 200k với trả tiền ship 20k', stt=True)
+        items = r.get('items', [])
+        self.assertEqual(len(items), 3)
+        self.assertEqual(items[0]['amount'], 100000)
+        self.assertEqual(items[0]['kind'], 'expense')
+        self.assertEqual(items[1]['amount'], 200000)
+        self.assertEqual(items[1]['kind'], 'income')
+        self.assertEqual(items[2]['amount'], 20000)
+        self.assertEqual(items[2]['kind'], 'expense')
+        self.assertEqual(items[2]['category'], 'shipping')
+
+    def test_spoken_numbers_without_unit(self):
+        r = ai.analyze_text('Sáng nhập bao rau ba trăm nghìn với đóng tiền điện năm trăm', stt=True)
+        items = r.get('items', [])
+        self.assertEqual(len(items), 2)
+        self.assertEqual(items[0]['amount'], 300000)
+        self.assertEqual(items[1]['amount'], 500000)
+        self.assertEqual(items[1]['category'], 'utilities')
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -59,6 +59,7 @@ def normalize_stt_text(s):
 
     # ── 4. Slang currency units ──
     # cu / chai = 1,000,000
+    s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:cu|chai)\s+(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\b', r'\1 trieu \2 tram nghin', s)
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:cu|chai)\s+ruoi\b', r'\1 trieu nam tram nghin', s)
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:cu|chai)\b', r'\1 trieu', s)
     # lit / xi / lop = 100,000
@@ -68,6 +69,9 @@ def normalize_stt_text(s):
     s = re.sub(r'\b(?:lit|xi|lop)\b', 'mot tram nghin', s)
     # canh = 1,000
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+canh\b', r'\1 nghin', s)
+
+    # ── 5. "tram" standalone without nghin/dong in marketplace context (e.g. nam tram = 500k) ──
+    s = re.sub(rf'\b(\d+|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin)\s+tram\b(?!\s*(?:nghin|ngan|k\b|dong|vnd|trieu|tr|ruoi|\d|{WORDS}))', r'\1 tram nghin', s)
 
     return s
 
@@ -101,19 +105,49 @@ def money_candidates(text, bare=False):
 
 
 
-def parse_multi_items(text):
-    """Parse a multiline transaction list into individual items.
+def split_transaction_clauses(text):
+    """Split compound speech or multiline text into individual transaction clauses.
+
+    Splits by:
+    1. Line breaks (\\n)
+    2. Conjunctions and punctuation (dấu phẩy, chấm phẩy, 'với', 'và', 'rồi', 'xong'...)
+    3. Action cue transitions when an action keyword (mua, bán, trả, đóng, ship...)
+       immediately follows a previous amount/currency word.
+    """
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    if not lines:
+        return []
+
+    delim = re.compile(
+        r'(?<!\d)[,;]+(?!\d)|\s+(?:với|voi|và|va|rồi|roi|xong|đồng thời|dong thoi|tiếp theo|tiep theo)\s+',
+        re.IGNORECASE
+    )
+    cue_pattern = re.compile(
+        r'(\b\d+[\d.,]*(?:k|dong|đ|d|vnd|nghin|ngan|trieu|tr|tram|cu|chai|lit|xi|lop)?)\s+'
+        r'(?=(?:mua|bán|ban|nhập|nhap|trả|tra|đóng|dong|chi|thu|lấy|lay|khách|khach|ship|tiền\s+)\b)',
+        re.IGNORECASE
+    )
+
+    segments = []
+    for line in lines:
+        line_split = cue_pattern.sub(r'\1\n', line)
+        for sub_line in line_split.splitlines():
+            parts = delim.split(sub_line)
+            for part in parts:
+                part = part.strip()
+                if part:
+                    segments.append(part)
+    return segments
+
+
+def parse_multi_items(text, stt=True):
+    """Parse multiline or compound transaction sentences into individual items.
 
     Returns [] immediately when the text looks like a receipt with a running
     total line (tong cong / thanh toan / so tien ...) so that parse_fields
     can pick up the TONG CONG total instead of treating each line-item
     individually.
     """
-    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
-    if len(lines) < 2:
-        return []
-
-    # If any line looks like a receipt total, defer entirely to parse_fields.
     folded_all = fold(text)
     if re.search(
         r'\b(tong\s*(cong|tien|gia\s*tri|so|hang)|thanh\s*toan|tong\s*cong'
@@ -122,20 +156,37 @@ def parse_multi_items(text):
     ):
         return []
 
+    clauses = split_transaction_clauses(text)
+    if len(clauses) < 2:
+        return []
+
     items = []
-    for line in lines:
+    for line in clauses:
         folded = fold(line)
         if re.search(r'\b(kiem tra|xac nhan|xem lai|giao dich|so thu chi|hoa don|phieu thu|phieu chi|cam on|hen gap lai|tong cong|thanh toan)\b', folded):
             continue
         line_clean = re.sub(r'(\w)\s*[-\u2013\u2014:]\s*(\d)', r'\1 : \2', line)
-        cands = money_candidates(fold(line_clean), bare=True)
+        folded_clean = fold(line_clean)
+        folded_norm = normalize_stt_text(folded_clean)
+        cands = money_candidates(folded_norm, bare=True)
         if not cands:
             m = re.search(r'(\d+[\d.,]*)\s*(?:k|dong|\u0111|d|vnd|nghin|ngan|trieu|tr)\b', line, re.I)
             if m:
                 cands = money_candidates(fold(m.group(0)), bare=True)
+        # Small bare number after item: e.g. "rau cải 20" -> 20.000
+        if not cands:
+            m_bare = re.search(r'(?:^|[^\d.,])(\d{1,3})\s*$', line.strip())
+            if m_bare:
+                val = int(m_bare.group(1))
+                if 1 <= val <= 500:
+                    cands = [val * 1000]
+
         if cands and 0 < cands[0] <= 1000000000000:
             amt = cands[0]
-            desc = re.sub(r'[-\u2013\u2014:]?\s*\d+[\d.,]*\s*(?:k|dong|\u0111|d|vnd|nghin|ngan|trieu|tr)?\s*$', '', line, flags=re.I).strip()
+            desc = re.sub(
+                r'[-\u2013\u2014:]?\s*(?:hết|het|được|duoc|mất|mat|khoảng|khoang|tam|tầm|là|la)?\s*\d+[\d.,]*\s*(?:k|dong|\u0111|d|vnd|nghin|ngan|trieu|tr|tram|cu|chai|lit)?\s*$',
+                '', line, flags=re.I
+            ).strip()
             desc = re.sub(r'^[0-9]+[.)\-]\s*|^[-*\u2022]\s*', '', desc).strip()
             if not desc:
                 desc = line
@@ -145,7 +196,7 @@ def parse_multi_items(text):
                 'description': desc[:300],
                 'amount': amt
             })
-    return items
+    return items if len(items) >= 2 else []
 
 
 def parse_fields(text, stt=False):

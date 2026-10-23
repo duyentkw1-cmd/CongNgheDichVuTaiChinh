@@ -129,14 +129,31 @@ def analyze_text(text, stt=False):
     if not ready():
         raise HTTPException(503,'Thiếu mô hình phân loại. Chạy train-models.bat rồi mở lại ứng dụng.')
 
-    multi = parse_multi_items(text)
+    multi = parse_multi_items(text, stt=stt)
     items = []
     if len(multi) >= 2:
         for it in multi:
             cl = classify(it['raw_line'])
+            kind = cl['kind']
+            cat = cl['category']
+
+            # Ensure Thu/Chi aligns with unambiguous action keywords
+            folded_raw = fold(it['raw_line'])
+            is_income_word = bool(re.search(r'\b(ban|duoc|khach tra|nhan tien|thu|gom tien)\b', folded_raw))
+            is_expense_word = bool(re.search(r'\b(mua|nhap|tra|dong|ton|het|lay hang|ship|chi)\b', folded_raw))
+
+            if is_income_word and not is_expense_word:
+                kind = 'income'
+                if cat not in ('sales', 'service', 'other_income', 'capital'):
+                    cat = 'sales'
+            elif is_expense_word and not is_income_word:
+                kind = 'expense'
+                if cat not in ('materials', 'rent', 'utilities', 'shipping', 'salary', 'other_expense'):
+                    cat = 'materials'
+
             items.append({
-                'kind': cl['kind'],
-                'category': cl['category'],
+                'kind': kind,
+                'category': cat,
                 'description': it['description'],
                 'amount': it['amount']
             })
