@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thử nghiệm Nhận diện Giọng nói Tiếng Việt (Web Speech API)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      background: #ffffff;
+      max-width: 500px;
+      width: 100%;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    p.desc {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .mic-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .mic-button {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      border: none;
+      background: #155d4c;
+      color: #ffffff;
+      font-size: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(21, 93, 76, 0.3);
+    }
+    .mic-button:hover {
+      background: #0e4437;
+      transform: scale(1.04);
+    }
+    .mic-button.recording {
+      background: #dc2626;
+      box-shadow: 0 0 0 10px rgba(220, 38, 38, 0.2), 0 0 0 20px rgba(220, 38, 38, 0.1);
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.98); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(0.98); }
+    }
+    .status-text {
+      margin-top: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #475569;
+      text-align: center;
+      min-height: 20px;
+    }
+    .input-group {
+      margin-top: 15px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 12px 14px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1e293b;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+    textarea:focus {
+      border-color: #155d4c;
+      background: #ffffff;
+    }
+    .tip {
+      margin-top: 15px;
+      padding: 10px 12px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #166534;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>🎙️ Speech-to-Text Tiếng Việt</h2>
+    <p class="desc">Chuyển giọng nói thành chữ trực tiếp theo thời gian thực (Web Speech API / vi-VN).</p>
+
+    <div class="mic-container">
+      <button id="micBtn" class="mic-button" title="Chạm để nói">🎤</button>
+      <div id="statusText" class="status-text">Chạm micro để bắt đầu nói</div>
+    </div>
+
+    <div class="input-group">
+      <label for="transcript">Văn bản nhận diện được:</label>
+      <textarea id="transcript" placeholder="Lời nói của bạn sẽ xuất hiện trực tiếp tại đây..."></textarea>
+    </div>
+
+    <div class="tip">
+      💡 <b>Thử nghiệm:</b> Nói các câu như: <i>"Sáng nay mua năm cân thịt bò hai trăm nghìn"</i> hoặc <i>"Bán rau sáu chục ngàn"</i>. Hệ thống sẽ tự động bắt chữ thời gian thực và tự dừng khi bạn dứt câu.
+    </div>
+  </div>
+
+  <script>
+    // Module Web Speech API tích hợp trực tiếp
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const micBtn = document.getElementById('micBtn');
+    const statusText = document.getElementById('statusText');
+    const transcriptArea = document.getElementById('transcript');
+
+    let recognition = null;
+    let isListening = false;
+
+    if (!SpeechRecognition) {
+      statusText.innerText = '⚠️ Trình duyệt không hỗ trợ Web Speech API. Hãy dùng Chrome hoặc Edge.';
+      statusText.style.color = '#dc2626';
+      micBtn.disabled = true;
+      micBtn.style.opacity = '0.5';
+      micBtn.style.cursor = 'not-allowed';
+    }
+
+    function initRecognition() {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'vi-VN';
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => {
+        isListening = true;
+        micBtn.classList.add('recording');
+        micBtn.innerHTML = '⏹️';
+        statusText.innerText = '🔴 Đang nghe... Hãy nói ngay!';
+        statusText.style.color = '#dc2626';
+      };
+
+      recognition.onresult = (event) => {
+        let interimText = '';
+        let finalText = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const item = event.results[i];
+          if (item.isFinal) {
+            finalText += item[0].transcript;
+          } else {
+            interimText += item[0].transcript;
+          }
+        }
+
+        const current = (finalText || interimText).trim();
+        if (current) {
+          transcriptArea.value = current;
+          if (finalText) {
+            statusText.innerText = '✅ Đã nhận diện xong!';
+            statusText.style.color = '#155d4c';
+          } else {
+            statusText.innerText = '⏳ Đang nhận diện trực tiếp...';
+            statusText.style.color = '#d97706';
+          }
+        }
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech error:', event);
+        stop();
+        statusText.innerText = '❌ Lỗi nhận diện: ' + (event.error || 'Vui lòng thử lại');
+        statusText.style.color = '#dc2626';
+      };
+
+      recognition.onend = () => {
+        stop();
+        if (statusText.innerText.includes('Đang nghe')) {
+          statusText.innerText = 'Chạm micro để nói lại';
+          statusText.style.color = '#475569';
+        }
+      };
+    }
+
+    function start() {
+      if (!SpeechRecognition) return;
+      initRecognition();
+      try {
+        recognition.start();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function stop() {
+      isListening = false;
+      micBtn.classList.remove('recording');
+      micBtn.innerHTML = '🎤';
+      if (recognition) {
+        try { recognition.stop(); } catch(e){}
+      }
+    }
+
+    micBtn.addEventListener('click', () => {
+      if (isListening) {
+        stop();
+        statusText.innerText = 'Đã dừng nghe. Chạm micro để nói tiếp.';
+        statusText.style.color = '#475569';
+      } else {
+        start();
+      }
+    });
+  </script>
+</body>
+</html>
