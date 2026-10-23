@@ -282,6 +282,6 @@
   "model_sha256": {
     "category.joblib": "9e5875f1b9fadceda022d9a0c94353c83fdda76a020476574298d4bdc82d589a",
     "kind.joblib": "1eda55df785b64c6391663b639a36afd8a7041ecda9326c4f92f116d7473f185",
-    "vectorizer.joblib": "afad160532deb17e9226e30d9f3f332af40e0f20b3940af51c634c9288d3321f"
+    "vectorizer.joblib": "1ada3faa587c197c65b7c21a78d2445886dc09ff2e7fc447baedd28a2b984498"
   }
 }

@@ -11,6 +11,10 @@ HEADERS = {'X-Requested-With': 'so-thu-chi'}
 class RegisterTests(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app, headers=HEADERS)
+        self.client.__enter__()
+
+    def tearDown(self):
+        self.client.__exit__(None, None, None)
 
     def test_register_with_email_success(self):
         email = f"user_{uuid.uuid4().hex[:8]}@example.com"
@@ -153,3 +157,42 @@ class RegisterTests(unittest.TestCase):
             'password': 'password123'
         })
         self.assertEqual(r3.status_code, 409)
+
+    def test_login_email_does_not_use_embedded_phone_digits(self):
+        """An email that happens to contain another user's phone must not match that phone."""
+        phone = f"09{uuid.uuid4().int % 100000000:08d}"
+        r1 = self.client.post('/api/auth/register', json={
+            'name': 'Chủ số điện thoại',
+            'phone': phone,
+            'password': 'phone-pass-1',
+        })
+        self.assertEqual(r1.status_code, 200, r1.text)
+
+        email = f'shop{phone}@example.com'
+        r2 = self.client.post('/api/auth/register', json={
+            'name': 'Chủ email',
+            'email': email,
+            'password': 'email-pass-2',
+        })
+        self.assertEqual(r2.status_code, 200, r2.text)
+
+        email_login = TestClient(app, headers=HEADERS).post('/api/auth/login', json={
+            'email': email,
+            'password': 'email-pass-2',
+        })
+        self.assertEqual(email_login.status_code, 200, email_login.text)
+        self.assertEqual(email_login.json()['email'], email)
+        self.assertIsNone(email_login.json()['phone'])
+
+        wrong_password = TestClient(app, headers=HEADERS).post('/api/auth/login', json={
+            'email': email,
+            'password': 'phone-pass-1',
+        })
+        self.assertEqual(wrong_password.status_code, 401)
+
+        phone_login = TestClient(app, headers=HEADERS).post('/api/auth/login', json={
+            'email': phone,
+            'password': 'phone-pass-1',
+        })
+        self.assertEqual(phone_login.status_code, 200, phone_login.text)
+        self.assertEqual(phone_login.json()['phone'], phone)

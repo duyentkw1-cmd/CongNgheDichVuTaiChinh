@@ -146,20 +146,23 @@ def login(body: LoginInput, request: Request, response: Response, db: Session = 
         raise HTTPException(429, 'Bạn đã thử quá nhiều lần. Vui lòng thử lại sau 5 phút.')
     
     raw_identifier = body.email.strip().lower()
-    clean_phone = _re.sub(r'[^\d+]', '', raw_identifier)
-    
-    # Match by email or phone (including normalized formats)
-    conditions = [User.email == raw_identifier]
-    if clean_phone:
+    # Digits inside an email must not be treated as a phone number. Otherwise
+    # `shop0912345678@example.com` can match a different user whose phone is
+    # 0912345678, so the real email login fails (or hits the wrong account).
+    if '@' in raw_identifier:
+        user = db.scalar(select(User).where(User.email == raw_identifier))
+    else:
+        clean_phone = _re.sub(r'[^\d+]', '', raw_identifier)
         digits = clean_phone.replace('+', '')
-        conditions.extend([
-            User.phone == clean_phone,
-            User.phone == raw_identifier,
-            User.phone == digits,
-            User.email == f'phone_{digits}@sothuchi.local'
-        ])
-    
-    user = db.scalar(select(User).where(or_(*conditions)))
+        conditions = [User.email == raw_identifier]
+        if digits:
+            conditions.extend([
+                User.phone == clean_phone,
+                User.phone == raw_identifier,
+                User.phone == digits,
+                User.email == f'phone_{digits}@sothuchi.local',
+            ])
+        user = db.scalar(select(User).where(or_(*conditions)))
     if not user or not verify_password(body.password, user.password_hash):
         login_attempts[key].append(time.time())
         raise HTTPException(401, 'Email, số điện thoại hoặc mật khẩu chưa đúng.')

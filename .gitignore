@@ -13,4 +13,3 @@ qa/
 .env.*
 !.env.example
 models/whisper-base/model.bin
-installers/
