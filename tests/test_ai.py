@@ -597,6 +597,18 @@ class CompoundTransactionTests(unittest.TestCase):
         self.assertEqual(items[0]['kind'], 'expense')
         self.assertEqual(items[1]['kind'], 'expense')
 
+    def test_continuous_speech_with_nghin_space(self):
+        # Exact sentence from screenshot
+        r = ai.analyze_text('mua 5 kg rau hết 100 nghìn mua 1 kg thịt hết 200.000đ', stt=True)
+        items = r.get('items', [])
+        self.assertEqual(len(items), 2)
+        self.assertEqual(items[0]['amount'], 100000)
+        self.assertEqual(items[0]['description'], 'Mua 5 kg rau')
+        self.assertEqual(items[1]['amount'], 200000)
+        self.assertEqual(items[1]['description'], 'Mua 1 kg thịt')
+        self.assertEqual(items[0]['kind'], 'expense')
+        self.assertEqual(items[1]['kind'], 'expense')
+
     def test_mixed_income_expense_compound(self):
         r = ai.analyze_text('Mua 5kg thịt hết 100k, bán 1kg rau được 200k với trả tiền ship 20k', stt=True)
         items = r.get('items', [])

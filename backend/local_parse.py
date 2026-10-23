@@ -122,8 +122,14 @@ def split_transaction_clauses(text):
         r'(?<!\d)[,;]+(?!\d)|\s+(?:với|voi|và|va|rồi|roi|xong|đồng thời|dong thoi|tiếp theo|tiep theo)\s+',
         re.IGNORECASE
     )
+    amt_token = (
+        r'(?:'
+        r'\b\d+[\d.,]*(?:\s*(?:k|dong|đồng|đ|d|vnd|nghin|nghìn|ngan|ngàn|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít|xi|lop|ruoi|rưỡi))?'
+        r'|\b(?:k|dong|đồng|đ|d|vnd|nghin|nghìn|ngan|ngàn|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít|xi|lop|ruoi|rưỡi)\b'
+        r')'
+    )
     cue_pattern = re.compile(
-        r'(\b\d+[\d.,]*(?:k|dong|đ|d|vnd|nghin|ngan|trieu|tr|tram|cu|chai|lit|xi|lop)?)\s+'
+        rf'({amt_token})\s+'
         r'(?=(?:mua|bán|ban|nhập|nhap|trả|tra|đóng|dong|chi|thu|lấy|lay|khách|khach|ship|tiền\s+)\b)',
         re.IGNORECASE
     )
@@ -184,7 +190,7 @@ def parse_multi_items(text, stt=True):
         if cands and 0 < cands[0] <= 1000000000000:
             amt = cands[0]
             desc = re.sub(
-                r'[-\u2013\u2014:]?\s*(?:hết|het|được|duoc|mất|mat|khoảng|khoang|tam|tầm|là|la)?\s*\d+[\d.,]*\s*(?:k|dong|\u0111|d|vnd|nghin|ngan|trieu|tr|tram|cu|chai|lit)?\s*$',
+                r'[-\u2013\u2014:]?\s*(?:hết|het|được|duoc|mất|mat|khoảng|khoang|tam|tầm|là|la)?\s*\d+[\d.,]*\s*(?:k|dong|đồng|\u0111|đ|d|vnd|nghin|nghìn|ngan|ngàn|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít)?\s*$',
                 '', line, flags=re.I
             ).strip()
             desc = re.sub(r'^[0-9]+[.)\-]\s*|^[-*\u2022]\s*', '', desc).strip()
