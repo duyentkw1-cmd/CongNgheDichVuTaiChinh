@@ -21,8 +21,10 @@ from fastapi import HTTPException
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps, UnidentifiedImageError
 from starlette.concurrency import run_in_threadpool
 
+from datetime import date
+
 from ml.predict import classify, metrics, ready
-from .db import ROOT
+from .db import ROOT, today
 from .domain import CATEGORIES, fold
 from .local_parse import parse_fields, parse_multi_items
 
@@ -53,8 +55,9 @@ def tesseract_path():
 
 def capabilities():
     text=ready()
-    image=bool(text and tesseract_path() and
-               all((tessdata_path()/f'{lang}.traineddata').is_file() for lang in ('vie','eng')))
+    has_vision=bool(os.getenv('GEMINI_API_KEY') or os.getenv('GOOGLE_API_KEY'))
+    image=bool(text and ((tesseract_path() and
+               all((tessdata_path()/f'{lang}.traineddata').is_file() for lang in ('vie','eng'))) or has_vision))
     voice=bool(text and importlib.util.find_spec('faster_whisper') and
                all((speech_path()/f).is_file() for f in ('model.bin','config.json','tokenizer.json')))
     return {'mode':'local','text':text,'image':image,'voice':voice}
@@ -62,11 +65,14 @@ def capabilities():
 
 def connection_status():
     cap=capabilities()
-    return {**cap, 'providers':[
+    providers=[
         {'id':'finance','name':'Mô hình thu chi của nhóm','purpose':'Hai mô hình tự huấn luyện · 11 danh mục','configured':cap['text']},
         {'id':'whisper','name':'Whisper · chạy trên máy','purpose':'Mô hình có sẵn · nhận giọng nói tiếng Việt','configured':cap['voice']},
-        {'id':'tesseract','name':'Tesseract · tiếng Việt','purpose':'Mô hình có sẵn · đọc chữ in từ ảnh','configured':cap['image']}],
-        'training':metrics(), 'network_required':False}
+        {'id':'tesseract','name':'Tesseract · tiếng Việt','purpose':'Mô hình có sẵn · đọc chữ in từ ảnh','configured':bool(tesseract_path())}
+    ]
+    if os.getenv('GEMINI_API_KEY') or os.getenv('GOOGLE_API_KEY'):
+        providers.append({'id':'gemini_vision','name':'Gemini Vision AI','purpose':'Trích xuất hóa đơn chính xác bằng AI Vision','configured':True})
+    return {**cap, 'providers':providers, 'training':metrics(), 'network_required':False}
 
 
 def extract_receipt_description(text):
@@ -374,9 +380,204 @@ def _run_tesseract(image_buffer, psm='3'):
     return process.stdout.decode('utf-8',errors='replace').strip()
 
 
+VISION_PROMPT = """# BỐI CẢNH VÀ VAI TRÒ
+Bạn là Trợ lý AI chuyên gia về OCR và trích xuất dữ liệu tài chính từ hình ảnh hóa đơn (receipts/bills) cho ứng dụng "Sổ Thu Chi AI". Nhiệm vụ của bạn là đọc hình ảnh hóa đơn được cung cấp, trích xuất chính xác 100% các trường thông tin mà không được phép bịa đặt (hallucination) hay sai chính tả tiếng Việt.
+
+# QUY TẮC BẮT BUỘC:
+
+1. QUY TẮC KIỂM TRA VÀ TRÍCH XUẤT NGÀY THÁNG (DATE):
+   - Tìm kiếm chính xác trường chỉ thời gian trên hóa đơn (thường đi kèm từ "Ngày:", "Date:", hoặc nằm ở phần đầu/cuối hóa đơn).
+   - Định dạng ngày tháng đầu ra chuẩn: `YYYY-MM-DD` hoặc `DD/MM/YYYY`.
+   - Tuyệt đối không tự suy diễn ngày hiện tại nếu trên hóa đơn có in sẵn ngày cụ thể (Ví dụ trên bill hiển thị "24/10/2026" thì phải giữ nguyên chính xác giá trị này).
+
+2. QUY TẮC CHÍNH TẢ TIẾNG VIỆT (ZERO SPELLING ERROR):
+   - Đọc kỹ từng chữ trên hóa đơn (tên món ăn, tên cửa hàng, địa chỉ). Giữ nguyên dấu tiếng Việt chuẩn xác (ví dụ: "Đậu tẩm hành", "Nem phùng", "Lẩu ếch nhỏ", "Bia ca").
+   - Không được tự ý viết tắt hoặc viết sai chính tả các món ăn/hàng hóa xuất hiện trên bill.
+
+3. PHÂN LOẠI THU / CHI VÀ DANH MỤC (CATEGORY):
+   - Mặc định các hóa đơn mua hàng/ăn uống/chi tiêu là loại: "Chi".
+   - Danh mục (category) BẮT BUỘC chọn đúng 1 trong các giá trị sau khớp với hệ thống:
+     + "Nguyên liệu / nhập hàng" (Dùng cho nguyên liệu nấu ăn, hàng hóa sỉ, thực phẩm)
+     + "Thuê mặt bằng"
+     + "Điện, nước, Internet"
+     + "Vận chuyển"
+     + "Lương nhân viên"
+     + "Chi khác" (Dùng cho ăn uống tiếp khách, chi phí phát sinh ngoài lề,...)
+
+# CẤU TRÚC JSON ĐẦU RA (OUTPUT FORMAT)
+Trả về duy nhất định dạng mảng JSON thuần túy (không kèm văn bản thừa):
+
+[
+  {
+    "type": "Chi",
+    "date": "YYYY-MM-DD",
+    "description": "Tên món / Nội dung chi tiết trên bill (giữ nguyên chính tả)",
+    "amount": Số nguyên (VND),
+    "category": "Danh mục phù hợp trong danh sách quy định",
+    "store_name": "Tên cửa hàng/đơn vị phát hành hóa đơn"
+  }
+]"""
+
+
+def _map_vision_category(cat_str, kind='expense'):
+    folded_cat = fold(cat_str or '')
+    if 'nguyen lieu' in folded_cat or 'nhap hang' in folded_cat:
+        return 'materials'
+    if 'thue mat bang' in folded_cat:
+        return 'rent'
+    if any(k in folded_cat for k in ('dien', 'nuoc', 'internet')):
+        return 'utilities'
+    if any(k in folded_cat for k in ('van chuyen', 'ship')):
+        return 'shipping'
+    if any(k in folded_cat for k in ('luong', 'nhan vien')):
+        return 'salary'
+    if 'chi khac' in folded_cat:
+        return 'other_expense'
+    if kind == 'income':
+        if 'ban hang' in folded_cat:
+            return 'sales'
+        if 'dich vu' in folded_cat:
+            return 'service'
+        if 'von' in folded_cat or 'vay' in folded_cat:
+            return 'capital'
+        return 'other_income'
+    return 'other_expense'
+
+
+def _parse_vision_date(d_str):
+    if not d_str:
+        return str(today())
+    d_str = str(d_str).strip()
+    m = re.match(r'^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$', d_str)
+    if m:
+        try:
+            return str(date(int(m.group(1)), int(m.group(2)), int(m.group(3))))
+        except ValueError:
+            pass
+    m = re.match(r'^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$', d_str)
+    if m:
+        try:
+            return str(date(int(m.group(3)), int(m.group(2)), int(m.group(1))))
+        except ValueError:
+            pass
+    return str(today())
+
+
+def gemini_vision_ocr(raw_image_bytes):
+    api_key = os.getenv('GEMINI_API_KEY') or os.getenv('GOOGLE_API_KEY')
+    if not api_key:
+        return None
+    import base64
+    import json
+    import httpx
+
+    b64_img = base64.b64encode(raw_image_bytes).decode('utf-8')
+    models = ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash']
+
+    for model in models:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+        payload = {
+            "contents": [{
+                "parts": [
+                    {"text": VISION_PROMPT},
+                    {
+                        "inline_data": {
+                            "mime_type": "image/jpeg",
+                            "data": b64_img
+                        }
+                    }
+                ]
+            }],
+            "generationConfig": {
+                "temperature": 0.1,
+                "responseMimeType": "application/json"
+            }
+        }
+        try:
+            resp = httpx.post(url, json=payload, timeout=25.0)
+            if resp.status_code == 200:
+                data = resp.json()
+                candidates = data.get('candidates', [])
+                if not candidates:
+                    continue
+                parts = candidates[0].get('content', {}).get('parts', [])
+                if not parts:
+                    continue
+                text = parts[0].get('text', '')
+                parsed = json.loads(text)
+                if isinstance(parsed, dict):
+                    parsed = [parsed]
+                if not isinstance(parsed, list) or not parsed:
+                    continue
+
+                items = []
+                total_amount = 0
+                first_date = None
+                store_name = ''
+                descriptions = []
+
+                for item in parsed:
+                    itype = item.get('type', 'Chi')
+                    ikind = 'income' if 'thu' in fold(itype) else 'expense'
+                    icat = _map_vision_category(item.get('category', ''), ikind)
+                    iamount = int(item.get('amount') or 0)
+                    total_amount += iamount
+                    idesc = str(item.get('description', '')).strip()
+                    if idesc:
+                        descriptions.append(idesc)
+                    if not first_date and item.get('date'):
+                        first_date = _parse_vision_date(item.get('date'))
+                    if not store_name and item.get('store_name'):
+                        store_name = str(item.get('store_name')).strip()
+
+                    items.append({
+                        'kind': ikind,
+                        'category': icat,
+                        'description': idesc or 'Khoản chi tiêu',
+                        'amount': iamount
+                    })
+
+                main_kind = items[0]['kind'] if items else 'expense'
+                main_cat = items[0]['category'] if items else 'other_expense'
+                date_val = first_date or str(today())
+                main_desc = descriptions[0] if len(descriptions) == 1 else (', '.join(descriptions) if descriptions else 'Hóa đơn')
+                if store_name and store_name not in main_desc:
+                    main_desc = f"{main_desc} ({store_name})"[:300]
+
+                res = {
+                    'amount': total_amount if len(items) > 1 else (items[0]['amount'] if items else 0),
+                    'date': date_val,
+                    'payment': 'cash',
+                    'warnings': [f'AI Vision trích xuất thành công từ {store_name or "hóa đơn"}.'],
+                    'kind': main_kind,
+                    'category': main_cat,
+                    'description': main_desc[:300],
+                    'scope': 'business',
+                    'raw_text': text,
+                    'engine': 'gemini_vision',
+                    'providers': ['gemini_vision'],
+                    'classification': {
+                        'score': 0.99,
+                        'kind_score': 0.99,
+                        'needs_review': False,
+                        'alternatives': []
+                    }
+                }
+                if len(items) >= 2:
+                    res['items'] = items
+                    res['warnings'].append(f'Phát hiện danh sách {len(items)} món trong hóa đơn.')
+                return res
+            else:
+                logger.warning("Gemini Vision HTTP %s on model %s: %s", resp.status_code, model, resp.text[:200])
+        except Exception as e:
+            logger.warning("Gemini Vision error on model %s: %s", model, e)
+
+    return None
+
+
 def ocr(content):
-    if not capabilities()['image']:
-        raise HTTPException(503,'Chưa có bộ đọc ảnh. Chạy setup-local.bat và cài Tesseract theo HUONG-DAN-WINDOWS.md.')
+    if not (tesseract_path() and all((tessdata_path()/f'{lang}.traineddata').is_file() for lang in ('vie','eng'))):
+        raise HTTPException(503,'Chưa có bộ đọc ảnh Tesseract trên máy. Vui lòng cài Tesseract hoặc cấu hình GEMINI_API_KEY trong file .env.')
     raw=clean_image(content)
     with Image.open(io.BytesIO(raw)) as im:
         preprocessed_images = _preprocess_for_ocr(im)
@@ -408,9 +609,22 @@ def ocr(content):
     return result
 
 
+def process_image(content):
+    raw = clean_image(content)
+    api_key = os.getenv('GEMINI_API_KEY') or os.getenv('GOOGLE_API_KEY')
+    if api_key:
+        try:
+            res = gemini_vision_ocr(raw)
+            if res:
+                return res
+        except Exception as e:
+            logger.warning("Gemini Vision failed, falling back to local OCR: %s", e)
+    return ocr(content)
+
+
 async def read_image(content,consent=False):
     async with worker:
-        return await run_in_threadpool(ocr,content)
+        return await run_in_threadpool(process_image,content)
 
 
 @lru_cache(maxsize=1)
