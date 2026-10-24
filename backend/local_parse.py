@@ -17,7 +17,8 @@ WORDS='(?:khong|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin|muoi|tram|cham|linh|l
 def word_number(text):
     value=0;current=0
     for token in text.split():
-        if token in DIGITS: current=DIGITS[token]
+        if token.isdigit(): current=int(token)
+        elif token in DIGITS: current=DIGITS[token]
         elif token in ('tram','cham'): value+=(current or 1)*100;current=0
         elif token in ('muoi','chuc'): value+=(current or 1)*10;current=0
         elif token not in ('linh','le'): raise ValueError('Unknown number')
@@ -52,7 +53,7 @@ def normalize_stt_text(s):
     # ── 3. "tram ruoi" without an explicit nghin/k → add "nam muoi nghin" (50k suffix) ──
     # "sau tram ruoi" → "sau tram nam muoi nghin" (650k)
     s = re.sub(
-        r'\b(\d+|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin)\s+tram\s+ruoi\b(?!\s*(?:nghin|ngan|k\b|dong|vnd|trieu|tr))',
+        r'\b(\d+|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin)\s+tram\s+ruoi\b(?!\s*(?:nghin|ngan|k\b|dong|vnd|ty|trieu|tr))',
         r'\1 tram nam muoi nghin',
         s
     )
@@ -71,28 +72,33 @@ def normalize_stt_text(s):
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+canh\b', r'\1 nghin', s)
 
     # ── 5. "tram" standalone without nghin/dong in marketplace context (e.g. nam tram = 500k) ──
-    s = re.sub(rf'\b(\d+|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin)\s+tram\b(?!\s*(?:nghin|ngan|k\b|dong|vnd|trieu|tr|ruoi|\d|{WORDS}))', r'\1 tram nghin', s)
+    s = re.sub(rf'\b(\d+|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin)\s+tram\b(?!\s*(?:nghin|ngan|k\b|dong|vnd|ty|trieu|tr|ruoi|\d|{WORDS}))', r'\1 tram nghin', s)
 
     return s
 
 
 def money_candidates(text, bare=False):
+    # Normalize 1tr50k -> 1 tr 50 k
+    text=re.sub(r'\b(\d+)\s*tr(\d+)(k|dong|vnd|d)\b', r'\1 tr \2 \3', text)
     # Compact Vietnamese notation: 1tr5 means 1.5 million; 2tr200 means 2.2 million.
     text=re.sub(r'\b(\d+)\s*tr(\d{1,3})\b',lambda m:f'{int(m[1])*1000000+int(m[2].ljust(3,"0"))*1000} dong',text)
-    number=rf'(?:\d+(?:[.,]\d+)*|{WORDS}(?:\s+{WORDS})*)'
-    pattern=rf'(?<![\w/-])(?P<num>{number})\s*(?P<unit>trieu|nghin|ngan|vnd|dong|tr|k|d)\b(?:\s*(?P<half>ruoi))?'
+    # Half expressions: nua trieu = 500k, nua cu / nua chai = 500k, nua ty = 500M
+    text=re.sub(r'\bnua\s+(?:trieu|cu|chai)\b', 'nam tram nghin', text)
+    text=re.sub(r'\bnua\s+ty\b', 'nam tram trieu', text)
+    number=rf'(?:\d+(?:[.,]\d+)+|\d+(?:\s+{WORDS})*|{WORDS}(?:\s+{WORDS})*)'
+    pattern=rf'(?<![\w/-])(?P<num>{number})\s*(?P<unit>ty|trieu|nghin|ngan|vnd|dong|tr|k|d)\b(?:\s*(?P<half>ruoi))?'
     matches=list(re.finditer(pattern,text))
     values=[];last_end=-1
     for m in matches:
         num=m['num'].strip();unit=m['unit']
         try:
-            factor=1000000 if unit in ('trieu','tr') else 1000 if unit in ('nghin','ngan','k') else 1
-            n=decimal_number(num) if num[0].isdigit() else Decimal(word_number(num))
+            factor=1000000000 if unit == 'ty' else 1000000 if unit in ('trieu','tr') else 1000 if unit in ('nghin','ngan','k') else 1
+            n=Decimal(word_number(num)) if re.search(r'[a-zA-Z]', num) else decimal_number(num)
             val=n*factor+(factor//2 if m['half'] else 0)
             if val!=val.to_integral_value(): continue
             val=int(val)
         except (ValueError,InvalidOperation): continue
-        # Combine adjacent descending denominations, e.g. hai trieu ba tram nghin.
+        # Combine adjacent descending denominations, e.g. hai trieu ba tram nghin or 1 ty 200 trieu.
         if values and not text[last_end:m.start()].strip() and values[-1][1]>factor:
             values[-1]=(values[-1][0]+val,factor)
         else: values.append((val,factor))
@@ -124,8 +130,8 @@ def split_transaction_clauses(text):
     )
     amt_token = (
         r'(?:'
-        r'\b\d+[\d.,]*(?:\s*(?:k|dong|đồng|đ|d|vnd|nghin|nghìn|ngan|ngàn|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít|xi|lop|ruoi|rưỡi))?'
-        r'|\b(?:k|dong|đồng|đ|d|vnd|nghin|nghìn|ngan|ngàn|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít|xi|lop|ruoi|rưỡi)\b'
+        r'\b\d+[\d.,]*(?:\s*(?:k|dong|đồng|đ|d|vnd|nghin|nghìn|ngan|ngàn|ty|tỷ|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít|xi|lop|ruoi|rưỡi))?'
+        r'|\b(?:k|dong|đồng|đ|d|vnd|nghin|nghìn|ngan|ngàn|ty|tỷ|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít|xi|lop|ruoi|rưỡi)\b'
         r')'
     )
     cue_pattern = re.compile(
@@ -176,7 +182,7 @@ def parse_multi_items(text, stt=True):
         folded_norm = normalize_stt_text(folded_clean)
         cands = money_candidates(folded_norm, bare=True)
         if not cands:
-            m = re.search(r'(\d+[\d.,]*)\s*(?:k|dong|\u0111|d|vnd|nghin|ngan|trieu|tr)\b', line, re.I)
+            m = re.search(r'(\d+[\d.,]*)\s*(?:k|dong|\u0111|d|vnd|nghin|ngan|ty|trieu|tr)\b', line, re.I)
             if m:
                 cands = money_candidates(fold(m.group(0)), bare=True)
         # Small bare number after item: e.g. "rau cải 20" -> 20.000
@@ -190,7 +196,7 @@ def parse_multi_items(text, stt=True):
         if cands and 0 < cands[0] <= 1000000000000:
             amt = cands[0]
             desc = re.sub(
-                r'[-\u2013\u2014:]?\s*(?:hết|het|được|duoc|mất|mat|khoảng|khoang|tam|tầm|là|la)?\s*\d+[\d.,]*\s*(?:k|dong|đồng|\u0111|đ|d|vnd|nghin|nghìn|ngan|ngàn|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít)?\s*$',
+                r'[-\u2013\u2014:]?\s*(?:hết|het|được|duoc|mất|mat|khoảng|khoang|tam|tầm|là|la)?\s*\d+[\d.,]*\s*(?:k|dong|đồng|\u0111|đ|d|vnd|nghin|nghìn|ngan|ngàn|ty|tỷ|trieu|triệu|tr|tram|trăm|cu|củ|chai|lit|lít)?\s*$',
                 '', line, flags=re.I
             ).strip()
             desc = re.sub(r'^[0-9]+[.)\-]\s*|^[-*\u2022]\s*', '', desc).strip()
@@ -222,14 +228,33 @@ def parse_fields(text, stt=False):
     # === Date extraction BEFORE any substitution so '2026-10-15' is never mangled ===
     day=today()
     explicit=re.search(r'\b(\d{4})-(\d{1,2})-(\d{1,2})\b',s)
-    other=re.search(r'\b(\d{1,2})[/-](\d{1,2})(?:[/-](\d{4}))?\b',s)
+    unit_pattern = re.compile(r'^(?:kg|kilo|gam|gram|\bg\b|lit|\bl\b|ml|con|qua|trai|cai|chiec|phan|hop|lon|chai|goi|thung|ly|coc|suat|dia|to|bat|can|mieng|cay|bo|chuc)\b')
+    found_date = False
     try:
-        if explicit: day=date(*map(int,explicit.groups()))
-        elif other: day=date(int(other[3] or day.year),int(other[2]),int(other[1]))
-        elif 'hom kia' in s: day-=timedelta(days=2)
-        elif 'hom qua' in s: day-=timedelta(days=1)
-        elif 'ngay mai' in s: day+=timedelta(days=1)
-        elif not re.search(r'hom nay|bay gio',s): warnings.append('Thiếu ngày giao dịch; đang gợi ý ngày hôm nay.')
+        if explicit:
+            day=date(*map(int,explicit.groups()))
+            found_date = True
+        else:
+            for m in re.finditer(r'\b(\d{1,2})[/-](\d{1,2})(?:[/-](\d{4}))?\b', s):
+                d_val, m_val, y_val = int(m.group(1)), int(m.group(2)), m.group(3)
+                after = s[m.end():].lstrip()
+                before = s[:m.start()].rstrip()
+                # If no year is specified and followed by a measurement/fraction unit, skip!
+                if not y_val and unit_pattern.match(after):
+                    continue
+                # If no year and not preceded by 'ngay'/'thang' keyword, skip known fractions if followed by nouns
+                if not y_val and not re.search(r'\b(?:ngay|ng|thang)\s*$', before) and (d_val, m_val) in [(1,2), (1,3), (2,3), (1,4), (3,4), (1,5), (2,5), (3,5), (4,5)]:
+                    if unit_pattern.match(after):
+                        continue
+                year = int(y_val) if y_val else day.year
+                day = date(year, m_val, d_val)
+                found_date = True
+                break
+        if not found_date:
+            if 'hom kia' in s: day-=timedelta(days=2)
+            elif 'hom qua' in s: day-=timedelta(days=1)
+            elif 'ngay mai' in s: day+=timedelta(days=1)
+            elif not re.search(r'hom nay|bay gio',s): warnings.append('Thiếu ngày giao dịch; đang gợi ý ngày hôm nay.')
     except ValueError: warnings.append('Ngày đọc được không hợp lệ; hãy chọn lại ngày giao dịch.')
     if day>today(): warnings.append('Ngày đang ở tương lai; hãy sửa ngày trước khi lưu.')
 
