@@ -7,6 +7,6 @@ export type Category = {id:string;label:string;kind:Kind};
 export type Meta = {today:string;timezone:string;database:string;categories:Category[];ai:{mode:string;text:boolean;voice:boolean;image:boolean}};
 export type Transaction = {id:string;kind:Kind;amount:number;description:string;category:string;date:string;payment:'cash'|'transfer';scope:'business'|'personal';source:EntryMode;raw_text:string;attachment_id:string|null;created_at:string;updated_at:string};
 export type DraftItem = {kind:Kind;category:string;description:string;amount:number};
-export type Draft = Omit<Transaction,'id'|'amount'|'created_at'|'updated_at'> & {amount:number|null;items?:DraftItem[];warnings?:string[];engine?:string;classification?:{score:number;kind_score:number;needs_review:boolean;alternatives:{category:string;score:number}[]}};
+export type Draft = Omit<Transaction,'id'|'amount'|'created_at'|'updated_at'> & {amount:number|null;items?:DraftItem[];warnings?:string[];engine?:string;confirmation_message?:string;classification?:{score:number;kind_score:number;needs_review:boolean;alternatives:{category:string;score:number}[]}};
 export type Budget = {id:string;category:string;label:string;period:Period;limit:number;actual:number;exceeded:boolean;over:number;start:string;end:string};
 export type Report = {income:number;expense:number;balance:number;revenue:number;count:number;categories:{category:string;label:string;amount:number}[];series:{date:string;income:number;expense:number}[];transactions:Transaction[];start:string;end:string;scope:Scope;budgets:Budget[]};

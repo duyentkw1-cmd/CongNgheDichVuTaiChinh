@@ -94,8 +94,95 @@ export function stopListening(): void {
 }
 
 /**
- * Kiểm tra trạng thái đang lắng nghe
+ * Phát âm thanh tiếng Việt tự nhiên (TTS)
+ * Ưu tiên âm thanh Google Translate TTS tiếng Việt chuẩn (chị Google).
+ * Nếu offline, chỉ dùng Web Speech API khi THỰC SỰ có voice tiếng Việt (tránh phát âm sai bằng giọng tiếng Anh).
  */
-export function isListening(): boolean {
-  return isListeningState;
+export function speakVietnamese(text: string, onEnd?: () => void): void {
+  if (typeof window === 'undefined') {
+    if (onEnd) onEnd();
+    return;
+  }
+
+  let hasEnded = false;
+  const finish = () => {
+    if (!hasEnded) {
+      hasEnded = true;
+      if (onEnd) onEnd();
+    }
+  };
+
+  // Timeout bảo vệ: nếu TTS không phản hồi sau 6 giây, gọi finish() luôn
+  const safetyTimer = setTimeout(() => {
+    console.warn('TTS timeout - gọi callback bảo vệ');
+    finish();
+  }, 6000);
+
+  const safeFinish = () => {
+    clearTimeout(safetyTimer);
+    finish();
+  };
+
+  // 1. Dùng giọng đọc tiếng Việt chuẩn Google TTS (tự nhiên 100%, không bị giọng Mỹ đọc tiếng Việt)
+  try {
+    const encoded = encodeURIComponent(text);
+    const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=vi&client=tw-ob`;
+    const audio = new Audio(audioUrl);
+
+    audio.onended = safeFinish;
+    audio.onerror = () => {
+      fallbackSpeechSynthesis(text, safeFinish);
+    };
+
+    // Timeout riêng cho load audio: nếu không load được trong 3 giây, bỏ qua Google TTS
+    const loadTimer = setTimeout(() => {
+      audio.pause();
+      audio.src = '';
+      fallbackSpeechSynthesis(text, safeFinish);
+    }, 3000);
+
+    audio.oncanplaythrough = () => clearTimeout(loadTimer);
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        clearTimeout(loadTimer);
+        fallbackSpeechSynthesis(text, safeFinish);
+      });
+    }
+    return;
+  } catch {
+    fallbackSpeechSynthesis(text, safeFinish);
+  }
+}
+
+function fallbackSpeechSynthesis(text: string, onFinish: () => void): void {
+  if (!window.speechSynthesis) {
+    onFinish();
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const voices = window.speechSynthesis.getVoices();
+  const viVoice = voices.find(v =>
+    v.lang === 'vi-VN' ||
+    v.lang === 'vi_VN' ||
+    v.lang.toLowerCase().startsWith('vi') ||
+    /vietnam|hoaimy|namminh/i.test(v.name)
+  );
+
+  // QUAN TRỌNG: Chỉ đọc bằng SpeechSynthesis nếu THỰC SỰ có voice tiếng Việt!
+  // Tuyệt đối không để Microsoft David (English) đọc tiếng Việt vì sẽ phát âm sai thành tiếng Anh!
+  if (!viVoice) {
+    console.warn("Máy chưa có voice tiếng Việt của Windows. Không đọc giọng tiếng Anh để tránh phát âm sai.");
+    onFinish();
+    return;
+  }
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.voice = viVoice;
+  u.lang = 'vi-VN';
+  u.rate = 1.0;
+  u.onend = onFinish;
+  u.onerror = onFinish;
+  window.speechSynthesis.speak(u);
 }

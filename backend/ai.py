@@ -208,7 +208,20 @@ def analyze_text(text, stt=False):
             fields['amount']=None
             fields['warnings'].append('Nội dung có thể ngoài dữ liệu mô hình đã học. Hãy nhập và kiểm tra thủ công.')
 
+    from .market_assistant import extract_transaction_rules, format_spoken_vnd
+    market_info = extract_transaction_rules(text)
+    if market_info.get('is_valid_transaction'):
+        if market_info.get('item_summary') and (description == text or not description):
+            description = market_info['item_summary']
+        confirmation_msg = market_info.get('confirmation_message')
+    else:
+        amt_spk = format_spoken_vnd(fields.get('amount')) if fields.get('amount') else 'chưa rõ'
+        t_word = 'được' if kind == 'income' else 'hết'
+        t_verb = 'Bạn bán' if kind == 'income' else 'Bạn mua'
+        confirmation_msg = f"{t_verb} {description} {t_word} {amt_spk}. Bạn có muốn ghi lại thu chi không?"
+
     res = {**fields,'kind':kind,'category':category,'description':description,
+           'confirmation_message': confirmation_msg,
            'scope':'business','raw_text':text,
            'engine':'local','providers':['finance_local'],'classification':result}
     if items:

@@ -60,7 +60,15 @@ def normalize_stt_text(s):
 
     # ── 4. Slang currency units ──
     # cu / chai = 1,000,000
-    s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:cu|chai)\s+(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\b', r'\1 trieu \2 tram nghin', s)
+    w2d = {'mot': '1', 'hai': '2', 'ba': '3', 'bon': '4', 'tu': '4', 'nam': '5', 'sau': '6', 'bay': '7', 'tam': '8', 'chin': '9'}
+    num_pat = r'(?:\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)'
+    def cu_sub(m):
+        d1 = w2d.get(m.group(1), m.group(1))
+        d2 = w2d.get(m.group(2), m.group(2))
+        return f'{d1}tr{d2}'
+
+    s = re.sub(rf'\b({num_pat})\s+(?:cu|chai)\s+({num_pat})\b', cu_sub, s)
+    s = re.sub(rf'\b({num_pat})\s+(?:trieu)\s+({num_pat})\b', cu_sub, s)
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:cu|chai)\s+ruoi\b', r'\1 trieu nam tram nghin', s)
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:cu|chai)\b', r'\1 trieu', s)
     # lit / xi / lop = 100,000
@@ -74,14 +82,20 @@ def normalize_stt_text(s):
     # ── 5. "tram" standalone without nghin/dong in marketplace context (e.g. nam tram = 500k) ──
     s = re.sub(rf'\b(\d+|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin)\s+tram\b(?!\s*(?:nghin|ngan|k\b|dong|vnd|ty|trieu|tr|ruoi|\d|{WORDS}))', r'\1 tram nghin', s)
 
+    # ── 6. "chuc" -> "hai chuc" = 20k, "bon chuc" = 40k ──
+    chuc_dict = {'mot': '10', 'hai': '20', 'ba': '30', 'bon': '40', 'tu': '40', 'nam': '50', 'sau': '60', 'bay': '70', 'tam': '80', 'chin': '90'}
+    for w, val in chuc_dict.items():
+        s = re.sub(rf'\b{w}\s+chuc\b', f'{val} nghin', s)
+    s = re.sub(r'\b(\d+)\s+chuc\b', lambda m: f'{int(m.group(1)) * 10} nghin', s)
+
     return s
 
 
 def money_candidates(text, bare=False):
     # Normalize 1tr50k -> 1 tr 50 k
     text=re.sub(r'\b(\d+)\s*tr(\d+)(k|dong|vnd|d)\b', r'\1 tr \2 \3', text)
-    # Compact Vietnamese notation: 1tr5 means 1.5 million; 2tr200 means 2.2 million.
-    text=re.sub(r'\b(\d+)\s*tr(\d{1,3})\b',lambda m:f'{int(m[1])*1000000+int(m[2].ljust(3,"0"))*1000} dong',text)
+    # Compact Vietnamese notation: 1tr5 means 1.5 million; 1 trieu 2 means 1.2 million; 2tr200 means 2.2 million.
+    text=re.sub(r'\b(\d+)\s*(?:tr|trieu)\s*(\d{1,3})\b',lambda m:f'{int(m[1])*1000000+int(m[2].ljust(3,"0"))*1000} dong',text)
     # Half expressions: nua trieu = 500k, nua cu / nua chai = 500k, nua ty = 500M
     text=re.sub(r'\bnua\s+(?:trieu|cu|chai)\b', 'nam tram nghin', text)
     text=re.sub(r'\bnua\s+ty\b', 'nam tram trieu', text)

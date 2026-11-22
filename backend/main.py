@@ -18,6 +18,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from . import ai
+from .market_assistant import process_market_speech, process_market_confirmation
 from .db import (ROOT, DATA, DATABASE_URL, TZ, Attachment, Audit, Budget, Household,
                  LoginSession, SessionLocal, Transaction, User, hash_password, init_db, now, today, verify_password)
 from .domain import (CATEGORIES, TransactionInput, budget_status, period_range,
@@ -63,6 +64,15 @@ def current_user(request: Request, db: Session = Depends(db_session)):
     if user is None:
         raise HTTPException(401, 'Tài khoản không tồn tại.')
     return user
+
+def optional_current_user(request: Request, db: Session = Depends(db_session)):
+    token = request.cookies.get('sothuchi_session', '')
+    if not token:
+        return None
+    session = db.get(LoginSession, hashlib.sha256(token.encode()).hexdigest())
+    if not session or session.expires_at <= now():
+        return None
+    return db.get(User, session.user_id)
 
 def audit(db, user, action, transaction_id=None, detail=''):
     db.add(Audit(id=str(uuid.uuid4()), household_id=user.household_id,
@@ -345,6 +355,15 @@ def ai_quota(user):
         raise HTTPException(429, 'Vui lòng đợi một phút trước khi phân tích tiếp.')
     ai_attempts[key].append(time.time())
 
+class MarketExtractInput(BaseModel):
+    transcript: str = Field(min_length=1, max_length=2000)
+    use_llm: bool = True
+
+class MarketConfirmInput(BaseModel):
+    confirmation_transcript: str = Field(min_length=1, max_length=2000)
+    pending_draft: dict | None = None
+    use_llm: bool = True
+
 class TextInput(BaseModel):
     text: str = Field(min_length=1, max_length=10000)
     consent: bool = False
@@ -372,6 +391,14 @@ async def ai_image(file: UploadFile = File(...), consent: bool = Form(False), us
 async def ai_voice(file: UploadFile = File(...), consent: bool = Form(False), user: User = Depends(current_user)):
     ai_quota(user)
     return await ai.transcribe(await file.read(5 * 1024 * 1024 + 1), file.content_type, consent)
+
+@app.post('/api/ai/market-assistant/extract')
+def market_extract(body: MarketExtractInput):
+    return process_market_speech(body.transcript, use_llm=body.use_llm)
+
+@app.post('/api/ai/market-assistant/confirm')
+def market_confirm(body: MarketConfirmInput):
+    return process_market_confirmation(body.confirmation_transcript, body.pending_draft, use_llm=body.use_llm)
 
 @app.post('/api/attachments')
 async def attachment(file: UploadFile = File(...), user: User = Depends(current_user), db: Session = Depends(db_session)):
