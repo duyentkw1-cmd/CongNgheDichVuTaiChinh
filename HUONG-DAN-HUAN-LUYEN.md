@@ -7,7 +7,7 @@ Nhóm xây dựng pipeline dữ liệu, đặc trưng, hai bộ phân loại, đ
 | Thành phần | Nguồn | Có tự huấn luyện trong dự án? |
 |---|---|---|
 | Nhận diện Thu/Chi | `ml/train.py` + `datasets/train.csv` | Có: Logistic Regression nhị phân |
-| Phân loại 11 danh mục | Cùng pipeline | Có: Logistic Regression đa lớp |
+| Phân loại 10 danh mục | Cùng pipeline | Có: Logistic Regression đa lớp |
 | Giọng nói | Whisper base đa ngôn ngữ, triển khai bằng faster-whisper | Không: dùng trọng số có sẵn |
 | OCR tiếng Việt/Anh | Tesseract + tessdata_fast | Không: dùng trọng số có sẵn |
 | Tiền, ngày, thanh toán | `backend/local_parse.py` | Quy tắc xử lý, không phải mô hình học máy |
@@ -15,11 +15,22 @@ Nhóm xây dựng pipeline dữ liệu, đặc trưng, hai bộ phân loại, đ
 
 ## Dữ liệu kèm theo
 
-**Toàn bộ 1.584 câu là dữ liệu mô phỏng**, không phải dữ liệu thu thập từ hộ kinh doanh. Có 264 câu gốc/nhóm ngữ nghĩa, mỗi câu có 6 biến thể về cách diễn đạt, số tiền hoặc dấu tiếng Việt. Quy mô này dùng để minh họa quá trình học; các biến thể không tương đương 1.584 giao dịch độc lập ngoài thực tế.
+**Toàn bộ 18.240 câu là dữ liệu mô phỏng**, không phải dữ liệu thu thập từ hộ kinh doanh. Có 544 câu gốc/nhóm ngữ nghĩa (10 danh mục); mỗi câu gốc được sinh nhiều biến thể về cách diễn đạt, số tiền, dấu tiếng Việt, lỗi OCR/giọng nói. Các biến thể không tương đương 18.240 giao dịch độc lập ngoài thực tế.
 
-- Train: 1.056 dòng (176 nhóm).
-- Validation: 264 dòng (44 nhóm), dùng chọn hệ số C.
-- Test: 264 dòng (44 nhóm), dùng đánh giá cuối.
+- Train: 16.320 dòng (368 nhóm).
+- Validation: 960 dòng (88 nhóm), dùng chọn hệ số C.
+- Test: 960 dòng (88 nhóm), dùng đánh giá cuối.
+- Câu gốc v2 (24/danh mục) và v3 (thêm 24/danh mục: cách nói tiểu thương, dòng hóa đơn, các cặp hay nhầm) nằm trong `ml/build_dataset.py`.
+
+### Bộ kiểm tra viết tay (độc lập)
+
+`datasets/challenge.csv` gồm 200 câu viết tay kiểu đời thực, **không dùng để huấn luyện hay chọn tham số**. Chạy sau mỗi lần huấn luyện:
+
+```powershell
+.venv\Scripts\python.exe -m ml.evaluate --errors
+```
+
+Kết quả v3: Thu/Chi đúng 97,5%, danh mục đúng 93,0% (v2: 93,5% và 84,5%). Đừng thêm chính các câu sai của bộ này vào train; như vậy bộ kiểm tra mất tính độc lập.
 - Cùng `group_id` không được xuất hiện ở nhiều tập. Script còn kiểm tra câu giống hệt sau chuẩn hóa và mã dòng trùng lặp.
 - Các tập vẫn chia sẻ cách sinh mẫu và miền từ vựng. Dù tách nhóm, kết quả có thể lạc quan hơn dữ liệu thật. Cần bổ sung tập kiểm tra độc lập, tự viết/thu thập, có lỗi chính tả, ngôn ngữ địa phương và lỗi OCR/STT.
 

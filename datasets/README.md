@@ -2,7 +2,7 @@
 
 Nguồn: câu gốc do người tạo dự án biên soạn cho demo, sau đó sinh biến thể có kiểm soát bằng `ml/build_dataset.py`, seed 20261021. Không lấy dữ liệu thật, không có thông tin cá nhân.
 
-1.584 dòng; 264 nhóm câu gốc; 11 lớp. Các tệp CSV mã hóa UTF-8 có BOM, có thể mở bằng Excel. Mỗi dòng là một khoản thu/chi, không gộp nhiều nghiệp vụ.
+18.240 dòng; 544 nhóm câu gốc; 10 lớp. Thêm `challenge.csv`: 200 câu kiểm tra viết tay, không dùng để huấn luyện. Các tệp CSV mã hóa UTF-8 có BOM, có thể mở bằng Excel. Mỗi dòng là một khoản thu/chi, không gộp nhiều nghiệp vụ.
 
 | Cột | Ý nghĩa |
 |---|---|
@@ -25,7 +25,6 @@ Nguồn: câu gốc do người tạo dự án biên soạn cho demo, sau đó s
 | utilities | Điện, nước, Internet | expense |
 | shipping | Vận chuyển | expense |
 | salary | Lương nhân viên | expense |
-| personal | Chi cá nhân | expense |
 | other_expense | Chi khác | expense |
 
 Ví dụ một dòng bổ sung trong train.csv:

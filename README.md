@@ -23,7 +23,7 @@ Có sẵn frontend đã build, không cần Node.js để mở demo. Email demo 
 | frontend/dist | Giao diện đã build, kèm font offline |
 | backend | Đăng nhập, giao dịch, báo cáo, cảnh báo, xuất Excel/CSV/PDF, AI local |
 | ml | Sinh dữ liệu mô phỏng, huấn luyện, dự đoán bằng mô hình của nhóm |
-| datasets | 1.584 mẫu CSV; train/validation/test tách nhóm câu |
+| datasets | 18.240 mẫu CSV mô phỏng (train/validation/test tách nhóm câu) + 200 câu kiểm tra viết tay |
 | models/finance | Hai mô hình đã học, TF-IDF, chỉ số và dự đoán trên test |
 | models/whisper-base | Trọng số có sẵn nhận giọng nói đa ngôn ngữ |
 | models/tessdata | Dữ liệu OCR tiếng Việt/Anh có sẵn |
@@ -36,7 +36,7 @@ Có sẵn frontend đã build, không cần Node.js để mở demo. Email demo 
 
 - Đăng nhập/đăng xuất phiên bằng cookie HttpOnly; demo có tài khoản dựng sẵn.
 - Nhập text, nhập biểu mẫu, ghi/tải âm thanh, chụp/tải ảnh.
-- Hai bộ phân loại học máy tự huấn luyện: Thu/Chi và 11 danh mục. Luôn kiểm tra trước khi lưu; cảnh báo khi điểm thấp hoặc hai bộ phân loại không thống nhất.
+- Hai bộ phân loại học máy tự huấn luyện: Thu/Chi và 10 danh mục. Luôn kiểm tra trước khi lưu; cảnh báo khi điểm thấp hoặc hai bộ phân loại không thống nhất.
 - Giọng nói và ảnh đi qua bộ nhận dạng local thật; các phép trích số tiền/ngày có quy tắc rõ ràng và có thể yêu cầu người dùng nhập bổ sung.
 - Giao dịch có sửa/xóa, kiểm tra trùng, lịch sử sửa, tách chi cá nhân; vốn/tiền vay không cộng vào doanh thu bán hàng.
 - Báo cáo theo ngày/tuần/tháng, cơ cấu chi, ngưỡng chi, Excel/CSV/PDF.

@@ -1,0 +1,201 @@
+id,text,category
+c-sales-01,bán 5 ký thịt heo được 600 nghìn,sales
+c-sales-02,sáng nay bán hết 3 thùng xoài thu 1 triệu 2,sales
+c-sales-03,khách mua 2 bó rau trả 30k,sales
+c-sales-04,chị Lan lấy 10 kg gạo trả tiền 250 nghìn,sales
+c-sales-05,ban duoc 40 to pho thu 1tr6,sales
+c-sales-06,doanh thu hôm nay 3 triệu rưỡi,sales
+c-sales-07,thu tiền hàng của quán bà Tư 2 triệu,sales
+c-sales-08,bán cá được 850k,sales
+c-sales-09,khách quen mua 12 quả trứng 40 nghìn,sales
+c-sales-10,tiền bán bánh cuốn sáng nay 700 nghìn,sales
+c-sales-11,bán nước mía cả ngày được 1 triệu,sales
+c-sales-12,khach chuyen khoan tien mua ao 350k,sales
+c-sales-13,thu tiền ly trà sữa 25 nghìn,sales
+c-sales-14,bán 2 con gà ta 500 nghìn,sales
+c-sales-15,đơn shopee về tiền 1 triệu 3,sales
+c-sales-16,thu tiền bán hàng ca chiều,sales
+c-sales-17,ban trai cay duoc 900 ngan,sales
+c-sales-18,cửa hàng thu tiền bán sữa bột 1.200.000,sales
+c-sales-19,bán đậu phụ cả sáng thu 400k,sales
+c-sales-20,bán xôi được 450 nghìn,sales
+c-service-01,sửa xe cho khách thu 150k,service
+c-service-02,vá lốp 30 nghìn,service
+c-service-03,cắt tóc 3 khách được 180k,service
+c-service-04,nhận tiền công may 2 bộ đồ 400 nghìn,service
+c-service-05,khách trả tiền thay nhớt 120k,service
+c-service-06,thu tiền gội đầu sấy tóc 50 nghìn,service
+c-service-07,nhận công sửa tủ lạnh cho khách 300 nghìn,service
+c-service-08,khách trả tiền giữ xe tháng 100k,service
+c-service-09,thu phí giao hộ hàng cho khách 40 nghìn,service
+c-service-10,nhận tiền nấu cỗ thuê 2 triệu,service
+c-service-11,thu tiền làm nail 250k,service
+c-service-12,khach tra tien rua xe may 40k,service
+c-service-13,thu tiền photo tài liệu 35 nghìn,service
+c-service-14,thu phí sửa đồng hồ 80k,service
+c-service-15,nhận tiền công sơn cửa 1tr5,service
+c-service-16,thu tiền trông trẻ tháng này 3 triệu,service
+c-service-17,khách trả tiền massage 200 nghìn,service
+c-service-18,thu tiền in ảnh thẻ 30k,service
+c-service-19,nhận tiền lắp điều hòa cho khách 500k,service
+c-service-20,thu tiền ủi đồ cho khách 60 nghìn,service
+c-capital-01,vay chị Hoa 10 triệu để nhập hàng,capital
+c-capital-02,ngân hàng giải ngân 50 triệu,capital
+c-capital-03,bỏ thêm 5 triệu vốn vào sạp,capital
+c-capital-04,mượn mẹ 3 triệu xoay vốn,capital
+c-capital-05,nhận tiền góp vốn của anh Tâm 20 triệu,capital
+c-capital-06,vay quỹ tín dụng 15 triệu,capital
+c-capital-07,rút tiết kiệm 10 triệu làm vốn bán hàng,capital
+c-capital-08,vay nóng 2 triệu nhập cá,capital
+c-capital-09,chồng đưa thêm 4 triệu làm vốn,capital
+c-capital-10,nhan tien vay ngan hang 30tr,capital
+c-capital-11,bạn cho mượn 5 triệu mở sạp,capital
+c-capital-12,góp vốn với chị gái 8 triệu,capital
+c-capital-13,vay qua app 3 triệu để nhập hàng,capital
+c-capital-14,bỏ vốn ban đầu 20 triệu,capital
+c-capital-15,anh trai chuyển 6 triệu cho mượn,capital
+c-capital-16,vay hội phụ nữ 10 triệu,capital
+c-capital-17,nộp thêm tiền vốn 2 triệu vào két,capital
+c-capital-18,nhận khoản vay 7 triệu để buôn bán,capital
+c-capital-19,vay lãi ngày 5 triệu nhập hàng tết,capital
+c-capital-20,ba mẹ cho 15 triệu làm vốn mở quán,capital
+c-oi-01,ngân hàng trả lãi 50 nghìn,other_income
+c-oi-02,bán ve chai giấy carton 80k,other_income
+c-oi-03,được hoàn tiền đơn hàng hỏng 200 nghìn,other_income
+c-oi-04,nhận tiền thưởng doanh số từ đại lý 1 triệu,other_income
+c-oi-05,chủ nhà trả lại tiền cọc 5 triệu,other_income
+c-oi-06,thanh lý tủ đông cũ 2 triệu,other_income
+c-oi-07,bảo hiểm bồi thường 3 triệu,other_income
+c-oi-08,nhận hỗ trợ của phường 500 nghìn,other_income
+c-oi-09,nhà cung cấp trả lại tiền thừa 150k,other_income
+c-oi-10,bạn trả tiền mượn tháng trước 1 triệu,other_income
+c-oi-11,bán vỏ chai bia 60 nghìn,other_income
+c-oi-12,lãi tiết kiệm tháng này 120k,other_income
+c-oi-13,được hoàn phí ship 25 nghìn,other_income
+c-oi-14,nhận tiền đền bù hàng vỡ 300k,other_income
+c-oi-15,thu tiền thanh lý xe đẩy cũ 800 nghìn,other_income
+c-oi-16,được hoàn tiền điện 90 nghìn,other_income
+c-oi-17,nhận tiền khuyến mãi từ hãng 400 nghìn,other_income
+c-oi-18,thu lại tiền cọc két bia 200k,other_income
+c-oi-19,nhan tien hoan coc thue ki ot 3 trieu,other_income
+c-oi-20,được thưởng khai trương 2 triệu,other_income
+c-mat-01,nhập 20 ký gạo 360 nghìn,materials
+c-mat-02,mua rau ở chợ đầu mối 500k,materials
+c-mat-03,lấy 3 thùng bia về bán 900 nghìn,materials
+c-mat-04,mua 5 kg thịt ba chỉ 650 nghìn,materials
+c-mat-05,nhập cá từ ghe 1 triệu 2,materials
+c-mat-06,mua sữa tươi đường đá 300k,materials
+c-mat-07,"Mua Dầu ăn, Sữa tươi, Đường cát",materials
+c-mat-08,"Mua Rau cải, Thịt heo",materials
+c-mat-09,nhap hang quan ao 5 trieu,materials
+c-mat-10,mua bột năng trân châu 200 nghìn,materials
+c-mat-11,lấy 2 khay trứng vịt 180k,materials
+c-mat-12,mua than để nướng 150 nghìn,materials
+c-mat-13,nhập trái cây về bày bán 2 triệu,materials
+c-mat-14,mua ly nhựa ống hút 250k,materials
+c-mat-15,mua nước mắm muối tiêu 120 nghìn,materials
+c-mat-16,đi chợ mua đồ nấu quán 800k,materials
+c-mat-17,nhập 50 ổ bánh mì 150 nghìn,materials
+c-mat-18,lấy hàng của mối 3 triệu,materials
+c-mat-19,mua hành tỏi ớt 60k,materials
+c-mat-20,"Hóa đơn mua hàng Bột mì, Trứng gà, Bơ",materials
+c-rent-01,đóng tiền sạp chợ tháng 11 1 triệu 5,rent
+c-rent-02,trả tiền thuê nhà mặt phố 8 triệu,rent
+c-rent-03,tiền mặt bằng tháng này 6 triệu,rent
+c-rent-04,nộp phí thuê ki ốt chợ 2 triệu,rent
+c-rent-05,thuê chỗ để xe đẩy bán hàng 300 nghìn,rent
+c-rent-06,trả chủ nhà 5 triệu tiền nhà,rent
+c-rent-07,dong tien thue mat bang 4tr,rent
+c-rent-08,thuê kho chứa gạo 1 triệu,rent
+c-rent-09,phí thuê vỉa hè bán hàng 500k,rent
+c-rent-10,trả tiền thuê quầy trong siêu thị 3 triệu,rent
+c-rent-11,tiền thuê sạp cá 800 nghìn,rent
+c-rent-12,đặt cọc thuê mặt bằng mới 10 triệu,rent
+c-rent-13,trả tiền thuê phòng làm xưởng 2 triệu,rent
+c-rent-14,thanh toán tiền thuê cửa hàng quý 4,rent
+c-rent-15,nộp tiền chỗ ngồi chợ đêm 200k,rent
+c-rent-16,chuyển khoản tiền nhà tháng 12 cho cô chủ,rent
+c-rent-17,tiền thuê ki-ốt tháng 10 2.500.000,rent
+c-rent-18,PHIẾU CHI Lý do chi: Tiền thuê mặt bằng,rent
+c-rent-19,thuê gian hàng hội chợ 1 triệu,rent
+c-rent-20,trả tiền thuê tiệm tóc 4 triệu rưỡi,rent
+c-util-01,đóng tiền điện 800 nghìn,utilities
+c-util-02,tiền nước tháng này 150k,utilities
+c-util-03,trả tiền wifi 220 nghìn,utilities
+c-util-04,nạp tiền điện thoại 100k,utilities
+c-util-05,hóa đơn tiền điện tháng 10 1.250.000,utilities
+c-util-06,dong tien dien nuoc 1tr2,utilities
+c-util-07,thanh toán cước internet viettel,utilities
+c-util-08,tiền điện quán tháng 11,utilities
+c-util-09,nộp tiền nước máy 90 nghìn,utilities
+c-util-10,trả tiền mạng cáp quang 6 tháng,utilities
+c-util-11,đóng tiền rác 30 nghìn,utilities
+c-util-12,HÓA ĐƠN TIỀN NƯỚC,utilities
+c-util-13,mua thẻ cào nạp điện thoại 50k,utilities
+c-util-14,tiền điện tủ đông chạy cả tháng 600k,utilities
+c-util-15,thanh toán tiền điện EVN 950 nghìn,utilities
+c-util-16,tra tien nuoc sinh hoat 120k,utilities
+c-util-17,gia hạn gói 4G 90 nghìn,utilities
+c-util-18,đóng phí truyền hình cáp 80k,utilities
+c-util-19,điện nước tháng này hết 2 triệu,utilities
+c-util-20,hóa đơn GTGT tiền điện kỳ 11,utilities
+c-ship-01,trả tiền ship 30k,shipping
+c-ship-02,gửi hàng ra Hà Nội 120 nghìn,shipping
+c-ship-03,thuê xe ba gác chở hàng 200k,shipping
+c-ship-04,phí giao hàng tiết kiệm 25 nghìn,shipping
+c-ship-05,trả tiền xe ôm chở rau 50k,shipping
+c-ship-06,cước gửi xe khách 80 nghìn,shipping
+c-ship-07,thuê xe tải chở bàn ghế 700 nghìn,shipping
+c-ship-08,ship cho khách 2 đơn 40k,shipping
+c-ship-09,tiền grab giao đồ 35 nghìn,shipping
+c-ship-10,"PHIẾU GỬI HÀNG Cước vận chuyển, Phụ phí",shipping
+c-ship-11,gửi bưu điện 45k,shipping
+c-ship-12,phí vận chuyển hàng từ Quảng Châu 2 triệu,shipping
+c-ship-13,chuyen phat nhanh 60k,shipping
+c-ship-14,trả tiền xe chở gạo về kho 300 nghìn,shipping
+c-ship-15,phí giao hàng shopee 18k,shipping
+c-ship-16,thuê shipper giao 10 đơn 150k,shipping
+c-ship-17,trả cước chành xe 250 nghìn,shipping
+c-ship-18,thuê xe lôi chở trái cây ra chợ 100k,shipping
+c-ship-19,trả phí chuyển hàng về quê 90 nghìn,shipping
+c-ship-20,tiền cước gửi hàng đi Đà Nẵng 150k,shipping
+c-sal-01,trả lương con bé phụ bán 4 triệu,salary
+c-sal-02,lương tháng 11 cho nhân viên 6 triệu,salary
+c-sal-03,ứng lương cho thằng Tý 500k,salary
+c-sal-04,trả công phụ bếp hôm nay 250 nghìn,salary
+c-sal-05,thưởng tết nhân viên 2 triệu,salary
+c-sal-06,trả lương thợ may 5 triệu,salary
+c-sal-07,tien cong lam them gio 150k,salary
+c-sal-08,trả công người rửa chén 180 nghìn,salary
+c-sal-09,chi lương 3 nhân viên 15 triệu,salary
+c-sal-10,trả lương bảo vệ ca đêm 3 triệu,salary
+c-sal-11,tiền công thợ phụ 300 nghìn,salary
+c-sal-12,PHIẾU CHI Trả lương nhân viên tháng 10,salary
+c-sal-13,phát lương cuối tháng cho nhân viên,salary
+c-sal-14,trả công giúp việc quán 2 triệu rưỡi,salary
+c-sal-15,ứng trước tiền công cho chị phụ 1 triệu,salary
+c-sal-16,trả lương bạn part time 1tr8,salary
+c-sal-17,chi tiền công thuê người bán hộ 400k,salary
+c-sal-18,thưởng doanh số cho nhân viên 500 nghìn,salary
+c-sal-19,trả công bốc vác dỡ hàng 200k,salary
+c-sal-20,trả lương đầu bếp tháng này 7 triệu,salary
+c-oe-01,sửa tủ lạnh 400 nghìn,other_expense
+c-oe-02,mua cái cân mới 350k,other_expense
+c-oe-03,đóng thuế khoán quý 4 1 triệu,other_expense
+c-oe-04,in tờ rơi quảng cáo 300 nghìn,other_expense
+c-oe-05,mua dù che nắng cho sạp 250k,other_expense
+c-oe-06,trả lãi vay tháng này 500 nghìn,other_expense
+c-oe-07,mua máy xay sinh tố 1 triệu 2,other_expense
+c-oe-08,phí quẹt thẻ ngân hàng 20k,other_expense
+c-oe-09,chạy quảng cáo facebook 500 nghìn,other_expense
+c-oe-10,mua bàn ghế nhựa 800 nghìn,other_expense
+c-oe-11,sửa bếp gas 150k,other_expense
+c-oe-12,mua dao thớt mới 200 nghìn,other_expense
+c-oe-13,mua thùng rác cho quán 50k,other_expense
+c-oe-14,mua sổ sách bút 40k,other_expense
+c-oe-15,làm biển hiệu mới 1 triệu 5,other_expense
+c-oe-16,mua bình chữa cháy 300 nghìn,other_expense
+c-oe-17,phí duy trì phần mềm bán hàng 200k,other_expense
+c-oe-18,mua xe đẩy bán hàng 2 triệu,other_expense
+c-oe-19,sửa máy pha cà phê 600k,other_expense
+c-oe-20,đóng bảo hiểm cháy nổ 1 triệu,other_expense

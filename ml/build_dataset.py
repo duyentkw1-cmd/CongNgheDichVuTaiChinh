@@ -153,6 +153,144 @@ SEEDS = {
 }
 INCOME = {'sales', 'service', 'capital', 'other_income'}
 
+# v3: extra seed families for real-life wording: market vendors' speech, short
+# notes, receipt item lists, and the boundaries the v2 model confused
+# (buying tools vs. stock, services vs. selling goods, selling scrap vs. sales).
+# Written to avoid the exact items/phrases of datasets/challenge.csv, so the
+# challenge set still measures generalization to unseen wording.
+SEEDS_V3 = {
+ 'sales': [
+  'Bán ba ký cà chua cho khách', 'Khách lấy hai chục bánh bao trả tiền',
+  'Bán hết mẻ chè buổi tối', 'Thu tiền bán mấy nải chuối',
+  'Bán được mười hộp cơm trưa', 'Khách sỉ lấy năm thùng mì gói',
+  'Bán tạp hóa cả ngày thu được', 'Cô bán bún thu tiền khách ăn',
+  'Bán vịt quay cho khách đặt', 'Tiền hàng khách trả qua ví điện tử',
+  'Bán bình hoa cho khách', 'Khách lấy ba cân thịt bò',
+  'Đơn hàng online đã giao thu tiền', 'Thu tiền khách mua sỉ nước suối',
+  'Bán bột giặt và nước rửa chén', 'Bán dừa tươi ở sạp',
+  'Thu tiền mấy ly sinh tố', 'Khách mua bộ đồ ngủ trả tiền',
+  'Bán đồ chơi trẻ em được tiền', 'Thu tiền bán hải sản buổi sáng',
+  'Bán quà vặt ở cổng trường', 'Khách trả tiền mua hai ổ bánh mì',
+  'Bán được mấy chục ký khoai lang', 'Hôm nay bán hàng lời được'],
+ 'service': [
+  'Thu tiền bơm bánh xe cho khách', 'Khách trả công thay má phanh',
+  'Nhận tiền sửa quạt máy cho khách', 'Thu tiền giặt hấp chăn mền',
+  'Khách trả tiền uốn tóc nhuộm tóc', 'Thu phí chụp hình cưới',
+  'Nhận tiền dạy nấu ăn cho học viên', 'Thu tiền công sửa ống nước',
+  'Khách trả tiền thông cống', 'Thu phí khắc dấu cho khách',
+  'Thu tiền đánh chìa khóa', 'Khách trả tiền đánh giày',
+  'Thu phí cho thuê xe máy', 'Nhận tiền công dán phim điện thoại',
+  'Thu tiền xông hơi cho khách', 'Khách trả tiền chăm sóc da mặt',
+  'Thu tiền công lắp đặt máy giặt', 'Nhận tiền nấu ăn thuê cho đám tiệc',
+  'Thu phí giữ đồ cho khách', 'Khách thanh toán tiền sửa ti vi',
+  'Thu tiền công vệ sinh nhà cửa thuê', 'Nhận tiền đưa đón học sinh',
+  'Khách trả tiền cài đặt máy tính', 'Thu tiền công xăm lông mày'],
+ 'capital': [
+  'Vay chị hàng xóm tiền để lấy hàng', 'Mượn tiền bạn để mở thêm quầy',
+  'Ngân hàng chính sách cho vay vốn', 'Chủ sạp bỏ tiền túi vào làm vốn',
+  'Vay tiền góp để buôn bán', 'Nhận tiền vay từ quỹ hỗ trợ phụ nữ',
+  'Bố cho thêm tiền làm vốn kinh doanh', 'Mượn tạm em gái để xoay vòng vốn',
+  'Vay thế chấp sổ đỏ lấy vốn', 'Bạn bè góp tiền chung mở quán',
+  'Rút tiền tiết kiệm bỏ vào kinh doanh', 'Nhận tiền vay để mua xe hàng',
+  'Vay mượn họ hàng nhập hàng tết', 'Đem tiền nhà bỏ vào vốn tiệm',
+  'Vay tiền qua thẻ tín dụng làm vốn', 'Người nhà góp thêm vốn cho sạp',
+  'Nhận vốn vay ưu đãi cho hộ kinh doanh', 'Mượn tiền chủ hụi để nhập hàng',
+  'Vay trả góp để đầu tư quầy hàng', 'Chủ quán đưa tiền riêng vào quỹ chung',
+  'Nhận tiền mượn của đồng nghiệp làm vốn', 'Vay thêm để mở chi nhánh',
+  'Góp vốn cùng bạn mở xe bán đồ ăn', 'Cô chú cho vay không lãi làm vốn'],
+ 'other_income': [
+  'Bán giấy vụn và thùng các tông cũ', 'Bán sắt vụn cho người thu mua',
+  'Bán lại lon nhựa đã dùng', 'Thanh lý quạt cũ của tiệm',
+  'Bán lại máy cũ không dùng nữa', 'Nhận tiền hoàn trả từ sàn thương mại',
+  'Được trả lại tiền đặt hàng bị hủy', 'Nhận lãi tài khoản tiết kiệm',
+  'Người mượn trả lại tiền cho quán', 'Nhận tiền bồi thường do giao hàng mất',
+  'Được hoàn tiền thuế', 'Nhận tiền thưởng từ chương trình của hãng',
+  'Được nhà nước hỗ trợ tiền mùa dịch', 'Thu lại tiền đặt cọc vỏ bình gas',
+  'Nhận tiền hoàn từ ví điện tử', 'Bán phế liệu nhôm đồng',
+  'Được tặng tiền mừng mở hàng', 'Thanh lý tủ kính cũ',
+  'Nhận lại tiền cọc thuê thiết bị', 'Được bồi hoàn tiền hàng thiếu',
+  'Nhận tiền giới thiệu khách từ đối tác', 'Thu tiền cho thuê lại chỗ để xe một lần',
+  'Hãng trả tiền trưng bày sản phẩm', 'Nhận tiền hoàn do thanh toán trùng'],
+ 'materials': [
+  'Mua Bánh tráng, Mắm ruốc, Rau răm', 'Mua Cà rốt, Khoai tây, Hành tây',
+  'Mua Mực, Tôm, Nghêu', 'Mua Đường, Bột ngọt, Hạt nêm',
+  'Lấy hàng ở vựa trái cây', 'Đi chợ sỉ nhập rau củ',
+  'Nhập nước ngọt từ đại lý về bán', 'Lấy mấy thùng sữa về bán lẻ',
+  'Mua xương heo nấu nước dùng', 'Mua đậu xanh đậu đỏ nấu chè',
+  'Nhập vải về may đồ bán', 'Lấy bánh kẹo của nhà phân phối',
+  'Mua gà vịt về làm thịt bán', 'Nhập hàng tạp hóa cho cửa hàng',
+  'Mua chanh tắc đường để pha nước', 'Mua giấy gói và túi đựng hàng bán',
+  'Nhập thuốc lá bia rượu về bán', 'Mua sả ớt gừng nấu món ăn',
+  'Lấy hàng điện thoại phụ kiện về bán', 'Mua bún tươi cho quán bún',
+  'Mua bánh phở tươi mỗi sáng', 'Nhập hạt điều đóng gói bán',
+  'Mua nước cốt dừa làm bánh', 'Nhập cá khô mực khô về bán'],
+ 'rent': [
+  'Đóng tiền chỗ bán ở chợ', 'Trả tiền thuê sạp mỗi tháng',
+  'Nộp phí mặt bằng cho ban quản lý chợ', 'Trả tiền thuê lô trong chợ',
+  'Thuê lề đường để bày hàng', 'Trả tiền thuê nhà nguyên căn kinh doanh',
+  'Đóng tiền thuê quầy ở trung tâm thương mại', 'Trả tiền thuê container làm kho',
+  'Thuê thêm phòng để chứa hàng', 'Chuyển tiền nhà cho chủ trọ',
+  'Đặt cọc thuê sạp mới', 'Trả tiền thuê bếp chung để nấu',
+  'Thuê sân để tổ chức bán hàng', 'Đóng tiền thuê mặt tiền quán',
+  'Trả tiền thuê tầng trệt mở tiệm', 'Thuê chỗ đậu xe bán đồ ăn',
+  'Trả phí thuê gian hàng chợ phiên', 'Trả chủ nhà tiền thuê quý',
+  'Nộp tiền thuê kiot cho chợ', 'Thanh toán tiền thuê nhà xưởng',
+  'Trả tiền thuê văn phòng nhỏ', 'Trả tiền thuê chỗ ngồi bán vé số',
+  'Tiền thuê nhà tháng này cho cửa hàng', 'Gia hạn hợp đồng thuê mặt bằng'],
+ 'utilities': [
+  'Trả tiền điện cho chủ nhà', 'Đóng tiền nước cho ban quản lý',
+  'Nạp tiền mạng di động', 'Thanh toán gói cước truyền hình internet',
+  'Trả tiền điện tính theo số công tơ', 'Đóng tiền nước sạch',
+  'Thanh toán hóa đơn viễn thông', 'Trả tiền thuê bao điện thoại bàn',
+  'Đóng phí thu gom rác thải', 'Trả tiền điện ba pha của xưởng',
+  'Nạp thẻ điện thoại để gọi khách', 'Thanh toán tiền điện qua ứng dụng',
+  'Đóng tiền nước giếng khoan bơm', 'Trả phí dịch vụ internet cho cửa hàng',
+  'Gia hạn gói data cho máy bán hàng', 'Hóa đơn điện nước của sạp',
+  'Trả tiền điện tháng trước còn nợ', 'Thanh toán tiền nước theo đồng hồ',
+  'Đóng tiền điện chiếu sáng biển hiệu', 'Trả cước sim dùng cho máy quẹt thẻ',
+  'Đóng tiền vệ sinh môi trường hàng tháng', 'Thanh toán phí wifi quán cà phê',
+  'Trả tiền điện chạy máy lạnh', 'Nộp tiền nước cho tổ dân phố'],
+ 'shipping': [
+  'Trả tiền xe chở hàng từ chợ về', 'Thuê ba gác chở đồ',
+  'Gửi hàng qua nhà xe', 'Trả cước gửi hàng qua bưu cục',
+  'Trả tiền xe ôm giao hàng cho khách', 'Phí giao hàng cho đơn online',
+  'Thuê xe tải nhỏ chở hàng tết', 'Trả tiền vận chuyển hàng ra sạp',
+  'Gửi hàng đi tỉnh qua xe khách', 'Trả công chở hàng bằng xe máy',
+  'Cước vận chuyển đơn đi miền Bắc', 'Trả phí ship cho tài xế công nghệ',
+  'Thuê xe chở đá cho quán', 'Trả tiền cước chở hàng đường thủy',
+  'Phí vận chuyển nguyên liệu về bếp', 'Trả tiền xe kéo chở hàng',
+  'Gửi chuyển phát hàng mẫu cho khách', 'Trả tiền ship hàng hoàn',
+  'Thuê xe chở hàng đi hội chợ', 'Phí gửi hàng qua dịch vụ hỏa tốc',
+  'Trả tiền cho người chở hàng thuê', 'Cước xe chở hàng từ kho ra chợ',
+  'Trả tiền giao hàng nội thành', 'Phí vận chuyển hàng nhập từ xưởng'],
+ 'salary': [
+  'Trả tiền công cho người làm theo ngày', 'Phát lương cho phụ việc',
+  'Trả lương em phụ quán tháng này', 'Ứng tiền công cho thợ',
+  'Trả công người phụ dọn dẹp quán', 'Trả lương người giao hàng của tiệm',
+  'Trả tiền làm thêm cuối tuần cho nhân viên', 'Thưởng lễ cho người làm',
+  'Trả lương kế toán làm bán thời gian', 'Trả công người trông sạp',
+  'Trả tiền công phụ hồ cho tiệm', 'Trả công người làm bánh thuê',
+  'Chi lương cho nhân viên bán hàng online', 'Trả lương người chạy bàn',
+  'Trả tiền công người lặt rau', 'Ứng lương giữa tháng cho phụ bếp',
+  'Trả công người bưng bê đám tiệc', 'Trả lương tháng mười ba cho nhân viên',
+  'Trả công thợ phụ xưởng may', 'Trả tiền công khuân vác hàng',
+  'Trả lương người pha chế ca sáng', 'Thanh toán tiền công thời vụ',
+  'Trả lương nhân viên giữ xe', 'Thưởng chuyên cần cho nhân viên'],
+ 'other_expense': [
+  'Mua quạt máy cho quán', 'Mua nồi cơm điện cho bếp',
+  'Mua chảo và xoong nồi mới', 'Mua bạt che mưa cho sạp',
+  'Mua thùng đá giữ lạnh', 'Mua máy hút chân không',
+  'Mua giấy in hóa đơn', 'Mua kéo và băng keo cho cửa hàng',
+  'Sửa quạt máy của quán', 'Sửa xe đẩy bán hàng',
+  'Thay bóng đèn cho cửa hàng', 'Sơn lại tường cửa hàng',
+  'Nộp thuế môn bài', 'Đóng phí kiểm định cân điện tử',
+  'Trả phí chuyển khoản ngân hàng', 'Trả tiền lãi khoản vay',
+  'Đăng tin quảng cáo trên mạng xã hội', 'In danh thiếp cho cửa hàng',
+  'Mua bảng menu cho quán', 'Mua tủ mát trưng bày',
+  'Mua ổ khóa cửa cho tiệm', 'Mua máy tính tiền',
+  'Đóng phí bảo trì thang máy', 'Mua đồng phục cho nhân viên'],
+}
+
 # ── Augmentation helpers ───────────────────────────────────────────────
 
 # Common OCR errors for Vietnamese text
@@ -303,12 +441,19 @@ def build():
     out.mkdir(exist_ok=True)
     rows = []
     rng = random.Random(20261021)
-    for category, seeds in SEEDS.items():
-        assert len(seeds) == 24, category
+    rng_v3 = random.Random(20261125)  # separate stream so v2 rows stay identical
+    for category, base_seeds in SEEDS.items():
+        assert len(base_seeds) == 24, category
+        seeds = base_seeds + SEEDS_V3.get(category, [])
         for i, seed in enumerate(seeds):
-            split = 'train' if i < 16 else 'validation' if i < 20 else 'test'
+            if i < 24:  # v2 seeds keep their original split
+                split = 'train' if i < 16 else 'validation' if i < 20 else 'test'
+            else:  # v3 seeds: 4 train, 1 validation, 1 test out of every 6
+                k = (i - 24) % 6
+                split = 'train' if k < 4 else 'validation' if k == 4 else 'test'
             group = f'{category}-{i:02}'
-            amount = rng.choice([85000, 150000, 350000, 650000, 1200000, 2500000])
+            g = rng if i < 24 else rng_v3
+            amount = g.choice([85000, 150000, 350000, 650000, 1200000, 2500000])
             # ── Core variants (backward compatible) ──
             variants = [
                 f'{seed} {amount:,} đồng'.replace(',', '.'),
@@ -332,45 +477,45 @@ def build():
                     except Exception:
                         pass
                 # OCR noise variants
-                variants.append(_ocr_noise(f'{seed} {amount:,} đồng'.replace(',', '.'), rng, 0.15))
-                variants.append(_ocr_noise(f'{seed} {amount:,} VND'.replace(',', '.'), rng, 0.25))
+                variants.append(_ocr_noise(f'{seed} {amount:,} đồng'.replace(',', '.'), g, 0.15))
+                variants.append(_ocr_noise(f'{seed} {amount:,} VND'.replace(',', '.'), g, 0.25))
                 # Speech noise variants
-                variants.append(_speech_noise(f'{seed.lower()} {amount // 1000} nghìn', rng, 0.3))
-                variants.append(_speech_noise(f'hôm nay {seed.lower()} {amount} đồng', rng, 0.4))
+                variants.append(_speech_noise(f'{seed.lower()} {amount // 1000} nghìn', g, 0.3))
+                variants.append(_speech_noise(f'hôm nay {seed.lower()} {amount} đồng', g, 0.4))
                 # Stripped diacritics (simulating no-accent Vietnamese / STT output)
                 variants.append(f'{_strip_diacritics(seed)} {amount} dong')
                 variants.append(f'{_strip_diacritics(seed.lower())} het {amount // 1000} nghin')
                 variants.append(f'{_strip_diacritics(seed.lower())} {amount // 1000} ngan tien mat')
                 variants.append(f'{_strip_diacritics(seed.lower())} {amount // 1000} nhin dong')
                 # Word dropout
-                variants.append(_word_dropout(f'Hôm nay {seed.lower()} hết {amount:,} đồng chuyển khoản'.replace(',', '.'), rng))
+                variants.append(_word_dropout(f'Hôm nay {seed.lower()} hết {amount:,} đồng chuyển khoản'.replace(',', '.'), g))
                 # Word shuffle (mild)
-                variants.append(_shuffle_words(f'{seed} hết {amount // 1000} nghìn tiền mặt', rng))
+                variants.append(_shuffle_words(f'{seed} hết {amount // 1000} nghìn tiền mặt', g))
             elif split == 'validation':
                 # Fewer augmentations for validation — still unseen patterns
                 variants.append(f'ghi nhé: {seed.lower()} {amount:,} đồng'.replace(',', '.'))
-                variants.append(_ocr_noise(f'{seed} {amount:,} VND'.replace(',', '.'), rng, 0.15))
+                variants.append(_ocr_noise(f'{seed} {amount:,} VND'.replace(',', '.'), g, 0.15))
                 variants.append(f'{_strip_diacritics(seed.lower())} {amount} dong')
                 variants.append(f'Hôm qua {seed.lower()} tốn {amount // 1000}k')
             else:  # test
                 # Test also gets a few more variants for better eval
                 variants.append(f'{seed.lower()}, tổng {amount} đ')
-                variants.append(_ocr_noise(f'{seed} {amount:,} VND'.replace(',', '.'), rng, 0.2))
-                variants.append(_speech_noise(f'{seed.lower()} {amount // 1000} nghìn đồng', rng, 0.3))
+                variants.append(_ocr_noise(f'{seed} {amount:,} VND'.replace(',', '.'), g, 0.2))
+                variants.append(_speech_noise(f'{seed.lower()} {amount // 1000} nghìn đồng', g, 0.3))
                 variants.append(f'{_strip_diacritics(seed)} {amount} dong')
 
             for j, text in enumerate(variants):
                 rows.append({'id': f'{group}-{j}', 'text': text,
                              'kind': 'income' if category in INCOME else 'expense',
                              'category': category, 'group_id': group, 'split': split,
-                             'origin': 'synthetic_authored_template_v2'})
+                             'origin': 'synthetic_authored_template_v2' if i < 24 else 'synthetic_authored_template_v3'})
     fields = list(rows[0])
     for split in ('train', 'validation', 'test'):
         with (out / f'{split}.csv').open('w', encoding='utf-8-sig', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fields)
             writer.writeheader()
             writer.writerows(row for row in rows if row['split'] == split)
-    meta = {'origin': 'Synthetic educational data, authored seed families + deterministic variants + augmentation v2',
+    meta = {'origin': 'Synthetic educational data, authored seed families + deterministic variants + augmentation v2; v3 seed families (real-life wording)',
             'seed': 20261021, 'total': len(rows), 'categories': len(SEEDS),
             'split_counts': {s: sum(r['split'] == s for r in rows) for s in ('train', 'validation', 'test')},
             'group_policy': 'A semantic seed and all variants stay in exactly one split. Evaluation is synthetic, not real-world accuracy.',

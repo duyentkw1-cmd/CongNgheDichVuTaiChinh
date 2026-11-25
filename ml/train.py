@@ -68,7 +68,7 @@ def train():
     out = ROOT / 'models' / 'finance'
     out.mkdir(parents=True, exist_ok=True)
     total_features = x['train'].shape[1]
-    report = {'version':'local-finance-v2', 'data_origin':'synthetic; not validated on real household data',
+    report = {'version':'local-finance-v3', 'data_origin':'synthetic; not validated on real household data',
               'split_policy':'disjoint semantic seed families; no training on validation or test',
               'counts':{s:len(r) for s,r in rows.items()}, 'features':total_features,
               'python':platform.python_version(), 'sklearn':sklearn.__version__, 'tasks':{}}
