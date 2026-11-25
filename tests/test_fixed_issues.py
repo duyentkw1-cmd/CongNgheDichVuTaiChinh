@@ -67,5 +67,19 @@ class FixedIssuesTests(unittest.TestCase):
         self.assertEqual(parse_fields('thu 2.5 triệu')['amount'], 2500000)
         self.assertEqual(parse_fields('thu 2,5 triệu')['amount'], 2500000)
 
+    def test_million_followed_by_explicit_unit(self):
+        """'1 triệu 50 nghìn' is 1,050,000, not the compact '1tr5' = 1,500,000."""
+        for stt in (False, True):
+            self.assertEqual(parse_fields('chi 1tr50k mua đồ', stt=stt)['amount'], 1050000)
+            self.assertEqual(parse_fields('thu 1 triệu 50 nghìn', stt=stt)['amount'], 1050000)
+            self.assertEqual(parse_fields('thu 2 triệu 200 nghìn', stt=stt)['amount'], 2200000)
+            self.assertEqual(parse_fields('mua 3tr250k hàng', stt=stt)['amount'], 3250000)
+            self.assertEqual(parse_fields('hai triệu ba trăm nghìn', stt=stt)['amount'], 2300000)
+            # Compact form without a unit keeps its meaning.
+            self.assertEqual(parse_fields('chi 2tr200 mua đồ', stt=stt)['amount'], 2200000)
+            self.assertEqual(parse_fields('1 triệu 2', stt=stt)['amount'], 1200000)
+        self.assertEqual(parse_fields('2 củ 300 nghìn', stt=True)['amount'], 2300000)
+        self.assertEqual(parse_fields('3 củ 2', stt=True)['amount'], 3200000)
+
 if __name__ == '__main__':
     unittest.main()

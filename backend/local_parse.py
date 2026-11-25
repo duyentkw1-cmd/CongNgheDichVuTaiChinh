@@ -67,8 +67,11 @@ def normalize_stt_text(s):
         d2 = w2d.get(m.group(2), m.group(2))
         return f'{d1}tr{d2}'
 
-    s = re.sub(rf'\b({num_pat})\s+(?:cu|chai)\s+({num_pat})\b', cu_sub, s)
-    s = re.sub(rf'\b({num_pat})\s+(?:trieu)\s+({num_pat})\b', cu_sub, s)
+    # "1 trieu 2" -> 1tr2 (1.2M), but not "2 trieu 200 nghin" / "hai trieu ba tram nghin":
+    # an explicit unit after the second number means separate denominations.
+    after_unit = r'(?!\s*(?:nghin|ngan|k|dong|vnd|d|tram|muoi|chuc|lit|xi|lop|canh)\b)'
+    s = re.sub(rf'\b({num_pat})\s+(?:cu|chai)\s+({num_pat})\b{after_unit}', cu_sub, s)
+    s = re.sub(rf'\b({num_pat})\s+(?:trieu)\s+({num_pat})\b{after_unit}', cu_sub, s)
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:cu|chai)\s+ruoi\b', r'\1 trieu nam tram nghin', s)
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:cu|chai)\b', r'\1 trieu', s)
     # lit / xi / lop = 100,000
@@ -95,7 +98,9 @@ def money_candidates(text, bare=False):
     # Normalize 1tr50k -> 1 tr 50 k
     text=re.sub(r'\b(\d+)\s*tr(\d+)(k|dong|vnd|d)\b', r'\1 tr \2 \3', text)
     # Compact Vietnamese notation: 1tr5 means 1.5 million; 1 trieu 2 means 1.2 million; 2tr200 means 2.2 million.
-    text=re.sub(r'\b(\d+)\s*(?:tr|trieu)\s*(\d{1,3})\b',lambda m:f'{int(m[1])*1000000+int(m[2].ljust(3,"0"))*1000} dong',text)
+    # Skip when a unit follows the second number (1 tr 50 k, 2 trieu 200 nghin): those
+    # are explicit denominations and are added up by the adjacent-unit rule below.
+    text=re.sub(r'\b(\d+)\s*(?:tr|trieu)\s*(\d{1,3})\b(?!\s*(?:k|nghin|ngan|dong|vnd|d)\b)',lambda m:f'{int(m[1])*1000000+int(m[2].ljust(3,"0"))*1000} dong',text)
     # Half expressions: nua trieu = 500k, nua cu / nua chai = 500k, nua ty = 500M
     text=re.sub(r'\bnua\s+(?:trieu|cu|chai)\b', 'nam tram nghin', text)
     text=re.sub(r'\bnua\s+ty\b', 'nam tram trieu', text)
@@ -242,6 +247,10 @@ def parse_fields(text, stt=False):
     # === Date extraction BEFORE any substitution so '2026-10-15' is never mangled ===
     day=today()
     explicit=re.search(r'\b(\d{4})-(\d{1,2})-(\d{1,2})\b',s)
+    # Formal Vietnamese date on invoices: "Ngày 08 tháng 08 năm 2026".
+    spelled=re.search(r'\bngay\s*(\d{1,2})\s*thang\s*(\d{1,2})\s*nam\s*(\d{4})\b',s)
+    if spelled and not explicit:
+        explicit=re.match(r'(\d{4})-(\d{1,2})-(\d{1,2})',f'{spelled[3]}-{spelled[2]}-{spelled[1]}')
     unit_pattern = re.compile(r'^(?:kg|kilo|gam|gram|\bg\b|lit|\bl\b|ml|con|qua|trai|cai|chiec|phan|hop|lon|chai|goi|thung|ly|coc|suat|dia|to|bat|can|mieng|cay|bo|chuc)\b')
     found_date = False
     try:

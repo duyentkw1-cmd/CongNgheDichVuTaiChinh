@@ -4,6 +4,25 @@ import type {Draft,DraftItem,EntryMode,Meta,Transaction,Kind} from './types';
 import {api,post,ApiError,money,prettyDate,newRequestId} from './api';
 import {Sheet,Message,Spinner} from './ui';
 import {startListening,stopListening,isSpeechSupported,speakVietnamese} from './speechToText';
+// Phone photos are often 3–5 MB at 4000px; the server only needs ~1800px to read
+// a receipt. Shrinking here cuts upload time and server work. Falls back to the
+// original file if the browser cannot decode it.
+// Without explicit width/height, browsers open the camera at 640x480, which is
+// too small for OCR; the camera request below asks for up to 2560x1920.
+const MAX_IMAGE_SIDE=2000;
+async function shrinkImage(input:File):Promise<File>{
+ try{
+  const bmp=await createImageBitmap(input,{imageOrientation:'from-image'});
+  const ratio=Math.min(1,MAX_IMAGE_SIDE/Math.max(bmp.width,bmp.height));
+  if(ratio===1&&input.size<1024*1024){bmp.close();return input;}
+  const c=document.createElement('canvas');c.width=Math.round(bmp.width*ratio);c.height=Math.round(bmp.height*ratio);
+  const ctx=c.getContext('2d');if(!ctx){bmp.close();return input;}
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(bmp,0,0,c.width,c.height);bmp.close();
+  const blob=await new Promise<Blob|null>(r=>c.toBlob(r,'image/jpeg',.85));
+  if(!blob||blob.size>=input.size)return input;
+  return new File([blob],input.name.replace(/\.\w+$/,'')+'.jpg',{type:'image/jpeg'});
+ }catch{return input;}
+}
 type Props={mode:EntryMode;editing:Transaction|null;meta:Meta;onClose:()=>void;onSaved:(message:string)=>void};
 export default function Entry({mode,editing,meta,onClose,onSaved}:Props){
  const blank=():Draft=>({kind:'expense',amount:null,description:'',category:'materials',date:meta.today,payment:'cash',scope:'business',source:'manual',raw_text:'',attachment_id:null});
@@ -21,7 +40,7 @@ export default function Entry({mode,editing,meta,onClose,onSaved}:Props){
  useEffect(()=>{if(!file){setPreview('');return;}const url=URL.createObjectURL(file);setPreview(url);return()=>URL.revokeObjectURL(url);},[file]);
  useEffect(()=>{if(!audio)return;const url=URL.createObjectURL(audio);setAudioUrl(url);return()=>URL.revokeObjectURL(url);},[audio]);
  useEffect(()=>{if(!recording)return;const timer=setInterval(()=>setSeconds(s=>{if(s>=29){stopListening();if(recorder.current?.state==='recording')recorder.current.stop();return 30;}return s+1;}),1000);return()=>clearInterval(timer);},[recording]);
- useEffect(()=>{if(!camera)return;let active=true;async function open(){try{if(!navigator.mediaDevices?.getUserMedia)throw new Error('Camera cần trình duyệt Chrome/Edge trên localhost hoặc HTTPS.');const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});if(!active){stream.getTracks().forEach(t=>t.stop());return;}camStream.current=stream;if(video.current){video.current.srcObject=stream;await video.current.play();}}catch{setError('Chưa mở được camera. Hãy cấp quyền hoặc chọn Tải ảnh lên.');setCamera(false);}}void open();return()=>{active=false;camStream.current?.getTracks().forEach(t=>t.stop());};},[camera]);
+ useEffect(()=>{if(!camera)return;let active=true;async function open(){try{if(!navigator.mediaDevices?.getUserMedia)throw new Error('Camera cần trình duyệt Chrome/Edge trên localhost hoặc HTTPS.');const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:2560},height:{ideal:1920}},audio:false});if(!active){stream.getTracks().forEach(t=>t.stop());return;}camStream.current=stream;if(video.current){video.current.srcObject=stream;await video.current.play();}}catch{setError('Chưa mở được camera. Hãy cấp quyền hoặc chọn Tải ảnh lên.');setCamera(false);}}void open();return()=>{active=false;camStream.current?.getTracks().forEach(t=>t.stop());};},[camera]);
  function switchTab(next:EntryMode){if(recording){stopListening();recorder.current?.stop();}setCamera(false);setTab(next);setStep('input');setError('');setDuplicate(false);setConfirmDelete(false);}
  function review(result:Draft,source:EntryMode){
   const newDraft:Draft = {...blank(),...result,source};
@@ -157,8 +176,8 @@ export default function Entry({mode,editing,meta,onClose,onSaved}:Props){
  }
  async function analyze(value=text,sample=false,source:EntryMode=tab){setBusy(true);setError('');try{const result=await post<Draft>('/api/ai/text',{text:value,sample});review(result,source==='manual'?'text':source);}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
  async function uploadAnalysis(kind:'image'|'voice'){const payload=kind==='image'?file:audio;if(!payload)return;setBusy(true);setError('');try{const form=new FormData();form.append('file',payload,kind==='image'?'receipt.jpg':audio?.type.includes('mp4')?'recording.mp4':'recording.webm');review(await api<Draft>('/api/ai/'+kind,{method:'POST',body:form}),kind);}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
- async function selectImage(input:File|undefined){if(!input)return;setError('');setCamera(false);uploadId.current=null;if(!['image/jpeg','image/png','image/webp'].includes(input.type)){setError('Hãy chọn ảnh JPG, PNG hoặc WebP.');return;}if(input.size>5*1024*1024){setError('Ảnh tối đa 5 MB. Vui lòng chọn ảnh nhỏ hơn.');return;}setFile(input);setKeepImage(false);}
- async function capture(){const v=video.current;if(!v||!v.videoWidth){setError('Camera chưa sẵn sàng.');return;}const c=document.createElement('canvas');const ratio=Math.min(1,1800/v.videoWidth);c.width=v.videoWidth*ratio;c.height=v.videoHeight*ratio;c.getContext('2d')?.drawImage(v,0,0,c.width,c.height);c.toBlob(b=>{if(b)void selectImage(new File([b],'anh-chung-tu.jpg',{type:'image/jpeg'}));},'image/jpeg',.85);}
+ async function selectImage(input:File|undefined){if(!input)return;setError('');setCamera(false);uploadId.current=null;if(!['image/jpeg','image/png','image/webp'].includes(input.type)){setError('Hãy chọn ảnh JPG, PNG hoặc WebP.');return;}const small=await shrinkImage(input);if(small.size>5*1024*1024){setError('Ảnh tối đa 5 MB. Vui lòng chọn ảnh nhỏ hơn.');return;}setFile(small);setKeepImage(false);}
+ async function capture(){const v=video.current;if(!v||!v.videoWidth){setError('Camera chưa sẵn sàng.');return;}const c=document.createElement('canvas');const ratio=Math.min(1,MAX_IMAGE_SIDE/Math.max(v.videoWidth,v.videoHeight));c.width=v.videoWidth*ratio;c.height=v.videoHeight*ratio;c.getContext('2d')?.drawImage(v,0,0,c.width,c.height);c.toBlob(b=>{if(b)void selectImage(new File([b],'anh-chung-tu.jpg',{type:'image/jpeg'}));},'image/jpeg',.85);}
  async function record(){
   setError('');
   if(recording){

@@ -13,6 +13,9 @@ import os
 import re
 import shutil
 import subprocess
+import unicodedata
+import time
+from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from pathlib import Path
 
@@ -26,7 +29,7 @@ from datetime import date
 from ml.predict import classify, metrics, ready
 from .db import ROOT, today
 from .domain import CATEGORIES, fold
-from .local_parse import parse_fields, parse_multi_items
+from .local_parse import money_candidates, parse_fields, parse_multi_items
 
 # One heavy job at a time prevents exhausting RAM on a normal laptop.
 worker = asyncio.Semaphore(1)
@@ -247,15 +250,39 @@ def clean_image(content):
         raise HTTPException(400,'Ảnh không hợp lệ. Dùng JPG, PNG hoặc WebP dưới 24 megapixel.') from None
 
 
+def _deskew(gray, max_angle=8.0, step=0.5):
+    """Straighten a tilted receipt photo.
+
+    Text rows make the horizontal ink profile spiky when the image is level, so
+    pick the rotation whose row sums have the highest variance. Runs on a small
+    copy, so it costs only a few tens of milliseconds.
+    """
+    small = gray.copy()
+    small.thumbnail((800, 800))
+    arr = np.asarray(small, dtype=np.float32)
+    ink = Image.fromarray(((arr < arr.mean() * 0.8) * 255).astype(np.uint8))
+    best_angle, best_score = 0.0, -1.0
+    for angle in np.arange(-max_angle, max_angle + 1e-6, step):
+        rows = (np.asarray(ink.rotate(float(angle), resample=Image.Resampling.NEAREST)) > 0).sum(axis=1)
+        score = float(np.var(rows))
+        if score > best_score:
+            best_angle, best_score = float(angle), score
+    if abs(best_angle) < step:
+        return gray
+    return gray.rotate(best_angle, resample=Image.Resampling.BICUBIC, expand=True, fillcolor=255)
+
+
 def _preprocess_for_ocr(im):
     """Enhanced image preprocessing for clean, high-accuracy OCR.
     
     Avoids aggressive sharpening which causes severe noise and artifact characters
     on camera-captured receipts.
     """
-    gray = ImageOps.grayscale(im)
+    gray = _deskew(ImageOps.grayscale(im))
     w, h = gray.size
-    # Upscale smaller images so text characters have sufficient height for Tesseract
+    # Upscale smaller images so text characters have sufficient height for Tesseract.
+    # Larger targets (2000-2600px) were tried on real receipts: no reliable accuracy
+    # gain, but 30-70% slower on dense tables.
     if max(w, h) < 1400:
         scale = 1400.0 / max(w, h)
         gray = gray.resize((int(w * scale), int(h * scale)), Image.Resampling.LANCZOS)
@@ -301,6 +328,16 @@ def score_ocr_text(text):
     noise_penalty = (noise_ratio * 200) if noise_ratio > 0.05 else 0
 
     return (word_count * 2) + kw_score + num_score - noise_penalty
+
+
+_OCR_AMOUNT = re.compile(
+    r'\b\d{1,3}(?:[.,]\d{3})+\b|\b\d{4,}\b|\b\d+\s*(?:k|nghin|nghìn|dong|đ|vnd|tr|trieu|triệu)\b',
+    re.IGNORECASE)
+
+
+def _ocr_good_enough(text, score):
+    """A pass is good enough when it reads real text and at least one amount."""
+    return score >= 100 and bool(_OCR_AMOUNT.search(text or ''))
 
 
 def clean_ocr_noise(text):
@@ -476,6 +513,10 @@ def _parse_vision_date(d_str):
     return str(today())
 
 
+GEMINI_REQUEST_TIMEOUT = 12.0
+GEMINI_TOTAL_TIMEOUT = 20.0
+
+
 def gemini_vision_ocr(raw_image_bytes):
     api_key = os.getenv('GEMINI_API_KEY') or os.getenv('GOOGLE_API_KEY')
     if not api_key:
@@ -487,7 +528,14 @@ def gemini_vision_ocr(raw_image_bytes):
     b64_img = base64.b64encode(raw_image_bytes).decode('utf-8')
     models = ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash']
 
+    # Total time budget across all models, so a slow or offline network falls
+    # back to local OCR quickly instead of waiting up to 4 x 25 seconds.
+    deadline = time.monotonic() + GEMINI_TOTAL_TIMEOUT
     for model in models:
+        remaining = deadline - time.monotonic()
+        if remaining < 2:
+            logger.warning("Gemini Vision time budget used up; falling back to local OCR")
+            break
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
         payload = {
             "contents": [{
@@ -507,7 +555,7 @@ def gemini_vision_ocr(raw_image_bytes):
             }
         }
         try:
-            resp = httpx.post(url, json=payload, timeout=25.0)
+            resp = httpx.post(url, json=payload, timeout=min(GEMINI_REQUEST_TIMEOUT, remaining))
             if resp.status_code == 200:
                 data = resp.json()
                 candidates = data.get('candidates', [])
@@ -582,10 +630,257 @@ def gemini_vision_ocr(raw_image_bytes):
                 return res
             else:
                 logger.warning("Gemini Vision HTTP %s on model %s: %s", resp.status_code, model, resp.text[:200])
+        except httpx.TimeoutException:
+            # A timeout means the network is slow; trying more models only adds delay.
+            logger.warning("Gemini Vision timed out on model %s; falling back to local OCR", model)
+            break
         except Exception as e:
             logger.warning("Gemini Vision error on model %s: %s", model, e)
 
     return None
+
+
+# ── Receipt understanding for OCR text ─────────────────────────────────────
+# Receipts are not sentences: one total line, item lines, and noise such as
+# codes, cash given and change. The free-text parser (analyze_text) treats every
+# line with a number as a separate transaction, so receipts get their own path.
+
+def normalize_receipt_ocr(text):
+    """Fix OCR misreads that are specific to printed receipts."""
+    # The "đ" after an amount is often read as 4/a/q/d glued to the number:
+    # "290.0004" -> "290.000đ". Grouped thousands always end in 3 digits, so a
+    # 4th trailing character cannot be part of the number.
+    text = re.sub(r'(\d{1,3}(?:[.,]\d{3})+)[0-9aqdđ](?=[\s.,;:)]|$)', r'\1đ', text)
+    # "Số" is commonly read as "S6"/"S0"/"So" before ":" or "tiền".
+    text = re.sub(r'\bS[60o]\b(?=\s*(?::|ti[eéèẻẽẹêếềểễệ]n))', 'Số', text)
+    return text
+
+
+# Words and phrases common on Vietnamese receipts, with correct accents. Used to
+# repair OCR accent/character errors ("Tién khéch dua" -> "Tiền khách đưa").
+# Only entries whose accent-free form is unambiguous: single words like "ban"
+# (bán/bàn), "sua" (sữa/sửa), "ca" (cá/cà) are left out on purpose.
+_RECEIPT_VOCAB = (
+    'Tổng cộng', 'Tổng tiền', 'Tổng tiền hàng', 'Tổng thanh toán', 'Tổng cước', 'Tổng số tiền',
+    'Thanh toán', 'Tiền mặt', 'Chuyển khoản', 'Hóa đơn', 'Hóa đơn bán hàng', 'Hóa đơn bán lẻ',
+    'Hóa đơn thanh toán', 'Phiếu chi', 'Phiếu thu', 'Phiếu gửi hàng', 'Phiếu bán hàng',
+    'Khách hàng', 'Thu ngân', 'Số tiền', 'Tiền thừa', 'Tiền khách đưa', 'Đơn giá', 'Thành tiền',
+    'Số lượng', 'Khuyến mại', 'Giảm giá', 'Chiết khấu', 'Cảm ơn quý khách',
+    'Lý do chi', 'Lý do thu', 'Nội dung', 'Diễn giải', 'Vận chuyển', 'Cước vận chuyển', 'Phụ phí',
+    'Trọng lượng', 'Tiền hàng', 'Điện thoại', 'Địa chỉ', 'Hình thức', 'Nguyên liệu', 'Tiền điện',
+    'Tiền nước', 'Thuê mặt bằng', 'Tiền thuê mặt bằng', 'Trả lương', 'Nhân viên', 'Mặt hàng',
+    'Tên món', 'Thịt heo', 'Thịt bò', 'Thịt gà', 'Nước ngọt', 'Rau cải', 'Dầu ăn', 'Bột mì',
+    'Đường cát', 'Khăn lạnh', 'Nấm hương', 'Trứng gà', 'Cà phê', 'Sữa tươi', 'Tôm', 'Thịt',
+    'Trứng', 'Nước', 'Gạo', 'Chiên', 'Hương', 'Tươi', 'Quý khách', 'Bớt tiền lẻ',
+    # On receipts these readings dominate the alternatives (bành, thang, ngay, họp).
+    'Bánh', 'Tháng', 'Ngày', 'Cái', 'Gói', 'Hộp',
+)
+_VOCAB_BY_FOLD = {fold(p): p for p in _RECEIPT_VOCAB}
+_VOCAB_MAX_WORDS = max(len(p.split()) for p in _RECEIPT_VOCAB)
+
+
+def _edit_distance_le1(a, b):
+    """True when a and b differ by at most one insert, delete or substitution."""
+    if abs(len(a) - len(b)) > 1:
+        return False
+    i = 0
+    while i < min(len(a), len(b)) and a[i] == b[i]:
+        i += 1
+    return a[i + 1:] == b[i + 1:] or a[i:] == b[i + 1:] or a[i + 1:] == b[i:]
+
+
+def _match_case(original, target):
+    letters = [c for c in original if c.isalpha()]
+    if letters and all(c.isupper() for c in letters):
+        return target.upper()
+    if original[:1].islower():
+        return target[:1].lower() + target[1:]
+    return target
+
+
+def correct_receipt_words(text):
+    """Repair OCR misreads of known receipt words/phrases.
+
+    Exact match on the accent-free form fixes wrong accents; phrases of 8+ letters
+    also accept one wrong/missing character ("Tong cang" -> "Tổng cộng").
+    """
+    out_lines = []
+    for line in unicodedata.normalize('NFC', text).splitlines():
+        tokens = list(re.finditer(r'[^\W\d_]+', line))
+        pieces, pos, i = [], 0, 0
+        while i < len(tokens):
+            replaced = False
+            for n in range(min(_VOCAB_MAX_WORDS, len(tokens) - i), 0, -1):
+                group = tokens[i:i + n]
+                # Only join words separated by plain spaces.
+                if any(line[a.end():b.start()].strip() for a, b in zip(group, group[1:])):
+                    continue
+                key = ' '.join(fold(t.group()) for t in group)
+                target = _VOCAB_BY_FOLD.get(key)
+                if target is None and len(key.replace(' ', '')) >= 8:
+                    target = next((p for k, p in _VOCAB_BY_FOLD.items()
+                                   if k.count(' ') == key.count(' ') and _edit_distance_le1(k, key)), None)
+                if target:
+                    start, end = group[0].start(), group[-1].end()
+                    pieces.append(line[pos:start])
+                    pieces.append(_match_case(line[start:end], target))
+                    pos, i, replaced = end, i + n, True
+                    break
+            if not replaced:
+                i += 1
+        pieces.append(line[pos:])
+        out_lines.append(''.join(pieces))
+    return '\n'.join(out_lines)
+
+
+_RECEIPT_TOTAL_LABELS = (
+    # (pattern on folded text, priority). Higher priority wins; ties -> later line.
+    (r'tong\s*(?:cong|thanh\s*toan|tien\s*thanh\s*toan|so\s*tien|phai\s*tra|gia\s*tri\s*thanh\s*toan)', 4),
+    (r'(?:khach\s*)?(?:can|phai)\s*(?:thanh\s*toan|tra)', 4),
+    (r'tong\s*(?:tien(?:\s*hang)?|cuoc|gia\s*tri|so)', 3),
+    (r'so\s*tien(?:\s*thanh\s*toan)?', 3),
+    (r'thanh\s*toan', 2),
+    (r'cong\s*(?:tien(?:\s*hang)?)?', 1),
+    (r'tong', 1),
+)
+# Lines that contain money but are never the transaction amount.
+_RECEIPT_SKIP = re.compile(
+    r'khach\s*dua|tien\s*(?:thua|thoi|tra\s*lai|khach)|thoi\s*lai|tra\s*lai|giam\s*gia|chiet\s*khau'
+    r'|bang\s*chu|da\s*(?:tra|thanh\s*toan)\s*truoc|con\s*no|\bma\b|\bmst\b|\bsdt\b|dien\s*thoai'
+    r'|\bkwh\b|\bm3\b|trong\s*luong|\bso\s*:|so\s*phieu|\bms\b|hotline|\bdt\b|doanh\s*so|tich\s*luy'
+    r'|khuyen\s*mai|\bkm\b|bot\s*tien|tien\s*le')
+# Item lines, ignoring headers/footers; used for the description.
+_RECEIPT_META = re.compile(
+    r'tong|thanh\s*toan|thanh\s*tien|so\s*tien|ngay|gio|thu\s*ngan|dia\s*chi|hinh\s*thuc|tien\s*mat'
+    r'|chuyen\s*khoan|cam\s*on|hen\s*gap|\bvat\b|thue|\bban\s*:|khach|\bdc\b|tien\s*hang')
+# Phone numbers, invoice numbers and tax codes: long digit runs without
+# thousand separators. Real amounts on receipts are printed with separators.
+_RECEIPT_ID_NUMBER = re.compile(r'(?<![\d.,])\d{7,}(?![\d.,])')
+
+
+def receipt_amount(text):
+    """Return (amount, from_total_line). Picks the labeled total, else the largest value."""
+    best = None  # (priority, line_index, amount)
+    fallback = []
+    for i, line in enumerate(text.splitlines()):
+        folded = fold(line)
+        if _RECEIPT_SKIP.search(folded):
+            continue
+        values = [v for v in money_candidates(folded, bare=True) if 0 < v <= 1_000_000_000_000]
+        if not values:
+            continue
+        fallback.extend(v for v in money_candidates(_RECEIPT_ID_NUMBER.sub(' ', folded), bare=True)
+                        if 0 < v <= 1_000_000_000_000)
+        labels = [(re.search(r'\b' + p + r'\b', folded), prio) for p, prio in _RECEIPT_TOTAL_LABELS]
+        # OCR often drops the "T" of a line-initial "Tổng:" -> "“ổng : 360,000".
+        labels.append((re.match(r'^\W{0,3}ong\b(?=\s*[:;])', folded), 2))
+        for m, priority in labels:
+            if m:
+                after = [v for v in money_candidates(folded[m.end():], bare=True) if v > 0]
+                amount = (after or values)[-1]
+                if best is None or (priority, i) > best[:2]:
+                    best = (priority, i, amount)
+                break
+    if best:
+        return best[2], True
+    return (max(fallback), False) if fallback else (None, False)
+
+
+def _receipt_item_name(line):
+    """Item name from a receipt row such as "Bánh da nem 1 chiếc 4,000 4,000" or
+    "3 | Tôm chiên xù | 3 | 300.000 | 900.000": the leading words before the
+    first number. Rows must end with a price."""
+    if not re.search(r'\d[\d.,]*\s*(?:đ|d|vnd|k)?\W{0,3}$', line, re.IGNORECASE):
+        return None
+    words = []
+    for token in re.split(r'[\s|]+', line):
+        word = token.strip('.,:;!?()[]{}“”"\'`‘’-_*')
+        if re.fullmatch(r'[^\W\d_]+', word):
+            if not words and len(word) == 1:
+                continue  # stray OCR mark before the name ("i", "l", "v")
+            words.append(word)
+        elif words:
+            break
+    name = ' '.join(words[:6])
+    return name if len(name.replace(' ', '')) >= 3 else None
+
+
+def receipt_description(text):
+    """Return (description shown to the user, candidate texts for the classifier)."""
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    explicit = None
+    for line in lines:
+        # Match on the accent-free form so OCR accent errors ("Lý do chị:") still
+        # match; NFC keeps one character per letter so indexes line up.
+        nfc = unicodedata.normalize('NFC', line)
+        m = re.match(r'^\s*(?:noi\s*dung|ly\s*do(?:\s*(?:chi|thu))?|dien\s*giai|ghi\s*chu|ve\s*viec)\s*[:：;]\s*',
+                     fold(nfc))
+        if m and len(nfc) - m.end() >= 3:
+            explicit = nfc[m.end():].strip()
+            break
+    title = next((ln for ln in lines[:6] if re.search(
+        r'\b(hoa don|phieu|bien (?:lai|nhan))\b', fold(ln))), '')
+    store = next((ln for ln in lines[:4] if re.search(
+        r'\b(cua hang|tiem|quan|sieu thi|nha thuoc|dich vu|cong ty)\b', fold(ln))), '')
+    items = []
+    for line in lines:
+        folded = fold(line)
+        if _RECEIPT_META.search(folded) or _RECEIPT_SKIP.search(folded):
+            continue
+        name = _receipt_item_name(line)
+        if name:
+            items.append(name)
+    if explicit:
+        return explicit[:300], [explicit]
+    # "Hóa đơn bán lẻ" is printed by the seller; for the person scanning it this is
+    # a purchase, so do not let the word "bán" push the classifier toward sales.
+    title_for_model = 'Hóa đơn mua hàng' if re.search(r'hoa\s*don\s*ban', fold(title)) else title
+    if items:
+        desc = 'Mua ' + ', '.join(items[:3])
+        if re.search(r'\b(phieu gui|van chuyen|giao hang|cuoc)\b', fold(title + ' ' + store + ' ' + desc)):
+            desc = ', '.join(items[:3])
+        # Item names alone are often clearer than with the header (which may be
+        # generic), but the header helps for bills like "Hóa đơn tiền điện".
+        return desc[:300], [desc, ' '.join(x for x in (title_for_model, store, desc) if x)]
+    if title:
+        return (f'{title} - {store}' if store else title)[:300], [f'{title_for_model} {store}'.strip()]
+    if store:
+        return f'Hóa đơn {store}'[:300], [store]
+    return 'Hóa đơn mua hàng', [text]
+
+
+def analyze_receipt(text):
+    """Analyze OCR text of one receipt: one total, one category, date, payment."""
+    text = text.strip()
+    if not text or len(text) > 10000:
+        raise HTTPException(422, 'Ảnh có quá nhiều nội dung. Hãy chụp riêng một chứng từ.')
+    if not ready():
+        raise HTTPException(503, 'Thiếu mô hình phân loại. Chạy train-models.bat rồi mở lại ứng dụng.')
+    description, candidates = receipt_description(text)
+    try:
+        result = max((classify(c) for c in candidates), key=lambda r: r['score'])
+    except Exception:
+        raise HTTPException(503, 'Chưa tải được mô hình phân loại. Chạy setup-local.bat hoặc huấn luyện lại bằng train-models.bat.') from None
+    fields = parse_fields(text)
+    amount, from_total = receipt_amount(text)
+    warnings = [w for w in fields['warnings'] if 'số tiền' not in w.lower()]
+    if amount is None:
+        warnings.append('Chưa thấy tổng tiền trên chứng từ. Vui lòng nhập số tiền trước khi lưu.')
+    elif not from_total:
+        warnings.append('Không thấy dòng "Tổng cộng"; đang gợi ý số tiền lớn nhất trên chứng từ. Hãy kiểm tra lại.')
+    category = result['category']
+    kind = CATEGORIES[category][1]
+    if result['needs_review']:
+        warnings.append('Mô hình chưa chắc danh mục. Hãy chọn lại nhóm phù hợp trước khi lưu.')
+    t_word = 'được' if kind == 'income' else 'hết'
+    t_verb = 'Bạn bán' if kind == 'income' else 'Bạn mua'
+    from .market_assistant import format_spoken_vnd
+    amt_spk = format_spoken_vnd(amount) if amount else 'chưa rõ'
+    return {**fields, 'amount': amount, 'warnings': warnings, 'kind': kind, 'category': category,
+            'description': description,
+            'confirmation_message': f'{t_verb} {description} {t_word} {amt_spk}. Bạn có muốn ghi lại thu chi không?',
+            'scope': 'business', 'raw_text': text, 'engine': 'local', 'providers': ['finance_local'],
+            'classification': result}
 
 
 def ocr(content):
@@ -593,22 +888,29 @@ def ocr(content):
         raise HTTPException(503,'Chưa có bộ đọc ảnh Tesseract trên máy. Vui lòng cài Tesseract hoặc cấu hình GEMINI_API_KEY trong file .env.')
     raw=clean_image(content)
     with Image.open(io.BytesIO(raw)) as im:
+        image_side = max(im.size)
         preprocessed_images = _preprocess_for_ocr(im)
 
-    best_text = ''
-    best_score = -999.0
-
+    images = []
     for prep_im in preprocessed_images:
         buffer = io.BytesIO()
         prep_im.save(buffer, format='PNG')
-        img_bytes = buffer.getvalue()
+        images.append(buffer.getvalue())
 
-        for psm in ('3', '6', '4'):
-            text = _run_tesseract(img_bytes, psm)
-            s = score_ocr_text(text)
-            if s > best_score:
-                best_score = s
-                best_text = text
+    # Fast path: one Tesseract pass (gentle contrast, block-of-text mode) is
+    # enough for most clear receipts. Only fall back to the other variants
+    # when that pass misses an amount or reads too little text.
+    best_text = _run_tesseract(images[0], '6')
+    best_score = score_ocr_text(best_text)
+    if not _ocr_good_enough(best_text, best_score):
+        attempts = [(img, psm) for i, img in enumerate(images) for psm in ('6', '3', '4')
+                    if (i, psm) != (0, '6')]
+        workers = max(1, min(4, (os.cpu_count() or 2) // 2))
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            for text in pool.map(lambda a: _run_tesseract(*a), attempts):
+                s = score_ocr_text(text)
+                if s > best_score:
+                    best_score, best_text = s, text
 
     text = clean_ocr_noise(best_text)
     text = fix_handwriting_ocr_errors(text)  # sửa lỗi nhầm ký tự khi đọc chữ viết tay
@@ -616,9 +918,13 @@ def ocr(content):
         raise HTTPException(422,'Chưa đọc được chữ. Hãy dùng ảnh rõ, thẳng, có đủ tổng tiền hoặc nhập tay.')
     if len(text)>10000:
         raise HTTPException(422,'Ảnh có quá nhiều nội dung. Hãy chụp riêng một chứng từ.')
-    result=analyze_text(text)
+    text = correct_receipt_words(normalize_receipt_ocr(text))
+    result=analyze_receipt(text)
     result['providers']=['tesseract_local','finance_local']
     result['warnings'].insert(0,'OCR có thể đọc sai dấu hoặc số (đặc biệt với chữ viết tay). Kiểm tra tổng tiền và nội dung gốc trước khi lưu.')
+    if image_side < 900:
+        result['warnings'].insert(1, f'Ảnh độ phân giải thấp ({image_side}px), dễ đọc sai số. '
+                                     'Hãy chụp gần, thẳng và đủ sáng để có kết quả chính xác hơn.')
     return result
 
 
