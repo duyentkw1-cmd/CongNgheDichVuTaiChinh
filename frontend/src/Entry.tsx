@@ -1,9 +1,9 @@
 import {useState,useEffect,useRef} from 'react';
-import {ShieldCheck,Mic,Camera,PenLine,Sparkles,Upload,ArrowRight,Check,ChevronLeft,Square,Trash2,ImagePlus,RefreshCw,History,ChevronDown} from 'lucide-react';
+import {ShieldCheck,Mic,Camera,PenLine,Sparkles,Upload,ArrowRight,Check,ChevronLeft,Square,Trash2,ImagePlus,History,ChevronDown} from 'lucide-react';
 import type {Draft,DraftItem,EntryMode,Meta,Transaction,Kind} from './types';
 import {api,post,ApiError,money,prettyDate,newRequestId} from './api';
 import {Sheet,Message,Spinner} from './ui';
-import {startListening,stopListening,isSpeechSupported,speakVietnamese} from './speechToText';
+import {startListening,stopListening,stopSpeaking,isSpeechSupported,speakVietnamese} from './speechToText';
 // Phone photos are often 3–5 MB at 4000px; the server only needs ~1800px to read
 // a receipt. Shrinking here cuts upload time and server work. Falls back to the
 // original file if the browser cannot decode it.
@@ -36,201 +36,436 @@ export default function Entry({mode,editing,meta,onClose,onSaved}:Props){
  const[history,setHistory]=useState<{action:string;at:string;detail:string}[]|null>(null);
  const recorder=useRef<MediaRecorder|null>(null),micStream=useRef<MediaStream|null>(null),camStream=useRef<MediaStream|null>(null),video=useRef<HTMLVideoElement>(null);
  const requestId=useRef(newRequestId()),uploadId=useRef<string|null>(null);
- useEffect(()=>()=>{stopListening();if(recorder.current?.state==='recording')recorder.current.stop();micStream.current?.getTracks().forEach(t=>t.stop());camStream.current?.getTracks().forEach(t=>t.stop());},[]);
+ const mountedRef=useRef(true),savedRef=useRef(false),voiceFlowSeqRef=useRef(0),busyRef=useRef(false);
+ busyRef.current=busy;
+
+ function cancelVoiceFlow(){
+  voiceFlowSeqRef.current+=1;
+  stopListening();
+  stopSpeaking();
+  setIsListeningConfirm(false);
+  setConfirmStatus('');
+ }
+
+ useEffect(()=>{
+  mountedRef.current=true;
+  return()=>{
+   mountedRef.current=false;
+   voiceFlowSeqRef.current+=1;
+   stopListening();
+   if(!savedRef.current)stopSpeaking();
+   if(recorder.current?.state==='recording')recorder.current.stop();
+   micStream.current?.getTracks().forEach(t=>t.stop());
+   camStream.current?.getTracks().forEach(t=>t.stop());
+  };
+ },[]);
  useEffect(()=>{if(!file){setPreview('');return;}const url=URL.createObjectURL(file);setPreview(url);return()=>URL.revokeObjectURL(url);},[file]);
  useEffect(()=>{if(!audio)return;const url=URL.createObjectURL(audio);setAudioUrl(url);return()=>URL.revokeObjectURL(url);},[audio]);
  useEffect(()=>{if(!recording)return;const timer=setInterval(()=>setSeconds(s=>{if(s>=29){stopListening();if(recorder.current?.state==='recording')recorder.current.stop();return 30;}return s+1;}),1000);return()=>clearInterval(timer);},[recording]);
  useEffect(()=>{if(!camera)return;let active=true;async function open(){try{if(!navigator.mediaDevices?.getUserMedia)throw new Error('Camera cần trình duyệt Chrome/Edge trên localhost hoặc HTTPS.');const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:2560},height:{ideal:1920}},audio:false});if(!active){stream.getTracks().forEach(t=>t.stop());return;}camStream.current=stream;if(video.current){video.current.srcObject=stream;await video.current.play();}}catch{setError('Chưa mở được camera. Hãy cấp quyền hoặc chọn Tải ảnh lên.');setCamera(false);}}void open();return()=>{active=false;camStream.current?.getTracks().forEach(t=>t.stop());};},[camera]);
- function switchTab(next:EntryMode){if(recording){stopListening();recorder.current?.stop();}setCamera(false);setTab(next);setStep('input');setError('');setDuplicate(false);setConfirmDelete(false);}
+
+ function switchTab(next:EntryMode){
+  cancelVoiceFlow();
+  if(recording){recorder.current?.stop();setRecording(false);}
+  setCamera(false);setTab(next);setStep('input');setError('');setDuplicate(false);setConfirmDelete(false);
+ }
+
+ function goBackToInput(restartVoice=false){
+  cancelVoiceFlow();
+  setStep('input');
+  if(restartVoice){
+   setTab('voice');
+   setText('');
+   const retrySeq=++voiceFlowSeqRef.current;
+   speakVietnamese('Vâng, bạn nói lại khoản thu chi từ đầu nhé.',()=>{
+    if(!mountedRef.current||voiceFlowSeqRef.current!==retrySeq)return;
+    setTimeout(()=>{
+     if(mountedRef.current&&voiceFlowSeqRef.current===retrySeq)void record();
+    },250);
+   });
+  }
+ }
+
  function review(result:Draft,source:EntryMode){
-  const newDraft:Draft = {...blank(),...result,source};
+  const seq=++voiceFlowSeqRef.current;
+  stopListening();
+  stopSpeaking();
+  setIsListeningConfirm(false);
+  const newDraft:Draft={...blank(),...result,source};
+  const newItems=result.items||[];
   setDraft(newDraft);
-  setItems(result.items||[]);
+  setItems(newItems);
   setStep('review');
   setError('');
   setDuplicate(false);
   setAllowDuplicate(false);
   if(result.confirmation_message){
-    setConfirmStatus('Trợ lý đang đọc lời nhắc...');
-    speakVietnamese(result.confirmation_message, ()=>{
-      if(source==='voice'&&isSpeechSupported()){
-        setTimeout(()=>{
-          listenForConfirmation(newDraft);
-        },250);
-      }
-    });
+   setConfirmStatus('Trợ lý đang đọc lời nhắc...');
+   speakVietnamese(result.confirmation_message,()=>{
+    if(!mountedRef.current||voiceFlowSeqRef.current!==seq)return;
+    if(source==='voice'&&isSpeechSupported()){
+     setTimeout(()=>{
+      if(!mountedRef.current||voiceFlowSeqRef.current!==seq)return;
+      listenForConfirmation(newDraft,newItems);
+     },250);
+    }else{
+     setConfirmStatus('Đã đọc xong lời nhắc. Bạn kiểm tra và bấm lưu.');
+    }
+   });
+  }else{
+   setConfirmStatus('');
   }
  }
 
- function listenForConfirmation(currentDraft:Draft){
-  if(!isSpeechSupported())return;
+ function listenForConfirmation(currentDraft:Draft,currentItems:DraftItem[]=items){
+  if(!isSpeechSupported()||!mountedRef.current)return;
+  const seq=voiceFlowSeqRef.current;
+  stopListening();
+  stopSpeaking();
   setIsListeningConfirm(true);
-  setConfirmStatus('Đang lắng nghe: Bạn nói "Có" để lưu, "Không" để sửa hoặc nói lại...');
-  let processed = false;
+  setConfirmStatus(
+   currentItems.length>1
+    ?'Đang lắng nghe: Bạn nói "Có" để lưu cả danh sách, hoặc "Không" để nói lại...'
+    :'Đang lắng nghe: Bạn nói "Có" để lưu, "Không" để nói lại, hoặc đọc số tiền muốn sửa...'
+  );
 
-  const handleTranscript = async(transcript:string)=>{
-    if(processed)return;
-    const clean=transcript.trim().toLowerCase();
-    if(!clean)return;
+  let processed=false;
+  let latestTranscript='';
 
-    const isQuickConfirm = /^(có|co|ừ|u|uh|ok|oke|lưu|luu|chuẩn|chuan|đúng|dung|được|duoc|rồi|roi)$/i.test(clean) ||
-                           /^(có|ừ|ok|lưu|chuẩn|đúng)\b/i.test(clean);
-    const isQuickReject = /^(không|khong|nhầm|nham|thôi|thoi|hủy|huy|sai|bỏ)\b/i.test(clean) && !/\d|k\b|nghìn|chi|thu/.test(clean);
+  const handleTranscript=async(transcript:string)=>{
+   if(processed||!mountedRef.current||voiceFlowSeqRef.current!==seq)return;
+   const clean=transcript.trim().toLowerCase();
+   if(!clean)return;
 
-    if(isQuickConfirm){
-      processed = true;
-      setIsListeningConfirm(false);
-      stopListening();
-      setConfirmStatus('Đã nhận diện: "Có" -> Đang tự động lưu vào sổ...');
-      speakVietnamese('Đã lưu khoản ' + (currentDraft.kind==='income'?'thu':'chi') + ' vào sổ.');
-      void save(currentDraft);
-      return;
+   processed=true;
+   setIsListeningConfirm(false);
+   stopListening();
+
+   const cleanNoPunct=clean.replace(/[.,!?…]/g,' ').replace(/\s+/g,' ').trim();
+   const hasCorrectionCue=/\d|\bk\b|nghìn|nghin|ngàn|ngan|triệu|trieu|củ|cu|chục|chuc|lít|lit|sửa|sua|đổi|doi|sang|thành|thanh|nhầm thành|nham thanh|nhầm sang|nham sang/i.test(cleanNoPunct);
+   const isPureConfirm=/^(có|co|ừ|u|uh|vâng|vang|vâng ạ|vang a|dạ có|da co|dạ vâng|da vang|ok|oke|okay|lưu|luu|lưu đi|luu di|lưu luôn|luu luon|ghi|ghi đi|ghi di|ghi luôn|ghi luon|chuẩn|chuan|chuẩn rồi|chuan roi|đúng|dung|đúng rồi|dung roi|được|duoc|được rồi|duoc roi|rồi|roi|đồng ý|dong y|yes)$/i.test(cleanNoPunct);
+   const isPureReject=/^(không|khong|không phải|khong phai|không đúng|khong dung|chưa đúng|chua dung|không lưu|khong luu|không ghi|khong ghi|nhầm|nham|nhầm rồi|nham roi|thôi|thoi|hủy|huy|sai|sai rồi|sai roi|bỏ|bỏ đi|bo di|nói lại|noi lai|nói lại từ đầu|noi lai tu dau|làm lại|lam lai)$/i.test(cleanNoPunct);
+
+   if(currentItems.length>1){
+    if(isPureConfirm&&!hasCorrectionCue){
+     setConfirmStatus(`Đang lưu ${currentItems.length} giao dịch vào sổ...`);
+     const ok=await saveAllItems(currentItems,currentDraft);
+     if(ok){
+      speakVietnamese(`Đã lưu ${currentItems.length} giao dịch vào sổ.`);
+     }else if(mountedRef.current){
+      setConfirmStatus('Chưa lưu được danh sách giao dịch. Bạn kiểm tra lỗi bên dưới.');
+     }
+     return;
     }
+    if(isPureReject&&!hasCorrectionCue){
+     goBackToInput(true);
+     return;
+    }
+    setConfirmStatus('Bạn kiểm tra danh sách bên dưới hoặc nói "Có" để lưu, "Không" để nói lại.');
+    speakVietnamese('Bạn nói Có để lưu cả danh sách, hoặc Không để nói lại từ đầu nhé.',()=>{
+     if(!mountedRef.current||voiceFlowSeqRef.current!==seq)return;
+     setTimeout(()=>{
+      if(mountedRef.current&&voiceFlowSeqRef.current===seq)listenForConfirmation(currentDraft,currentItems);
+     },250);
+    });
+    return;
+   }
 
-    if(isQuickReject){
-      processed = true;
-      setIsListeningConfirm(false);
-      stopListening();
-      setConfirmStatus('Đã nhận diện: "Không" → Không lưu, quay lại nói từ đầu.');
-      // Nói xác nhận không lưu (không block hành động)
-      speakVietnamese('Vâng, bạn nói lại khoản thu chi từ đầu nhé.');
-      // Quay lại màn hình nhập ngay lập tức, không đợi TTS
+   if(isPureConfirm&&!hasCorrectionCue){
+    setConfirmStatus('Đã xác nhận. Đang lưu vào sổ...');
+    const ok=await save(currentDraft);
+    if(ok){
+     speakVietnamese('Đã lưu khoản '+(currentDraft.kind==='income'?'thu':'chi')+' vào sổ.');
+    }else if(mountedRef.current){
+     setConfirmStatus('Chưa lưu được. Bạn kiểm tra lại thông tin bên dưới.');
+    }
+    return;
+   }
+
+   if(isPureReject&&!hasCorrectionCue){
+    goBackToInput(true);
+    return;
+   }
+
+   setConfirmStatus(`Bạn vừa nói: "${transcript}"`);
+   try{
+    const pending={
+     type:currentDraft.kind==='income'?'thu':'chi',
+     amount:currentDraft.amount,
+     item_summary:currentDraft.description||'giao dịch'
+    };
+    const res=await post<{
+     action:'CONFIRM_SAVE'|'RETRY_SPEAK'|'UPDATE_AND_CONFIRM'|'UNCLEAR';
+     reply_message:string;
+     updated_draft?:{type:'thu'|'chi';amount:number;item_summary:string};
+    }>('/api/ai/market-assistant/confirm',{
+     confirmation_transcript:transcript,
+     pending_draft:pending,
+     use_llm:false
+    });
+    if(!mountedRef.current||voiceFlowSeqRef.current!==seq)return;
+
+    if(res.action==='CONFIRM_SAVE'){
+     setConfirmStatus('Đã xác nhận. Đang lưu vào sổ...');
+     const ok=await save(currentDraft);
+     if(ok){
+      speakVietnamese(res.reply_message||'Đã lưu vào sổ.');
+     }else if(mountedRef.current){
+      setConfirmStatus('Chưa lưu được. Bạn kiểm tra lại thông tin bên dưới.');
+     }
+    }else if(res.action==='RETRY_SPEAK'){
+     goBackToInput(true);
+    }else if(res.action==='UPDATE_AND_CONFIRM'&&res.updated_draft){
+     const updatedKind:Kind=res.updated_draft.type==='thu'?'income':'expense';
+     const kindChanged=updatedKind!==currentDraft.kind;
+     const updatedDesc=res.updated_draft.item_summary&&res.updated_draft.item_summary!=='giao dịch'
+      ?res.updated_draft.item_summary
+      :currentDraft.description;
+     const updatedDraft:Draft={
+      ...currentDraft,
+      kind:updatedKind,
+      category:kindChanged?(updatedKind==='income'?'sales':'materials'):currentDraft.category,
+      description:updatedDesc,
+      amount:res.updated_draft.amount,
+      confirmation_message:res.reply_message
+     };
+     setDraft(updatedDraft);
+     setConfirmStatus(res.reply_message);
+     speakVietnamese(res.reply_message,()=>{
+      if(!mountedRef.current||voiceFlowSeqRef.current!==seq)return;
       setTimeout(()=>{
-        setStep('input');
-        setTab('voice');
-        setTimeout(()=>{void record();}, 400);
-      }, 800);
-      return;
+       if(mountedRef.current&&voiceFlowSeqRef.current===seq)listenForConfirmation(updatedDraft,[]);
+      },250);
+     });
+    }else{
+     const unclearMsg=res.reply_message||'Tôi chưa nghe rõ. Bạn nói Có để lưu hoặc Không để nói lại nhé.';
+     setConfirmStatus(unclearMsg);
+     speakVietnamese(unclearMsg,()=>{
+      if(!mountedRef.current||voiceFlowSeqRef.current!==seq)return;
+      setTimeout(()=>{
+       if(mountedRef.current&&voiceFlowSeqRef.current===seq)listenForConfirmation(currentDraft,currentItems);
+      },250);
+     });
     }
-
-    processed = true;
-    setIsListeningConfirm(false);
-    stopListening();
-    setConfirmStatus(`Bạn vừa nói: "${transcript}"`);
-    try{
-      const pending={
-        type:currentDraft.kind==='income'?'thu':'chi',
-        amount:currentDraft.amount,
-        item_summary:currentDraft.description||'giao dịch'
-      };
-      const res=await post<{
-        action:'CONFIRM_SAVE'|'RETRY_SPEAK'|'UPDATE_AND_CONFIRM'|'UNCLEAR';
-        reply_message:string;
-        updated_draft?:{type:'thu'|'chi';amount:number;item_summary:string};
-      }>('/api/ai/market-assistant/confirm',{
-        confirmation_transcript:transcript,
-        pending_draft:pending,
-        use_llm:false
-      });
-
-      if(res.action==='CONFIRM_SAVE'){
-        setConfirmStatus(res.reply_message||'Đã lưu vào sổ.');
-        speakVietnamese(res.reply_message||'Đã lưu vào sổ.');
-        void save(currentDraft);
-      }else if(res.action==='RETRY_SPEAK'){
-        setConfirmStatus('Không lưu. Quay lại nói từ đầu...');
-        speakVietnamese(res.reply_message||'Vâng, bạn nói lại khoản thu chi từ đầu nhé.');
-        // Quay lại ngay, không đợi TTS
-        setTimeout(()=>{
-          setStep('input');
-          setTab('voice');
-          setTimeout(()=>{void record();},400);
-        }, 800);
-      }else if(res.action==='UPDATE_AND_CONFIRM'&&res.updated_draft){
-        const updatedKind:Kind=res.updated_draft.type==='thu'?'income':'expense';
-        const updatedAmount=res.updated_draft.amount;
-        const updatedDraft:Draft={
-          ...currentDraft,
-          kind:updatedKind,
-          category:updatedKind==='income'?'sales':'materials',
-          amount:updatedAmount,
-          confirmation_message:res.reply_message
-        };
-        setDraft(updatedDraft);
-        setConfirmStatus(res.reply_message);
-        speakVietnamese(res.reply_message,()=>{
-          listenForConfirmation(updatedDraft);
-        });
-      }else{
-        setConfirmStatus('Chưa nghe rõ câu trả lời.');
-        speakVietnamese('Tôi chưa nghe rõ. Bạn nói Có để lưu hoặc Không để nói lại nhé.',()=>{
-          listenForConfirmation(currentDraft);
-        });
-      }
-    }catch{
-      setConfirmStatus('Không phân tích được phản hồi. Bạn có thể bấm nút trên màn hình.');
+   }catch{
+    if(mountedRef.current&&voiceFlowSeqRef.current===seq){
+     setConfirmStatus('Không phân tích được phản hồi. Bạn có thể bấm nút trên màn hình.');
     }
+   }
   };
 
   startListening(
-    (transcript,isFinal)=>{
-      const clean=transcript.trim().toLowerCase();
-      const isQuick=/^(có|co|ừ|u|uh|ok|oke|lưu|luu|chuẩn|chuan|đúng|dung|được|duoc|không|khong|thôi|thoi)$/i.test(clean);
-      if(isFinal||isQuick){
-        void handleTranscript(transcript);
-      }
-    },
-    ()=>{setIsListeningConfirm(false);},
-    ()=>{setIsListeningConfirm(false);}
+   (transcript,isFinal)=>{
+    if(!mountedRef.current||voiceFlowSeqRef.current!==seq||processed)return;
+    latestTranscript=transcript.trim();
+    if(!isFinal){
+     if(latestTranscript)setConfirmStatus(`Đang nghe: "${latestTranscript}"...`);
+     return;
+    }
+    void handleTranscript(latestTranscript);
+   },
+   ()=>{
+    if(!mountedRef.current||voiceFlowSeqRef.current!==seq||processed)return;
+    setIsListeningConfirm(false);
+    setConfirmStatus('Chưa nghe rõ phản hồi. Bạn bấm "Bật mic nói Có / Không" hoặc bấm nút Lưu.');
+   },
+   ()=>{
+    if(!mountedRef.current||voiceFlowSeqRef.current!==seq||processed)return;
+    if(latestTranscript){
+     void handleTranscript(latestTranscript);
+     return;
+    }
+    setIsListeningConfirm(false);
+    setConfirmStatus('Đã tắt mic nghe xác nhận. Bạn bấm "Bật mic nói Có / Không" hoặc bấm nút Lưu.');
+   }
   );
  }
- async function analyze(value=text,sample=false,source:EntryMode=tab){setBusy(true);setError('');try{const result=await post<Draft>('/api/ai/text',{text:value,sample});review(result,source==='manual'?'text':source);}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
- async function uploadAnalysis(kind:'image'|'voice'){const payload=kind==='image'?file:audio;if(!payload)return;setBusy(true);setError('');try{const form=new FormData();form.append('file',payload,kind==='image'?'receipt.jpg':audio?.type.includes('mp4')?'recording.mp4':'recording.webm');review(await api<Draft>('/api/ai/'+kind,{method:'POST',body:form}),kind);}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
+
+ async function analyze(value=text,sample=false,source:EntryMode=tab){setBusy(true);setError('');try{const result=await post<Draft>('/api/ai/text',{text:value,sample});if(mountedRef.current)review(result,source==='manual'?'text':source);}catch(e){if(mountedRef.current)setError((e as Error).message);}finally{if(mountedRef.current)setBusy(false);}}
+ async function uploadAnalysis(kind:'image'|'voice'){const payload=kind==='image'?file:audio;if(!payload)return;setBusy(true);setError('');try{const form=new FormData();form.append('file',payload,kind==='image'?'receipt.jpg':audio?.type.includes('mp4')?'recording.mp4':'recording.webm');const result=await api<Draft>('/api/ai/'+kind,{method:'POST',body:form});if(mountedRef.current)review(result,kind);}catch(e){if(mountedRef.current)setError((e as Error).message);}finally{if(mountedRef.current)setBusy(false);}}
  async function selectImage(input:File|undefined){if(!input)return;setError('');setCamera(false);uploadId.current=null;if(!['image/jpeg','image/png','image/webp'].includes(input.type)){setError('Hãy chọn ảnh JPG, PNG hoặc WebP.');return;}const small=await shrinkImage(input);if(small.size>5*1024*1024){setError('Ảnh tối đa 5 MB. Vui lòng chọn ảnh nhỏ hơn.');return;}setFile(small);setKeepImage(false);}
  async function capture(){const v=video.current;if(!v||!v.videoWidth){setError('Camera chưa sẵn sàng.');return;}const c=document.createElement('canvas');const ratio=Math.min(1,MAX_IMAGE_SIDE/Math.max(v.videoWidth,v.videoHeight));c.width=v.videoWidth*ratio;c.height=v.videoHeight*ratio;c.getContext('2d')?.drawImage(v,0,0,c.width,c.height);c.toBlob(b=>{if(b)void selectImage(new File([b],'anh-chung-tu.jpg',{type:'image/jpeg'}));},'image/jpeg',.85);}
+
+ async function startLocalRecorder(){
+  try{
+   if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw new Error();
+   const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+   micStream.current=stream;
+   const mime=['audio/webm;codecs=opus','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t));
+   const rec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
+   recorder.current=rec;
+   const chunks:BlobPart[]=[];
+   rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+   rec.onstop=()=>{setAudio(new Blob(chunks,{type:rec.mimeType}));setRecording(false);stream.getTracks().forEach(t=>t.stop());};
+   setSeconds(0);setAudio(null);setAudioUrl('');rec.start();setRecording(true);
+  }catch{
+   setError('Chưa truy cập được micro. Hãy cấp quyền trên Chrome/Edge ở localhost hoặc dùng câu mẫu / nhập tay.');
+  }
+ }
+
  async function record(){
   setError('');
   if(recording){
-    stopListening();
-    recorder.current?.stop();
-    setRecording(false);
-    return;
+   stopListening();
+   recorder.current?.stop();
+   setRecording(false);
+   return;
   }
+  stopSpeaking();
+  voiceFlowSeqRef.current+=1;
   if(isSpeechSupported()){
-    setRecording(true);
-    setSeconds(0);
-    startListening(
-      (transcript, isFinal)=>{
-        setText(transcript);
-        if(isFinal){
-          setRecording(false);
-          void analyze(transcript, false, 'voice');
-        }
-      },
-      (err)=>{
-        setRecording(false);
-        const msg = err?.error==='not-allowed'?'Chưa cấp quyền micro trên trình duyệt.':(err?.message||'Lỗi nhận diện giọng nói.');
-        setError(msg);
-      },
-      ()=>{
-        setRecording(false);
-      }
-    );
-    return;
+   setRecording(true);
+   setSeconds(0);
+   let latestVoiceTranscript='';
+   let voiceHandled=false;
+   startListening(
+    (transcript,isFinal)=>{
+     latestVoiceTranscript=transcript;
+     setText(transcript);
+     if(isFinal&&!voiceHandled){
+      voiceHandled=true;
+      setRecording(false);
+      void analyze(transcript,false,'voice');
+     }
+    },
+    (err)=>{
+     setRecording(false);
+     if((err?.error==='network'||err?.error==='service-not-allowed')&&meta.ai.voice){
+      void startLocalRecorder();
+      return;
+     }
+     const msg=err?.error==='not-allowed'?'Chưa cấp quyền micro trên trình duyệt.':(err?.message||'Lỗi nhận diện giọng nói.');
+     setError(msg);
+    },
+    ()=>{
+     setRecording(false);
+     if(!voiceHandled&&latestVoiceTranscript.trim()&&mountedRef.current){
+      voiceHandled=true;
+      void analyze(latestVoiceTranscript,false,'voice');
+     }
+    },
+    {continuous:true,silenceMs:1800}
+   );
+   return;
   }
+  await startLocalRecorder();
+ }
+
+ function setKind(kind:Kind){setDraft(d=>({...d,kind,category:kind==='income'?'sales':'materials'}));}
+
+ async function save(customDraft?:Draft):Promise<boolean>{
+  if(busyRef.current)return false;
+  voiceFlowSeqRef.current+=1;
+  stopListening();
+  setIsListeningConfirm(false);
+  const target=customDraft||draft;
+  if(target.amount==null||target.amount<=0){
+   setError('Vui lòng nhập số tiền hợp lệ trước khi lưu.');
+   return false;
+  }
+  setBusy(true);busyRef.current=true;setError('');
   try{
-    if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw new Error();
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    micStream.current=stream;
-    const mime=['audio/webm;codecs=opus','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t));
-    const rec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
-    recorder.current=rec;
-    const chunks:BlobPart[]=[];
-    rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
-    rec.onstop=()=>{setAudio(new Blob(chunks,{type:rec.mimeType}));setRecording(false);stream.getTracks().forEach(t=>t.stop());};
-    setSeconds(0);setAudio(null);setAudioUrl('');rec.start();setRecording(true);
-  }catch{
-    setError('Chưa truy cập được micro. Hãy cấp quyền trên Chrome/Edge ở localhost hoặc dùng câu mẫu / nhập tay.');
+   let attachmentId=target.attachment_id;
+   if(file&&keepImage){
+    if(!uploadId.current){
+     const f=new FormData();f.append('file',file);
+     uploadId.current=(await api<{id:string}>('/api/attachments',{method:'POST',body:f})).id;
+    }
+    attachmentId=uploadId.current;
+   }
+   const payload={...target,request_id:requestId.current,allow_duplicate:allowDuplicate,attachment_id:attachmentId};
+   await api('/api/transactions'+(editing?'/'+editing.id:''),{method:editing?'PUT':'POST',body:JSON.stringify(payload)});
+   savedRef.current=true;
+   onSaved(editing?'Đã cập nhật giao dịch.':'Đã ghi vào sổ. Báo cáo đã được cập nhật.');
+   onClose();
+   return true;
+  }catch(e){
+   setError((e as Error).message);
+   if(e instanceof ApiError&&e.status===409)setDuplicate(true);
+   return false;
+  }finally{
+   busyRef.current=false;
+   if(mountedRef.current)setBusy(false);
   }
  }
- function setKind(kind:Kind){setDraft(d=>({...d,kind,category:kind==='income'?'sales':'materials'}));}
- async function save(customDraft?: Draft){if(busy)return;const target=customDraft||draft;setBusy(true);setError('');try{let attachmentId=target.attachment_id;if(file&&keepImage){if(!uploadId.current){const f=new FormData();f.append('file',file);uploadId.current=(await api<{id:string}>('/api/attachments',{method:'POST',body:f})).id;}attachmentId=uploadId.current;}const payload={...target,request_id:requestId.current,allow_duplicate:allowDuplicate,attachment_id:attachmentId};await api('/api/transactions'+(editing?'/'+editing.id:''),{method:editing?'PUT':'POST',body:JSON.stringify(payload)});onSaved(editing?'Đã cập nhật giao dịch.':'Đã ghi vào sổ. Báo cáo đã được cập nhật.');onClose();}catch(e){setError((e as Error).message);if(e instanceof ApiError&&e.status===409)setDuplicate(true);}finally{setBusy(false);}}
+
  function updateItem(idx:number,patch:Partial<DraftItem>){setItems(prev=>prev.map((it,i)=>i===idx?{...it,...patch}:it));}
  function removeItem(idx:number){setItems(prev=>prev.filter((_,i)=>i!==idx));}
- async function saveAllItems(){if(busy||!items.length)return;setBusy(true);setError('');try{let attachmentId=draft.attachment_id;if(file&&keepImage){if(!uploadId.current){const f=new FormData();f.append('file',file);uploadId.current=(await api<{id:string}>('/api/attachments',{method:'POST',body:f})).id;}attachmentId=uploadId.current;}for(const it of items){const payload={kind:it.kind,amount:it.amount,description:it.description,category:it.category,date:draft.date,payment:draft.payment,scope:'business' as const,source:draft.source,raw_text:draft.raw_text,request_id:newRequestId(),allow_duplicate:true,attachment_id:attachmentId};await api('/api/transactions',{method:'POST',body:JSON.stringify(payload)});}onSaved(`Đã ghi ${items.length} giao dịch vào sổ. Báo cáo đã được cập nhật.`);onClose();}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
+
+ async function saveAllItems(customItems?:DraftItem[],customDraft?:Draft):Promise<boolean>{
+  const list=customItems||items;
+  const base=customDraft||draft;
+  if(busyRef.current||!list.length)return false;
+  voiceFlowSeqRef.current+=1;
+  stopListening();
+  setIsListeningConfirm(false);
+  setBusy(true);busyRef.current=true;setError('');
+  try{
+   let attachmentId=base.attachment_id;
+   if(file&&keepImage){
+    if(!uploadId.current){
+     const f=new FormData();f.append('file',file);
+     uploadId.current=(await api<{id:string}>('/api/attachments',{method:'POST',body:f})).id;
+    }
+    attachmentId=uploadId.current;
+   }
+   for(const it of list){
+    const payload={kind:it.kind,amount:it.amount,description:it.description,category:it.category,date:base.date,payment:base.payment,scope:'business' as const,source:base.source,raw_text:base.raw_text,request_id:newRequestId(),allow_duplicate:true,attachment_id:attachmentId};
+    await api('/api/transactions',{method:'POST',body:JSON.stringify(payload)});
+   }
+   savedRef.current=true;
+   onSaved(`Đã ghi ${list.length} giao dịch vào sổ. Báo cáo đã được cập nhật.`);
+   onClose();
+   return true;
+  }catch(e){
+   setError((e as Error).message);
+   return false;
+  }finally{
+   busyRef.current=false;
+   if(mountedRef.current)setBusy(false);
+  }
+ }
+
  async function remove(){if(!editing)return;setBusy(true);try{await api('/api/transactions/'+editing.id,{method:'DELETE'});onSaved('Đã xóa giao dịch khỏi sổ và báo cáo.');onClose();}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
  async function loadHistory(){if(!editing)return;try{setHistory(await api('/api/transactions/'+editing.id+'/history'));}catch(e){setError((e as Error).message);}}
  const sampleVoice='Hôm nay mua nguyên liệu hết sáu trăm nghìn, trả tiền mặt.';
+
+ const assistantBanner=!editing&&draft.confirmation_message?(
+  <div style={{background:'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',border:'1px solid #86efac',borderRadius:12,padding:'12px 14px',marginBottom:14}}>
+   <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:4}}>
+    <div style={{display:'flex',alignItems:'center',gap:6,color:'#15803d',fontWeight:600,fontSize:13}}>
+     <Sparkles size={16}/> Trợ lý giọng nói tiểu thương chợ:
+    </div>
+    {isListeningConfirm&&<span style={{fontSize:12,color:'#dc2626',fontWeight:600,display:'flex',alignItems:'center',gap:5}}>
+     <span style={{display:'inline-block',width:8,height:8,borderRadius:'50%',background:'#dc2626'}}/> Đang nghe bạn nói "Có" / "Không"...
+    </span>}
+   </div>
+   <div style={{fontSize:13.5,color:'#1e293b',lineHeight:1.45,fontWeight:500}}>
+    “{draft.confirmation_message}”
+   </div>
+   {confirmStatus&&<div style={{fontSize:12,color:isListeningConfirm?'#dc2626':'#15803d',marginTop:6,fontStyle:'italic',fontWeight:isListeningConfirm?600:400}}>
+    {confirmStatus}
+   </div>}
+   <div style={{display:'flex',flexWrap:'wrap',gap:8,marginTop:10}}>
+    {items.length>1?(
+     <button type="button" className="primary" style={{padding:'6px 14px',fontSize:12,borderRadius:8}} onClick={()=>{void saveAllItems();}}>
+      <Check size={14}/> Đúng rồi, ghi cả {items.length} khoản!
+     </button>
+    ):(
+     <button type="submit" className="primary" style={{padding:'6px 14px',fontSize:12,borderRadius:8}}>
+      <Check size={14}/> Đúng rồi, ghi vào sổ!
+     </button>
+    )}
+    {isSpeechSupported()&&!isListeningConfirm&&<button type="button" className="secondary" style={{padding:'6px 14px',fontSize:12,borderRadius:8,display:'flex',alignItems:'center',gap:4}} onClick={()=>listenForConfirmation(draft,items)}>
+     <Mic size={14}/> Bật mic nói Có / Không
+    </button>}
+    <button type="button" className="secondary" style={{padding:'6px 14px',fontSize:12,borderRadius:8}} onClick={()=>goBackToInput(false)}>
+     Nói lại từ đầu
+    </button>
+   </div>
+  </div>
+ ):null;
+
  return <Sheet title={editing?'Chi tiết giao dịch':step==='review'?'Kiểm tra & xác nhận':'Ghi một khoản mới'} subtitle={editing?prettyDate(editing.date):step==='review'?'Xem lại số tiền trước khi ghi vào sổ.':'Chọn cách thuận tiện nhất cho bạn.'} onClose={onClose}>
  {!editing&&<div className="entry-tabs">{([['voice','Giọng nói',Mic],['image','Hình ảnh',Camera],['text','Tự nhập',PenLine]] as const).map(([k,label,Icon])=><button key={k} disabled={busy} className={tab===k?'selected':''} onClick={()=>switchTab(k)}><Icon size={18}/>{label}</button>)}</div>}
  {step==='input'&&<>
@@ -240,6 +475,7 @@ export default function Entry({mode,editing,meta,onClose,onSaved}:Props){
  <p className="local-privacy"><ShieldCheck size={14}/> Dữ liệu được xử lý trên máy của bạn.</p>
  </>}
  {step==='review'&&items.length>1&&<div className="review-form">
+  {assistantBanner}
   <div className="analysis-label"><Sparkles size={15}/>AI phát hiện danh sách {items.length} giao dịch<span>Kiểm tra & xác nhận</span></div>
   <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:15}}>
    {items.map((it,idx)=>(
@@ -270,39 +506,13 @@ export default function Entry({mode,editing,meta,onClose,onSaved}:Props){
   </div>
   {draft.warnings?.map((w,i)=><Message key={i}>{w}</Message>)}
   {file&&<label className="checkbox" style={{marginTop:10}}><input type="checkbox" checked={keepImage} onChange={e=>setKeepImage(e.target.checked)}/><span>Lưu ảnh kèm các giao dịch</span></label>}
-  <button className="primary" type="button" disabled={busy} onClick={saveAllItems} style={{marginTop:16}}>
+  <button className="primary" type="button" disabled={busy} onClick={()=>{void saveAllItems();}} style={{marginTop:16}}>
    {busy?<Spinner/>:<Check size={19}/>} Xác nhận & lưu cả {items.length} giao dịch vào sổ
   </button>
-  <button className="manual-link" type="button" onClick={()=>setStep('input')}><ChevronLeft size={16}/> Quay lại nội dung nhập</button>
+  <button className="manual-link" type="button" onClick={()=>goBackToInput(false)}><ChevronLeft size={16}/> Quay lại nội dung nhập</button>
  </div>}
  {step==='review'&&items.length<=1&&<form className="review-form" onSubmit={e=>{e.preventDefault();void save();}}>
- {!editing&&draft.confirmation_message&&<div style={{background:'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',border:'1px solid #86efac',borderRadius:12,padding:'12px 14px',marginBottom:14}}>
-  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:4}}>
-   <div style={{display:'flex',alignItems:'center',gap:6,color:'#15803d',fontWeight:600,fontSize:13}}>
-    <Sparkles size={16}/> Trợ lý giọng nói tiểu thương chợ:
-   </div>
-   {isListeningConfirm&&<span style={{fontSize:12,color:'#dc2626',fontWeight:600,display:'flex',alignItems:'center',gap:5}}>
-    <span style={{display:'inline-block',width:8,height:8,borderRadius:'50%',background:'#dc2626'}}/> Đang nghe bạn nói "Có" / "Không"...
-   </span>}
-  </div>
-  <div style={{fontSize:13.5,color:'#1e293b',lineHeight:1.45,fontWeight:500}}>
-   “{draft.confirmation_message}”
-  </div>
-  {confirmStatus&&<div style={{fontSize:12,color:isListeningConfirm?'#dc2626':'#15803d',marginTop:6,fontStyle:'italic',fontWeight:isListeningConfirm?600:400}}>
-   {confirmStatus}
-  </div>}
-  <div style={{display:'flex',flexWrap:'wrap',gap:8,marginTop:10}}>
-   <button type="submit" className="primary" style={{padding:'6px 14px',fontSize:12,borderRadius:8}}>
-    <Check size={14}/> Đúng rồi, ghi vào sổ!
-   </button>
-   {isSpeechSupported()&&!isListeningConfirm&&<button type="button" className="secondary" style={{padding:'6px 14px',fontSize:12,borderRadius:8,display:'flex',alignItems:'center',gap:4}} onClick={()=>listenForConfirmation(draft)}>
-    <Mic size={14}/> Bật mic nói Có / Không
-   </button>}
-   <button type="button" className="secondary" style={{padding:'6px 14px',fontSize:12,borderRadius:8}} onClick={()=>{stopListening();if(typeof window!=='undefined'&&window.speechSynthesis)window.speechSynthesis.cancel();setStep('input');}}>
-    Nói lại từ đầu
-   </button>
-  </div>
- </div>}
+ {assistantBanner}
  {!editing&&draft.engine&&!draft.confirmation_message&&<div className="analysis-label"><Sparkles size={15}/>AI trên máy đã gợi ý<span>Bạn là người xác nhận</span></div>}
  <div className="kind-toggle"><button type="button" className={draft.kind==='expense'?'expense selected':''} onClick={()=>setKind('expense')}>− Khoản chi</button><button type="button" className={draft.kind==='income'?'income selected':''} onClick={()=>setKind('income')}>+ Khoản thu</button></div>
  <label className="amount-label">Số tiền (VND)<div><input type="text" inputMode="numeric" aria-label="Số tiền VND" value={draft.amount==null?'':draft.amount.toLocaleString('vi-VN')} onChange={e=>{const value=e.target.value.replace(/[^0-9]/g,'');setDraft({...draft,amount:value?Number(value):null});}} placeholder="0" required/><span>₫</span></div></label>
@@ -315,7 +525,7 @@ export default function Entry({mode,editing,meta,onClose,onSaved}:Props){
  {file&&<label className="checkbox"><input type="checkbox" checked={keepImage} onChange={e=>setKeepImage(e.target.checked)}/><span>Lưu ảnh kèm giao dịch</span></label>}
  {duplicate&&<label className="checkbox"><input type="checkbox" checked={allowDuplicate} onChange={e=>setAllowDuplicate(e.target.checked)}/><span>Tôi đã kiểm tra, đây là một giao dịch khác.</span></label>}
  <button className="primary" disabled={busy||(duplicate&&!allowDuplicate)}>{busy?<Spinner/>:<Check size={19}/>} {editing?'Lưu thay đổi':'Xác nhận & lưu vào sổ'}</button>
- {!editing&&<button className="manual-link" type="button" onClick={()=>setStep('input')}><ChevronLeft size={16}/> Quay lại nội dung nhập</button>}
+ {!editing&&<button className="manual-link" type="button" onClick={()=>goBackToInput(false)}><ChevronLeft size={16}/> Quay lại nội dung nhập</button>}
  {editing&&!confirmDelete&&<button type="button" className="delete-link" onClick={()=>setConfirmDelete(true)}><Trash2 size={16}/> Xóa giao dịch</button>}
  {confirmDelete&&<div className="delete-confirm"><p>Xóa khoản {money(draft.amount||0)} này? Báo cáo sẽ được cập nhật.</p><button type="button" className="danger" disabled={busy} onClick={remove}>Xác nhận xóa</button><button type="button" className="text-link" onClick={()=>setConfirmDelete(false)}>Giữ lại</button></div>}
  </form>}

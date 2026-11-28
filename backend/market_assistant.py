@@ -207,6 +207,31 @@ def parse_market_amount(text: str) -> Optional[int]:
     return None
 
 
+def build_confirmation_message(tx_type: Optional[str], item_summary: Optional[str], amount: Optional[int]) -> str:
+    """Build a natural, non-repetitive Vietnamese confirmation prompt for TTS."""
+    if not tx_type or not amount:
+        return "Tôi chưa nghe rõ khoản thu chi. Bạn nói lại giúp tôi nhé."
+
+    amount_str = format_spoken_vnd(amount)
+    raw_desc = (item_summary or ("thu tiền" if tx_type == "thu" else "mua hàng")).strip()
+    if raw_desc:
+        raw_desc = raw_desc[0].lower() + raw_desc[1:]
+    folded_desc = fold(raw_desc)
+
+    if re.match(r'^khach\b', folded_desc):
+        subject_desc = raw_desc[0].upper() + raw_desc[1:]
+        verb = "được" if tx_type == "thu" else "hết"
+        return f"{subject_desc} {verb} {amount_str}. Bạn có muốn ghi lại thu chi không?"
+
+    if re.match(r'^(mua|ban|nhap|tra|chi|thu)\b', folded_desc):
+        verb = "được" if tx_type == "thu" else "hết"
+        return f"Bạn {raw_desc} {verb} {amount_str}. Bạn có muốn ghi lại thu chi không?"
+
+    if tx_type == "thu":
+        return f"Bạn bán {raw_desc} được {amount_str}. Bạn có muốn ghi lại thu chi không?"
+    return f"Bạn mua {raw_desc} hết {amount_str}. Bạn có muốn ghi lại thu chi không?"
+
+
 def extract_item_summary(raw_transcript: str) -> Optional[str]:
     """Extract a concise item description from the transcript, preserving item & units.
 
@@ -214,6 +239,9 @@ def extract_item_summary(raw_transcript: str) -> Optional[str]:
     or price-related words like 'hết', 'được', 'giá'.
     """
     text = raw_transcript.strip()
+    folded_full = fold(text)
+    liquid_keywords = r'(dau|nuoc mam|sua|xang|mat ong|ruou|nuoc)'
+    is_liquid_measure = bool(re.search(rf'\b(?:\d+|mot|hai|ba|bon|nam)\s+lit\s+{liquid_keywords}\b', folded_full))
 
     # 1. Remove conversational prefixes
     clean = re.sub(r'^(?:tôi|anh|chị|em|cô|bác|vừa|hôm nay|nay|sáng nay|chiều nay)\s+', '', text, flags=re.I).strip()
@@ -223,12 +251,17 @@ def extract_item_summary(raw_transcript: str) -> Optional[str]:
     # Sửa lỗi STT lẫn từ đệm / rác chợ: "bán bảng 5 kg" -> "bán 5 kg", "mua vào" -> "mua"
     clean = re.sub(r'(?i)\b(bán|ban)\s+(?:bảng|bang|con|cái|chiếc)\s+(\d+)', r'\1 \2', clean)
     clean = re.sub(r'(?i)\b(bán|ban)\s+bảng\b', r'\1', clean)
+    clean = re.sub(r'(?i)\b(bán|ban|thu)\s+(?:được|duoc)\b', r'\1', clean)
+
+    vn_num = r'(?:một|hai|ba|bốn|tư|năm|lăm|sáu|bảy|tám|chín|mười|mươi|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin|muoi|\d+)'
 
     # 2. Strip complex compound currency words first
-    clean = re.sub(r'(?i)\b\d+\s*(?:củ|cu|chai)\s*(?:rưỡi|ruoi|\d+)\b', '', clean)
-    clean = re.sub(r'(?i)\b\d+\s*(?:triệu|trieu)\s*(?:rưỡi|ruoi|\d+)\b', '', clean)
+    clean = re.sub(rf'(?i)\b{vn_num}\s*(?:củ|cu|chai|triệu|trieu)\s*(?:rưỡi|ruoi|{vn_num})\b', '', clean)
+    clean = re.sub(rf'(?i)\b{vn_num}\s*(?:trăm|tram)\s*(?:rưỡi|ruoi)\b', '', clean)
     clean = re.sub(r'(?i)\b(?:nửa\s+(?:củ|cu|triệu|trieu))\b', '', clean)
-    clean = re.sub(r'(?i)\b(?:mot|hai|ba|bon|tu|nam|sau|bay|tam|chin|một|hai|ba|bốn|tư|năm|sáu|bảy|tám|chín)\s+(?:chục|chuc)\b', '', clean)
+    clean = re.sub(rf'(?i)\b{vn_num}\s+(?:chục|chuc)\b', '', clean)
+    if not is_liquid_measure:
+        clean = re.sub(rf'(?i)\b(?:{vn_num}\s+)?(?:lít|lit|xị|xi|lốp|lop)(?:\s+(?:rưỡi|ruoi))?\b', '', clean)
 
     # 3. Strip bare decimal-formatted numbers: 600.000, 1.200.000, 600,000
     clean = re.sub(r'\b\d{1,3}(?:[.,]\d{3})+\b', '', clean)
@@ -251,7 +284,6 @@ def extract_item_summary(raw_transcript: str) -> Optional[str]:
     )
 
     # 7. Remove Vietnamese spoken money words: "sáu trăm nghìn", "một triệu hai trăm nghìn đồng"
-    vn_num = r'(?:một|hai|ba|bốn|tư|năm|sáu|bảy|tám|chín|mười|mươi|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin|muoi|\d+)'
     clean = re.sub(
         rf'(?i)(?:{vn_num}\s+)*(?:trăm|tram)\s+(?:{vn_num}\s+)*(?:nghìn|nghin|ngàn|ngan|triệu|trieu)(?:\s+đồng|\s+dong)?',
         '',
@@ -262,14 +294,15 @@ def extract_item_summary(raw_transcript: str) -> Optional[str]:
         '',
         clean
     )
-    # Các từ 1 triệu, 2 triệu độc lập
-    clean = re.sub(r'(?i)\b(?:' + vn_num + r')\s*(?:triệu|trieu|củ|cu)\b', '', clean)
+    clean = re.sub(rf'(?i)\b{vn_num}\s*(?:triệu|trieu|củ|cu)\b', '', clean)
 
-    # 8. Clean isolated stray currency characters and trailing particles like "đ", "hết đ", "hết", "được"
+    # 8. Clean isolated stray currency characters, price cues before punctuation, and dangling punctuation
     clean = re.sub(r'(?i)\b(?:đ|vnd|dong|đồng)\b', '', clean)
-    clean = re.sub(r'\s{2,}', ' ', clean).strip()
-    clean = re.sub(r'\s+(?:được|hết|mất|giá|thu|chi|với giá|tổng|mất hết)$', '', clean, flags=re.I).strip()
-    clean = re.sub(r'^(?:được|hết|mất)\s+', '', clean, flags=re.I).strip()
+    clean = re.sub(r'(?i)\s*\b(?:với giá|mất hết|được|hết|mất|giá|tổng)\b\s*(?=[,.;]|$)', '', clean)
+    clean = re.sub(r'\s*([,.;])\s*', r'\1 ', clean)
+    clean = re.sub(r'\s{2,}', ' ', clean).strip(' ,.;:-')
+    clean = re.sub(r'\s+(?:được|hết|mất|giá|thu|chi|với giá|tổng|mất hết)$', '', clean, flags=re.I).strip(' ,.;:-')
+    clean = re.sub(r'^(?:được|hết|mất)\s+', '', clean, flags=re.I).strip(' ,.;:-')
 
     if len(clean) >= 3 and not re.fullmatch(r'^[0-9\s.,kđ]+$', clean):
         return clean
@@ -316,7 +349,17 @@ def extract_transaction_rules(transcript: str) -> Dict[str, Any]:
         folded
     ))
 
-    if is_khach_tra:
+    is_outgoing_refund = bool(re.search(
+        r'\b(hoan tien|hoan lai|boi thuong|den bu|tra no|tra lai)\b',
+        folded
+    )) and not bool(re.search(
+        r'\b(duoc hoan|nha cung cap|ncc|dai ly|hang|bao hiem|san)\b',
+        folded
+    ))
+
+    if is_outgoing_refund:
+        tx_type = "chi"
+    elif is_khach_tra:
         tx_type = "thu"
     elif income_cue and not expense_cue:
         tx_type = "thu"
@@ -344,28 +387,7 @@ def extract_transaction_rules(transcript: str) -> Dict[str, Any]:
             "next_action": "ASK_CLARIFICATION"
         }
 
-    amount_str = format_spoken_vnd(amount)
-    
-    # Chuẩn hoá item_summary cho câu nhắc lại:
-    # Nếu item_summary đã bắt đầu bằng "mua/bán/nhập/trả/chi/thu", không thêm "Bạn mua/Bạn bán" để tránh lặp từ "Bạn mua mua...", "Bạn bán bán..."
-    raw_desc = (item_summary or ("thu tiền" if tx_type == "thu" else "mua hàng")).strip()
-    if raw_desc:
-        # Chuẩn hoá chữ cái đầu viết thường cho mượt câu
-        raw_desc = raw_desc[0].lower() + raw_desc[1:]
-    folded_desc = fold(raw_desc)
-
-    first_word_match = re.match(r'^(mua|ban|nhap|tra|chi|thu)\b', folded_desc)
-    if first_word_match:
-        # Đã có động từ (ví dụ "bán 5 kg thịt", "mua nguyên liệu", "nhập hàng")
-        # Template: "Bạn {item_summary} [được/hết] [amount_str]. Bạn có muốn ghi lại thu chi không?"
-        verb = "được" if tx_type == "thu" else "hết"
-        msg = f"Bạn {raw_desc} {verb} {amount_str}. Bạn có muốn ghi lại thu chi không?"
-    else:
-        # Chưa có động từ
-        if tx_type == "thu":
-            msg = f"Bạn bán {raw_desc} được {amount_str}. Bạn có muốn ghi lại thu chi không?"
-        else:
-            msg = f"Bạn mua {raw_desc} hết {amount_str}. Bạn có muốn ghi lại thu chi không?"
+    msg = build_confirmation_message(tx_type, item_summary, amount)
 
     return {
         "is_valid_transaction": True,
@@ -381,7 +403,6 @@ def extract_transaction_rules(transcript: str) -> Dict[str, Any]:
 def handle_confirmation_rules(confirmation_transcript: str, pending_draft: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Fast, local rule-based confirmation classifier for Phase 2."""
     text = confirmation_transcript.strip()
-    folded = fold(text)
     clean_punct = re.sub(r'[^\w\s]', '', text.lower()).strip()
     clean_folded = fold(clean_punct)
     draft = dict(pending_draft or {})
@@ -396,7 +417,10 @@ def handle_confirmation_rules(confirmation_transcript: str, pending_draft: Optio
 
     # 1. UPDATE_AND_CONFIRM: Rejection or change with new amount or changed type
     has_new_amount = parse_market_amount(text) is not None
-    m_type_change = re.search(r'\b(?:doi|sang|thanh|la|nham\s+thanh|nham\s+sang)\s+(chi|thu)\b', clean_folded)
+    m_type_change = re.search(
+        r'\b(?:doi|chuyen|sua|sang|thanh|la|nham(?:\s+thanh|\s+sang)?|khoan)\s+(?:khoan\s+)?(chi|thu)\b',
+        clean_folded
+    )
     has_type_change = bool(m_type_change)
 
     if has_new_amount or has_type_change:
@@ -420,7 +444,8 @@ def handle_confirmation_rules(confirmation_transcript: str, pending_draft: Optio
 
     # 2. CONFIRM_SAVE: Clear agreement
     confirm_tokens = {
-        'có', 'co', 'ừ', 'u', 'uh', 'đúng rồi', 'dung roi', 'đúng', 'dung',
+        'có', 'co', 'ừ', 'u', 'uh', 'vâng', 'vang', 'dạ', 'da', 'dạ có', 'da co', 'dạ vâng', 'da vang',
+        'đúng rồi', 'dung roi', 'đúng', 'dung',
         'lưu đi', 'luu di', 'lưu', 'luu', 'ghi đi', 'ghi di', 'ghi', 'ghi vao',
         'ok', 'oke', 'okay', 'chuẩn', 'chuan', 'chuẩn rồi', 'chuan roi',
         'được', 'duoc', 'được rồi', 'duoc roi', 'chính xác', 'chinh xac',
@@ -447,9 +472,10 @@ def handle_confirmation_rules(confirmation_transcript: str, pending_draft: Optio
 
     # 3. RETRY_SPEAK: Clear cancellation or retry request without new data
     retry_tokens = {
-        'không', 'khong', 'không phải', 'khong phai', 'nhầm rồi', 'nham roi',
+        'không', 'khong', 'không phải', 'khong phai', 'không đúng', 'khong dung',
+        'chưa đúng', 'chua dung', 'nhầm rồi', 'nham roi',
         'nhầm', 'nham', 'sai rồi', 'sai roi', 'sai', 'nói lại', 'noi lai',
-        'thôi', 'thoi', 'hủy', 'huy', 'bỏ đi', 'bo di', 'bỏ qua', 'bo qua',
+        'làm lại', 'lam lai', 'thôi', 'thoi', 'hủy', 'huy', 'bỏ đi', 'bo di', 'bỏ qua', 'bo qua',
         'không lưu', 'khong luu', 'đừng lưu', 'dung luu', 'từ từ', 'tu tu',
         'không nhé', 'khong nhe', 'không đâu', 'khong dau', 'không ghi', 'khong ghi'
     }

@@ -64,5 +64,27 @@ class ReceiptAmountTests(unittest.TestCase):
         self.assertEqual(r['date'], '2026-08-08')
 
 
+    def test_bank_transfer_and_discount_receipt(self):
+        bank = (
+            'Chuyển tiền thành công\n-500.000 VND\nTrạng thái\nThành công\n'
+            'Thời gian\n14:22 - 18/11/2026\nMã giao dịch\nFT26325901842\n'
+            'Nội dung\nĐóng tiền điện tháng 11\nPhí giao dịch\n0 VND'
+        )
+        rb = ai.analyze_receipt(bank)
+        self.assertEqual(rb['amount'], 500000)
+        self.assertEqual(rb['date'], '2026-11-18')
+        self.assertEqual(rb['category'], 'utilities')
+        self.assertEqual(rb['description'], 'Đóng tiền điện tháng 11')
+
+        disc = (
+            'TẠP HÓA MINH AN\nNgày: 10/11/2026\nGạo thơm (2 x 120.000) 240.000đ\n'
+            'Tạm tính 240.000đ\nGiảm giá -30.000đ\nThuế VAT 21.000đ\n'
+            'Khách phải thanh toán 231.000đ\nTiền khách đưa 500.000đ\nTiền thừa 269.000đ'
+        )
+        rd = ai.analyze_receipt(disc)
+        self.assertEqual(rd['amount'], 231000)
+        self.assertEqual(rd['date'], '2026-11-10')
+
+
 if __name__ == '__main__':
     unittest.main()

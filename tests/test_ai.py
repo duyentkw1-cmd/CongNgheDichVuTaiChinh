@@ -630,5 +630,13 @@ class CompoundTransactionTests(unittest.TestCase):
         self.assertEqual(items[1]['category'], 'utilities')
 
 
+    def test_stt_slang_and_whisper_punctuation(self):
+        """Multi-word slang ('năm mươi cành'), Whisper grouped trailing periods, and homophones."""
+        self.assertEqual(parse_fields('mua nguyên liệu hết năm mươi cành', stt=True)['amount'], 50000)
+        self.assertEqual(parse_fields('Khách chuyển khoản mua bánh hết 180.000.', stt=True)['amount'], 180000)
+        self.assertEqual(parse_fields('đóng tiền thuê mặt bằng năm chiều rưỡi', stt=True)['amount'], 5500000)
+        self.assertEqual(parse_fields('mua rau bốn trung nhìn', stt=True)['amount'], 40000)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

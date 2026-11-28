@@ -43,12 +43,24 @@ def normalize_stt_text(s):
       ruoi after tram/cham without unit -> ...nam muoi nghin (rưỡi = half)
       Slang: cu/chai = 1M, lit/xi/lop = 100k, canh = 1k
     """
-    # ── 1. "cham" (STT alias of "tram"/trăm = 100) ──
+    # ── 0. Acoustic homophones from Whisper Vietnamese STT ──
+    s = re.sub(r'\bchien\s+(?=trong\b|tram\b|cham\b)', 'chin ', s)
+    s = re.sub(r'\btang\s+(?=tram\b|cham\b)', 'tam ', s)
+    s = re.sub(r'\b(tien|phi|cho|nguoi|tra)\s+sip\b', r'\1 ship', s)
+    s = re.sub(r'\bsipper\b', 'shipper', s)
+    s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+ly\s+(?=tien\b)', r'\1 lit ', s)
+
+    # ── 1. "cham" / "trong" (STT alias of "tram"/trăm = 100) ──
     s = re.sub(r'\b(khong|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin|\d+)\s+cham\b', r'\1 tram', s)
+    s = re.sub(r'\b(mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+trong\b(?=\s*(?:nghin|ngan|nhin|dong|ruoi))', r'\1 tram', s)
+    s = re.sub(r'\b(mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+trung\b(?=\s*(?:nghin|ngan|nhin|dong))', r'\1 chuc', s)
 
     # ── 2. "nhin" (STT alias of "nghin"/nghìn = 1000) ──
-    s = re.sub(r'\b(khong|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin|muoi|tram|\d+)\s+nhin\b', r'\1 nghin', s)
+    s = re.sub(r'\b(khong|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin|muoi|tram|chuc|\d+)\s+nhin\b', r'\1 nghin', s)
     s = re.sub(r'(\d+)\s+nhin\b', r'\1 nghin', s)
+
+    # ── 2.5 "chieu" misheard for "trieu" (when paired with number + money suffix, not time-of-day) ──
+    s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin|muoi)\s+chieu\b(?=\s*(?:ruoi|nghin|ngan|dong|vnd|\d|$))', r'\1 trieu', s)
 
     # ── 3. "tram ruoi" without an explicit nghin/k → add "nam muoi nghin" (50k suffix) ──
     # "sau tram ruoi" → "sau tram nam muoi nghin" (650k)
@@ -79,8 +91,8 @@ def normalize_stt_text(s):
     s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+(?:lit|xi|lop)\b', r'\1 tram nghin', s)
     s = re.sub(r'\b(?:lit|xi|lop)\s+ruoi\b', 'mot tram nam muoi nghin', s)
     s = re.sub(r'\b(?:lit|xi|lop)\b', 'mot tram nghin', s)
-    # canh = 1,000
-    s = re.sub(r'\b(\d+|mot|hai|ba|bon|tu|nam|sau|bay|tam|chin)\s+canh\b', r'\1 nghin', s)
+    # canh / kanh / keng = 1,000 (supports multi-word numbers like 'nam muoi canh')
+    s = re.sub(rf'\b(\d+(?:\s+{WORDS})*|{WORDS}(?:\s+{WORDS})*)\s+(?:canh|kanh|keng)\b', r'\1 nghin', s)
 
     # ── 5. "tram" standalone without nghin/dong in marketplace context (e.g. nam tram = 500k) ──
     s = re.sub(rf'\b(\d+|mot|hai|ba|bon|tu|nam|lam|sau|bay|tam|chin)\s+tram\b(?!\s*(?:nghin|ngan|k\b|dong|vnd|ty|trieu|tr|ruoi|\d|{WORDS}))', r'\1 tram nghin', s)
@@ -258,10 +270,11 @@ def parse_fields(text, stt=False):
             day=date(*map(int,explicit.groups()))
             found_date = True
         else:
-            for m in re.finditer(r'\b(\d{1,2})[/-](\d{1,2})(?:[/-](\d{4}))?\b', s):
+            s_date = re.sub(r'\b(\d{1,2})\s*[/-]\s*(\d)\s+(\d)\s*[/-]\s*(\d{4})\b', r'\1/\2\3/\4', s)
+            for m in re.finditer(r'\b(\d{1,2})[/-](\d{1,2})(?:[/-](\d{4}))?\b', s_date):
                 d_val, m_val, y_val = int(m.group(1)), int(m.group(2)), m.group(3)
-                after = s[m.end():].lstrip()
-                before = s[:m.start()].rstrip()
+                after = s_date[m.end():].lstrip()
+                before = s_date[:m.start()].rstrip()
                 # If no year is specified and followed by a measurement/fraction unit, skip!
                 if not y_val and unit_pattern.match(after):
                     continue
@@ -270,6 +283,8 @@ def parse_fields(text, stt=False):
                     if unit_pattern.match(after):
                         continue
                 year = int(y_val) if y_val else day.year
+                if y_val and year > day.year + 1 and (str(year).startswith('29') or str(year).startswith('209')):
+                    year = int('202' + str(year)[3:]) if str(year).startswith('209') else int('20' + str(year)[2:])
                 day = date(year, m_val, d_val)
                 found_date = True
                 break
@@ -311,9 +326,14 @@ def parse_fields(text, stt=False):
         else:
             values=money_candidates(s)
             if not values:
-                # Unmarked values only after an explicit money cue, never phone/order numbers.
-                cue=re.search(r'(?:so tien|het|gia|thanh tien)\s*[:=]?\s*(\d[\d.,]*)\b',s)
-                values=money_candidates(cue[1],bare=True) if cue else []
+                # Unmarked values after an explicit money/action cue, never phone/order numbers.
+                cue_pat = r'(?:so tien|het|gia|thanh tien|thu|chi|duoc|tra|ton|mat|ban|mua)\s*[:=]?\s*(\d+(?:[.,]\d+)*)' if stt else r'(?:so tien|het|gia|thanh tien)\s*[:=]?\s*(\d+(?:[.,]\d+)*)'
+                cue=re.search(cue_pat, s)
+                values=money_candidates(cue[1].rstrip('.,'),bare=True) if cue else []
+            if not values and stt:
+                # Whisper often formats spoken thousands as grouped decimals ('150.000.', '30,000') without 'đồng'.
+                grouped = re.findall(r'(?<![\w/.-])(\d{1,3}(?:[.,]\d{3})+)(?!\d)', s)
+                values = [int(decimal_number(v)) for v in grouped if 1000 <= decimal_number(v) <= 1000000000000]
             amount=values[0] if len(values)==1 and 0<values[0]<=1000000000000 else None
             if len(values)>1: warnings.append('Có nhiều số tiền. Chưa tự chọn tổng; hãy kiểm tra và nhập một khoản thu/chi.')
         if amount is None: warnings.append('Chưa xác định chắc chắn số tiền VND. Vui lòng bổ sung trước khi lưu.')

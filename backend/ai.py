@@ -208,20 +208,43 @@ def analyze_text(text, stt=False):
         if result['kind']!=kind:
             fields['warnings'].append('Hai mô hình chưa thống nhất Thu/Chi. Đang dùng chiều của danh mục gợi ý; cần kiểm tra.')
         if result['score']<0.25:
-            fields['amount']=None
-            fields['warnings'].append('Nội dung có thể ngoài dữ liệu mô hình đã học. Hãy nhập và kiểm tra thủ công.')
+            fields['warnings'].append('Nội dung có thể ngoài dữ liệu mô hình đã học. Hãy kiểm tra Thu/Chi và số tiền thủ công.')
 
-    from .market_assistant import extract_transaction_rules, format_spoken_vnd
-    market_info = extract_transaction_rules(text)
-    if market_info.get('is_valid_transaction'):
-        if market_info.get('item_summary') and (description == text or not description):
-            description = market_info['item_summary']
-        confirmation_msg = market_info.get('confirmation_message')
+    from .market_assistant import (
+        build_confirmation_message,
+        extract_item_summary,
+        extract_transaction_rules,
+        format_spoken_vnd,
+    )
+    if len(items) > 1:
+        summary_parts = [
+            f"{'thu' if it['kind'] == 'income' else 'chi'} {it['description']} {format_spoken_vnd(it['amount'])}"
+            for it in items[:3]
+        ]
+        extra = f" và {len(items) - 3} khoản khác" if len(items) > 3 else ""
+        confirmation_msg = (
+            f"Tôi nghe được {len(items)} giao dịch: {'; '.join(summary_parts)}{extra}. "
+            f"Bạn có muốn lưu cả {len(items)} giao dịch không?"
+        )
     else:
-        amt_spk = format_spoken_vnd(fields.get('amount')) if fields.get('amount') else 'chưa rõ'
-        t_word = 'được' if kind == 'income' else 'hết'
-        t_verb = 'Bạn bán' if kind == 'income' else 'Bạn mua'
-        confirmation_msg = f"{t_verb} {description} {t_word} {amt_spk}. Bạn có muốn ghi lại thu chi không?"
+        market_info = extract_transaction_rules(text)
+        expected_market_type = 'thu' if kind == 'income' else 'chi'
+        if market_info.get('is_valid_transaction') and market_info.get('type') == expected_market_type:
+            if market_info.get('item_summary') and (description == text or not description):
+                description = market_info['item_summary']
+            confirmation_msg = market_info.get('confirmation_message')
+        elif fields.get('amount') is None:
+            confirmation_msg = (
+                market_info.get('confirmation_message')
+                or 'Tôi chưa nghe rõ khoản thu chi. Bạn nói lại giúp tôi nhé.'
+            )
+        else:
+            if market_info.get('is_valid_transaction') and market_info.get('type') != expected_market_type:
+                fields['warnings'].append('Lưu ý kiểm tra lại khoản Thu hay Chi trước khi lưu.')
+            cleaned_desc = extract_item_summary(description) or description
+            if description == text and cleaned_desc:
+                description = cleaned_desc
+            confirmation_msg = build_confirmation_message(expected_market_type, cleaned_desc, fields['amount'])
 
     res = {**fields,'kind':kind,'category':category,'description':description,
            'confirmation_message': confirmation_msg,
@@ -250,19 +273,20 @@ def clean_image(content):
         raise HTTPException(400,'Ảnh không hợp lệ. Dùng JPG, PNG hoặc WebP dưới 24 megapixel.') from None
 
 
-def _deskew(gray, max_angle=8.0, step=0.5):
-    """Straighten a tilted receipt photo.
-
-    Text rows make the horizontal ink profile spiky when the image is level, so
-    pick the rotation whose row sums have the highest variance. Runs on a small
-    copy, so it costs only a few tens of milliseconds.
-    """
+def _deskew(gray, max_angle=15.0, step=0.5):
+    """Straighten a tilted receipt photo using two-stage coarse-to-fine search."""
     small = gray.copy()
-    small.thumbnail((800, 800))
+    small.thumbnail((700, 700))
     arr = np.asarray(small, dtype=np.float32)
-    ink = Image.fromarray(((arr < arr.mean() * 0.8) * 255).astype(np.uint8))
-    best_angle, best_score = 0.0, -1.0
-    for angle in np.arange(-max_angle, max_angle + 1e-6, step):
+    ink = Image.fromarray(((arr < arr.mean() * 0.82) * 255).astype(np.uint8))
+    coarse_angle, best_score = 0.0, -1.0
+    for angle in np.arange(-max_angle, max_angle + 1e-6, 1.5):
+        rows = (np.asarray(ink.rotate(float(angle), resample=Image.Resampling.NEAREST)) > 0).sum(axis=1)
+        score = float(np.var(rows))
+        if score > best_score:
+            coarse_angle, best_score = float(angle), score
+    best_angle = coarse_angle
+    for angle in np.arange(max(-max_angle, coarse_angle - 1.5), min(max_angle, coarse_angle + 1.5) + 1e-6, step):
         rows = (np.asarray(ink.rotate(float(angle), resample=Image.Resampling.NEAREST)) > 0).sum(axis=1)
         score = float(np.var(rows))
         if score > best_score:
@@ -287,20 +311,25 @@ def _preprocess_for_ocr(im):
         scale = 1400.0 / max(w, h)
         gray = gray.resize((int(w * scale), int(h * scale)), Image.Resampling.LANCZOS)
 
-    results = []
     # Method 1: Gentle autocontrast preserving clean character shapes
     c1 = ImageOps.autocontrast(gray, cutoff=0.5)
-    results.append(c1)
 
-    # Method 2: Contrast enhanced for low-contrast receipt photos
-    enhancer = ImageEnhance.Contrast(c1)
-    results.append(enhancer.enhance(1.4))
+    # Method 2: Local adaptive background normalization for uneven shadows / low light
+    arr_c1 = np.asarray(c1, dtype=np.float32)
+    bg = np.asarray(c1.filter(ImageFilter.BoxBlur(25)), dtype=np.float32)
+    norm_arr = np.clip((arr_c1 / np.maximum(bg, 22.0)) * 238.0, 0, 255).astype(np.uint8)
+    norm_im = ImageOps.autocontrast(Image.fromarray(norm_arr), cutoff=0.5)
 
-    # Method 3: Threshold binarization for receipts with uneven shading
-    arr = np.array(c1)
-    thresh = int(float(np.mean(arr)) * 0.88)
-    binary = c1.point(lambda p: 255 if p > thresh else 0)
-    results.append(binary)
+    # Method 3: Invert white-on-dark banner regions (e.g. bank app headers) without hurting light body
+    bg_wide = np.asarray(c1.filter(ImageFilter.BoxBlur(32)), dtype=np.float32)
+    dark_banner = bg_wide < 130.0
+    has_white_on_dark = bool(np.mean(dark_banner & (arr_c1 > 170.0)) > 0.002)
+    if has_white_on_dark:
+        inv_arr = np.where(dark_banner, 255.0 - arr_c1, norm_arr).astype(np.uint8)
+        m3 = Image.fromarray(inv_arr)
+        return [m3, c1, norm_im]
+    m3 = norm_im.filter(ImageFilter.UnsharpMask(radius=1.1, percent=110, threshold=3))
+    return [c1, norm_im, m3]
 
     return results
 
@@ -336,8 +365,11 @@ _OCR_AMOUNT = re.compile(
 
 
 def _ocr_good_enough(text, score):
-    """A pass is good enough when it reads real text and at least one amount."""
-    return score >= 100 and bool(_OCR_AMOUNT.search(text or ''))
+    """A pass is good enough when it reads real text and a non-zero amount."""
+    if score < 95 or not text:
+        return False
+    amt, _ = receipt_amount(text)
+    return bool(amt and amt > 0)
 
 
 def clean_ocr_noise(text):
@@ -672,6 +704,8 @@ _RECEIPT_VOCAB = (
     'Tên món', 'Thịt heo', 'Thịt bò', 'Thịt gà', 'Nước ngọt', 'Rau cải', 'Dầu ăn', 'Bột mì',
     'Đường cát', 'Khăn lạnh', 'Nấm hương', 'Trứng gà', 'Cà phê', 'Sữa tươi', 'Tôm', 'Thịt',
     'Trứng', 'Nước', 'Gạo', 'Chiên', 'Hương', 'Tươi', 'Quý khách', 'Bớt tiền lẻ',
+    'Tạm tính', 'Thuế VAT', 'Khách phải thanh toán', 'Phí giao dịch', 'Chuyển tiền thành công',
+    'Nhận tiền chuyển khoản', 'Biên lai chuyển khoản', 'Thịt bò', 'Tài khoản', 'Gạo thơm',
     # On receipts these readings dominate the alternatives (bành, thang, ngay, họp).
     'Bánh', 'Tháng', 'Ngày', 'Cái', 'Gói', 'Hộp',
 )
@@ -736,23 +770,27 @@ def correct_receipt_words(text):
 _RECEIPT_TOTAL_LABELS = (
     # (pattern on folded text, priority). Higher priority wins; ties -> later line.
     (r'tong\s*(?:cong|thanh\s*toan|tien\s*thanh\s*toan|so\s*tien|phai\s*tra|gia\s*tri\s*thanh\s*toan)', 4),
+    (r'(?:khach\s*)?(?:can|phai)\s*(?:thanh|chanh)\s*[tr]oan', 4),
     (r'(?:khach\s*)?(?:can|phai)\s*(?:thanh\s*toan|tra)', 4),
     (r'tong\s*(?:tien(?:\s*hang)?|cuoc|gia\s*tri|so)', 3),
-    (r'so\s*tien(?:\s*thanh\s*toan)?', 3),
+    (r'so\s*tien(?:\s*(?:thanh\s*toan|chuyen|nhan|giao\s*dich))?', 3),
     (r'thanh\s*toan', 2),
     (r'cong\s*(?:tien(?:\s*hang)?)?', 1),
     (r'tong', 1),
 )
 # Lines that contain money but are never the transaction amount.
 _RECEIPT_SKIP = re.compile(
-    r'khach\s*dua|tien\s*(?:thua|thoi|tra\s*lai|khach)|thoi\s*lai|tra\s*lai|giam\s*gia|chiet\s*khau'
+    r'khach\s*dua|tien\s*(?:thua|thoi|tra\s*lai|khach)|thoi\s*lai|tra\s*lai|giam\s*gi[a-z]{0,4}|chiet\s*khau'
+    r'|tam\s*tinh|thue\s*vat|\bvat\b|phi\s*giao\s*dich|ma\s*giao\s*dich'
     r'|bang\s*chu|da\s*(?:tra|thanh\s*toan)\s*truoc|con\s*no|\bma\b|\bmst\b|\bsdt\b|dien\s*thoai'
     r'|\bkwh\b|\bm3\b|trong\s*luong|\bso\s*:|so\s*phieu|\bms\b|hotline|\bdt\b|doanh\s*so|tich\s*luy'
     r'|khuyen\s*mai|\bkm\b|bot\s*tien|tien\s*le')
 # Item lines, ignoring headers/footers; used for the description.
 _RECEIPT_META = re.compile(
-    r'tong|thanh\s*toan|thanh\s*tien|so\s*tien|ngay|gio|thu\s*ngan|dia\s*chi|hinh\s*thuc|tien\s*mat'
-    r'|chuyen\s*khoan|cam\s*on|hen\s*gap|\bvat\b|thue|\bban\s*:|khach|\bdc\b|tien\s*hang')
+    r'tong|thanh\s*toan|thanh\s*tien|so\s*tien|tam\s*tinh|giam\s*gi[a-z]{0,4}|ngay|ng[a-z]{1,3}y|gio'
+    r'|thu\s*ngan|dia\s*chi|hinh\s*thuc|tien\s*mat|chuyen\s*khoan|chuyen\s*tien|nhan\s*tien'
+    r'|phi\s*giao\s*dich|ma\s*giao\s*dich|trang\s*thai|thoi\s*gian|cam\s*on|hen\s*gap'
+    r'|\bvat\b|thue|\bban\s*:|khach|\bdc\b|tien\s*hang')
 # Phone numbers, invoice numbers and tax codes: long digit runs without
 # thousand separators. Real amounts on receipts are printed with separators.
 _RECEIPT_ID_NUMBER = re.compile(r'(?<![\d.,])\d{7,}(?![\d.,])')
@@ -766,17 +804,19 @@ def receipt_amount(text):
         folded = fold(line)
         if _RECEIPT_SKIP.search(folded):
             continue
-        values = [v for v in money_candidates(folded, bare=True) if 0 < v <= 1_000_000_000_000]
+        # Strip leading +/- on bank transfer screenshot amounts (e.g. '-500.000 VND', '+850.000 VND')
+        folded_amt = re.sub(r'(?:^|\s)[+-](?=\d{1,3}(?:[.,]\d{3})+)', ' ', folded)
+        folded_amt = _RECEIPT_ID_NUMBER.sub(' ', folded_amt)
+        values = [v for v in money_candidates(folded_amt, bare=True) if 0 < v <= 1_000_000_000_000]
         if not values:
             continue
-        fallback.extend(v for v in money_candidates(_RECEIPT_ID_NUMBER.sub(' ', folded), bare=True)
-                        if 0 < v <= 1_000_000_000_000)
+        fallback.extend(values)
         labels = [(re.search(r'\b' + p + r'\b', folded), prio) for p, prio in _RECEIPT_TOTAL_LABELS]
         # OCR often drops the "T" of a line-initial "Tổng:" -> "“ổng : 360,000".
         labels.append((re.match(r'^\W{0,3}ong\b(?=\s*[:;])', folded), 2))
         for m, priority in labels:
             if m:
-                after = [v for v in money_candidates(folded[m.end():], bare=True) if v > 0]
+                after = [v for v in money_candidates(folded_amt[m.end():], bare=True) if v > 0]
                 amount = (after or values)[-1]
                 if best is None or (priority, i) > best[:2]:
                     best = (priority, i, amount)
@@ -786,40 +826,56 @@ def receipt_amount(text):
     return (max(fallback), False) if fallback else (None, False)
 
 
+_CURRENCY_WORDS = {'vnd', 'dong', 'd', 'k', 'tr', 'trieu', 'nghin', 'ngan'}
+
+
 def _receipt_item_name(line):
     """Item name from a receipt row such as "Bánh da nem 1 chiếc 4,000 4,000" or
     "3 | Tôm chiên xù | 3 | 300.000 | 900.000": the leading words before the
     first number. Rows must end with a price."""
+    if re.search(r'\d{1,2}\s*[/-]\s*\d{1,2}', line):
+        return None
     if not re.search(r'\d[\d.,]*\s*(?:đ|d|vnd|k)?\W{0,3}$', line, re.IGNORECASE):
         return None
     words = []
     for token in re.split(r'[\s|]+', line):
-        word = token.strip('.,:;!?()[]{}“”"\'`‘’-_*')
+        word = token.strip('.,:;!?()[]{}""\'`‘‘’-_*')
+        if not word:
+            continue
         if re.fullmatch(r'[^\W\d_]+', word):
+            if fold(word) in _CURRENCY_WORDS:
+                break
             if not words and len(word) == 1:
                 continue  # stray OCR mark before the name ("i", "l", "v")
             words.append(word)
         elif words:
             break
+        elif re.search(r'\d', word) and not re.fullmatch(r'\d{1,2}', word):
+            return None  # line starts with price/amount (e.g. '+850.000 VND'), not an item
     name = ' '.join(words[:6])
     return name if len(name.replace(' ', '')) >= 3 else None
-
 
 def receipt_description(text):
     """Return (description shown to the user, candidate texts for the classifier)."""
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
     explicit = None
-    for line in lines:
+    for idx, line in enumerate(lines):
         # Match on the accent-free form so OCR accent errors ("Lý do chị:") still
         # match; NFC keeps one character per letter so indexes line up.
         nfc = unicodedata.normalize('NFC', line)
-        m = re.match(r'^\s*(?:noi\s*dung|ly\s*do(?:\s*(?:chi|thu))?|dien\s*giai|ghi\s*chu|ve\s*viec)\s*[:：;]\s*',
-                     fold(nfc))
-        if m and len(nfc) - m.end() >= 3:
-            explicit = nfc[m.end():].strip()
-            break
+        folded_line = fold(nfc)
+        m = re.match(r'^\s*(?:noi\s*dung(?:\s*chuyen\s*(?:khoan|tien))?|ly\s*do(?:\s*(?:chi|thu))?|dien\s*giai|ghi\s*chu|ve\s*viec)\s*[:：;]?\s*',
+                     folded_line)
+        if m:
+            rest = nfc[m.end():].strip()
+            if len(rest) >= 3:
+                explicit = rest
+                break
+            if idx + 1 < len(lines) and len(lines[idx + 1].strip()) >= 3:
+                explicit = lines[idx + 1].strip()
+                break
     title = next((ln for ln in lines[:6] if re.search(
-        r'\b(hoa don|phieu|bien (?:lai|nhan))\b', fold(ln))), '')
+        r'\b(hoa don|phieu|bien (?:lai|nhan)|chuyen (?:tien|khoan)|nhan tien)\b', fold(ln))), '')
     store = next((ln for ln in lines[:4] if re.search(
         r'\b(cua hang|tiem|quan|sieu thi|nha thuoc|dich vu|cong ty)\b', fold(ln))), '')
     items = []
@@ -831,7 +887,10 @@ def receipt_description(text):
         if name:
             items.append(name)
     if explicit:
-        return explicit[:300], [explicit]
+        cands = [explicit]
+        if title:
+            cands.append(f'{title} {explicit}')
+        return explicit[:300], cands
     # "Hóa đơn bán lẻ" is printed by the seller; for the person scanning it this is
     # a purchase, so do not let the word "bán" push the classifier toward sales.
     title_for_model = 'Hóa đơn mua hàng' if re.search(r'hoa\s*don\s*ban', fold(title)) else title
@@ -872,13 +931,16 @@ def analyze_receipt(text):
     kind = CATEGORIES[category][1]
     if result['needs_review']:
         warnings.append('Mô hình chưa chắc danh mục. Hãy chọn lại nhóm phù hợp trước khi lưu.')
-    t_word = 'được' if kind == 'income' else 'hết'
-    t_verb = 'Bạn bán' if kind == 'income' else 'Bạn mua'
-    from .market_assistant import format_spoken_vnd
-    amt_spk = format_spoken_vnd(amount) if amount else 'chưa rõ'
+    from .market_assistant import build_confirmation_message, extract_item_summary
+    if amount is None:
+        confirmation_msg = 'Chưa đọc rõ tổng tiền trên chứng từ. Bạn kiểm tra và nhập số tiền giúp tôi nhé.'
+    else:
+        tx_type = 'thu' if kind == 'income' else 'chi'
+        cleaned_desc = extract_item_summary(description) or description
+        confirmation_msg = build_confirmation_message(tx_type, cleaned_desc, amount)
     return {**fields, 'amount': amount, 'warnings': warnings, 'kind': kind, 'category': category,
             'description': description,
-            'confirmation_message': f'{t_verb} {description} {t_word} {amt_spk}. Bạn có muốn ghi lại thu chi không?',
+            'confirmation_message': confirmation_msg,
             'scope': 'business', 'raw_text': text, 'engine': 'local', 'providers': ['finance_local'],
             'classification': result}
 
@@ -982,6 +1044,12 @@ def decode_audio(content):
         raise HTTPException(422,'Bản ghi quá ngắn. Hãy ghi một câu đầy đủ khoảng 5–10 giây rồi thử lại.')
     if float(np.mean(audio**2))<1e-7:
         raise HTTPException(422,'Bản ghi gần như im lặng. Hãy nghe lại, kiểm tra micro đã chọn và ghi một câu rõ tiếng.')
+    audio = audio - float(np.mean(audio))
+    peak = float(np.max(np.abs(audio)))
+    if 0.0 < peak < 0.35:
+        rms = float(np.sqrt(np.mean(audio**2)))
+        gain = min(0.75 / peak, 0.12 / max(rms, 1e-4))
+        audio = np.clip(audio * max(1.0, gain), -0.95, 0.95).astype(np.float32)
     return audio
 
 
@@ -994,21 +1062,20 @@ def speech(content):
         # and concrete money examples helps Whisper produce correct number words.
         initial_prompt = (
             'Ghi chép thu chi bằng tiếng Việt. '
-            'Mua nguyên liệu sáu trăm nghìn đồng, trả tiền mặt. '
-            'Thu tiền bán hàng hai triệu rưỡi, chuyển khoản. '
-            'Chi phí thuê mặt bằng ba triệu năm trăm nghìn. '
-            'Trả lương nhân viên, tiền điện nước, vận chuyển. '
-            'Một nghìn, mười nghìn, một trăm nghìn, một triệu đồng. '
-            'Vốn kinh doanh, vay ngân hàng, chi tiêu cá nhân. '
-            'Nghìn, triệu, đồng, VND, tiền mặt, chuyển khoản.'
+            'Mua nguyên liệu hết năm mươi cành, bốn chục nghìn, 50k, trả tiền mặt. '
+            'Bán hàng được một triệu hai trăm nghìn đồng, hai củ rưỡi, hai lít tiền rau, chuyển khoản. '
+            'Đóng tiền điện tám trăm nghìn, thuê mặt bằng năm triệu rưỡi, trả tiền ship cho shipper. '
+            'Vay ngân hàng, hoàn tiền cho khách, trả lương nhân viên, sửa xe, bán ve chai, 150.000 đồng.'
         )
         segments,info=speech_model().transcribe(
-            audio,language='vi',beam_size=5,vad_filter=True,
+            audio,language='vi',beam_size=2,vad_filter=True,
+            vad_parameters=dict(min_silence_duration_ms=400,speech_pad_ms=200),
             condition_on_previous_text=False,
-            temperature=[0.0, 0.2, 0.4, 0.6],
+            temperature=[0.0, 0.2],
+            repetition_penalty=1.15,
             initial_prompt=initial_prompt,
             word_timestamps=False,
-            no_speech_threshold=0.5,
+            no_speech_threshold=0.55,
         )
         # More lenient no_speech_prob filter (0.8 instead of 0.65)
         # to avoid discarding valid Vietnamese segments with background noise

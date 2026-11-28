@@ -124,14 +124,14 @@ class TestMarketAssistant(unittest.TestCase):
         }
 
         # 1. CONFIRM_SAVE
-        for phrase in ["ừ", "có", "uh", "đúng rồi", "lưu đi", "ghi đi", "ok", "chuẩn"]:
+        for phrase in ["ừ", "có", "uh", "vâng", "dạ có", "đúng rồi", "lưu đi", "ghi đi", "ok", "chuẩn"]:
             res = handle_confirmation_rules(phrase, draft)
             self.assertEqual(res["action"], "CONFIRM_SAVE", f"Failed for {phrase}")
             self.assertIn("Đã lưu", res["reply_message"])
             self.assertEqual(res["updated_draft"]["amount"], 500000)
 
         # 2. RETRY_SPEAK
-        for phrase in ["không", "không phải", "nhầm rồi", "nói lại", "thôi", "hủy"]:
+        for phrase in ["không", "không phải", "nhầm rồi", "nói lại", "làm lại", "chưa đúng", "thôi", "hủy"]:
             res = handle_confirmation_rules(phrase, draft)
             self.assertEqual(res["action"], "RETRY_SPEAK", f"Failed for {phrase}")
             # RETRY_SPEAK must clear the draft
@@ -188,6 +188,48 @@ class TestMarketAssistant(unittest.TestCase):
         res3 = market_confirm(req3)
         self.assertEqual(res3["action"], "UPDATE_AND_CONFIRM")
         self.assertEqual(res3["updated_draft"]["amount"], 450000)
+
+
+    def test_confirmation_message_edge_cases(self):
+        from backend.ai import analyze_text
+
+        # 1. Sample voice sentence must not leak dangling "hết ,"
+        r_sample = analyze_text("Hôm nay mua nguyên liệu hết sáu trăm nghìn, trả tiền mặt.", stt=True)
+        self.assertEqual(r_sample["amount"], 600000)
+        self.assertNotIn("hết ,", r_sample["confirmation_message"])
+        self.assertEqual(
+            r_sample["confirmation_message"],
+            "Bạn mua nguyên liệu, trả tiền mặt hết 600 nghìn đồng. Bạn có muốn ghi lại thu chi không?",
+        )
+
+        # 2. Slang "2 lít" in non-liquid phrase must be stripped from item_summary
+        r_slang = extract_transaction_rules("Bán được 2 lít tiền rau")
+        self.assertEqual(r_slang["amount"], 200000)
+        self.assertNotIn("2 lít", r_slang["item_summary"])
+        self.assertNotIn("2 lít", r_slang["confirmation_message"])
+        self.assertNotIn("được được", r_slang["confirmation_message"])
+
+        # 3. No verb + amount via ML fallback ("Cà phê 30k") must not duplicate "30k"
+        r_coffee = analyze_text("Cà phê 30k", stt=True)
+        self.assertEqual(r_coffee["amount"], 30000)
+        self.assertNotIn("30k", r_coffee["confirmation_message"])
+        self.assertIn("30 nghìn đồng", r_coffee["confirmation_message"])
+
+        # 4. Noise / no-amount input must ask to repeat instead of "hết chưa rõ"
+        r_noise = analyze_text("Alo alo nghe rõ không", stt=True)
+        self.assertIsNone(r_noise["amount"])
+        self.assertNotIn("chưa rõ", r_noise["confirmation_message"])
+        self.assertEqual(
+            r_noise["confirmation_message"],
+            "Tôi chưa nghe rõ khoản thu chi. Bạn nói lại giúp tôi nhé.",
+        )
+
+        # 5. Multi-item speech summarizes all items instead of mixing amounts
+        r_multi = analyze_text("Sáng bán cá 200k, chiều mua rau 50k", stt=True)
+        self.assertEqual(len(r_multi.get("items", [])), 2)
+        self.assertIn("2 giao dịch", r_multi["confirmation_message"])
+        self.assertIn("200 nghìn đồng", r_multi["confirmation_message"])
+        self.assertIn("50 nghìn đồng", r_multi["confirmation_message"])
 
 
 if __name__ == "__main__":

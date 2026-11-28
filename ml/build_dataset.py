@@ -291,6 +291,141 @@ SEEDS_V3 = {
   'Đóng phí bảo trì thang máy', 'Mua đồng phục cho nhân viên'],
 }
 
+# v4: semantic boundary seeds (directionality Thu vs Chi, colloquial market
+# phrasing, short service notes, symmetric refund/deposit/debt pairs, durable
+# equipment vs consumable stock). Written to avoid duplicating challenge.csv
+# or independent_eval.csv.
+SEEDS_V4 = {
+ 'sales': [
+  'Bà Tư lấy năm ký bún trả tiền', 'Anh Minh mua hai hộp cơm sườn trả tiền',
+  'Cô Mai lấy ba ký cam trả tiền', 'Chú Bảy lấy mười gói mì trả tiền mặt',
+  'Khách chuyển khoản đặt trước tiền mua bánh', 'Khách cọc tiền đặt giỏ quà tết',
+  'Bán lẻ mười ly nước ép buổi trưa', 'Chốt đơn bán sáu bộ áo thun cho khách',
+  'Khách quen trả nợ tiền hàng mua hôm qua', 'Thu tiền bán trái cây gọt sẵn tại quầy',
+  'Tiền bán hàng trên sàn thương mại điện tử về ví', 'Đơn hàng bán đồ gia dụng đã thu tiền',
+  'Bán hết hai khay xôi mặn buổi sáng', 'Khách mua hai chục cái nem chua trả tiền',
+  'Thu tiền bán trà tắc và bánh tráng trộn', 'Khách chuyển khoản mua hai ký chả lụa',
+  'Bán buôn năm lốc sữa tươi thu tiền', 'Khách lấy hàng tại sạp thanh toán đủ',
+  'Doanh thu bán hàng ăn vặt cả buổi tối', 'Bán được mấy ký tôm sú cho nhà hàng',
+  'Khách trả tiền mua bó hoa tươi', 'Thu tiền đơn đặt hàng bánh kem của khách',
+  'Bán năm ký cam sành cho khách quen', 'Tiền thu bán hàng tạp hóa buổi chiều'],
+ 'service': [
+  'Vá ruột xe cho khách', 'Cắt tóc nam', 'Gội đầu thư giãn', 'Giặt ủi quần áo',
+  'Bơm hơi bánh xe cho khách', 'Sửa bình nóng lạnh cho nhà anh Tuấn lấy công',
+  'Sửa máy bơm nước cho nhà cô Sáu lấy tiền', 'Thu hộ phí giao hàng cho khách giúp người gửi',
+  'Thu tiền công chạy việc giao nhận giúp khách', 'Nhận làm thuê dịch vụ trang trí tiệc cưới',
+  'Thu tiền công tháo lắp máy lạnh cho khách', 'Thay màn hình tivi cho khách lấy tiền công',
+  'Nhận tiền công sửa chữa đồ gỗ tại nhà', 'Khách trả tiền làm tóc uốn duỗi nhuộm',
+  'Thu tiền dịch vụ đánh bóng xe hơi', 'Nhận công chỉnh sửa quần áo cho khách',
+  'Thu phí trông giữ xe máy theo ngày', 'Khách trả tiền thuê thợ chụp ảnh sự kiện',
+  'Nhận tiền công cài phần mềm cho khách', 'Thu phí dịch vụ sửa ống khói bếp cho khách',
+  'Làm móng chân đắp bột cho khách thu tiền', 'Thay pin điện thoại cho khách lấy công',
+  'Nhận tiền vệ sinh sofa tại nhà khách', 'Thu tiền công hàn khung sắt cho khách'],
+ 'capital': [
+  'Vay nóng tiền để nhập trái cây về bán', 'Vay tín chấp lấy vốn nhập lô hàng mới',
+  'Mượn tiền người quen để nhập thêm cá thịt', 'Vay tiền bạn bè xoay vòng nhập hàng hóa',
+  'Rút tiền tiết kiệm cá nhân bỏ vào vốn quán', 'Chủ hộ rút sổ tiết kiệm đầu tư mở sạp',
+  'Hùn vốn chung với anh em mở tiệm ăn', 'Góp vốn thêm với bạn mở quán trà sữa',
+  'Mẹ ruột cho mượn tiền làm vốn buôn bán', 'Chị gái chuyển tiền cho mượn bổ sung vốn',
+  'Vay vốn ngân hàng thương mại đầu tư cửa hàng', 'Nhận giải ngân khoản vay kinh doanh nhỏ',
+  'Bỏ tiền riêng của chủ quán vào quỹ nhập hàng', 'Nạp thêm vốn lưu động vào két tiền mặt',
+  'Vay tiền từ người thân để mở rộng kho hàng', 'Nhận tiền góp vốn cổ phần từ đối tác',
+  'Mượn tạm tiền gia đình xoay sở vốn tiệm', 'Vay quỹ tín dụng nhân dân làm vốn buôn bán',
+  'Chồng góp thêm vốn cho vợ bán hàng ngoài chợ', 'Vay tiền trả góp bổ sung nguồn vốn nhập đồ',
+  'Nhận tiền hỗ trợ vốn khởi nghiệp từ gia đình', 'Đem tiền dành dụm bỏ vào làm vốn cửa hàng',
+  'Vay ngân hàng chính sách xã hội lấy vốn', 'Bổ sung nguồn vốn kinh doanh đầu tháng'],
+ 'other_income': [
+  'Bán đống chai nhựa và giấy bìa phế liệu', 'Bán phế liệu gom trong kho',
+  'Bán đồng nát phế liệu dọn cửa hàng', 'Thanh lý kệ sắt trưng bày cũ không dùng',
+  'Thanh lý máy tính bàn cũ của quán', 'Bán thanh lý bàn ghế cũ dư dùng',
+  'Nhà cung cấp chuyển khoản hoàn lại tiền hàng thiếu', 'Đại lý hoàn tiền chiết khấu hàng bị lỗi',
+  'Sàn thương mại hoàn trả tiền đơn hàng bị hủy', 'Hãng trả lại tiền khuyến mãi trưng bày',
+  'Được hoàn lại tiền cọc thuê mặt bằng về quỹ', 'Được hoàn tiền phí dịch vụ thu thừa',
+  'Thu hồi tiền đã cho người quen vay trước kia', 'Bạn cũ chuyển trả khoản nợ mượn năm ngoái',
+  'Đơn vị bảo hiểm chi trả tiền bồi thường sự cố', 'Khách hàng đền bù tiền làm vỡ đồ của quán',
+  'Đơn vị giao hàng bồi thường tiền hàng thất lạc', 'Nhận tiền lãi tài khoản tiết kiệm ngân hàng',
+  'Ngân hàng cộng tiền lãi số dư hàng tháng', 'Cho thuê lại một góc sạp dư thu tiền',
+  'Thu tiền cho người khác thuê lại chỗ để xe dư', 'Nhận lại tiền cọc vỏ bình nước của đại lý',
+  'Được nhận khoản trợ cấp hỗ trợ tiểu thương', 'Bán phế liệu thùng xốp cũ không dùng'],
+ 'materials': [
+  'Mua ly giấy ống hút và hộp đựng bán nước', 'Mua túi nilon và hộp nhựa đựng thức ăn mang về',
+  'Mua bao bì túi bóng đựng hàng bán cho khách', 'Mua màng bọc thực phẩm và hộp giấy bán đồ ăn',
+  'Chuyển khoản trả tiền hàng cho nhà cung cấp', 'Trả tiền nhập hàng cho nhà cung cấp',
+  'Đi chợ đầu mối lấy nông sản về chế biến', 'Thanh toán tiền hàng nhập kho từ đại lý',
+  'Lấy mấy thùng nước giải khát từ kho sỉ về bán', 'Mua nguyên liệu bột đường sữa để làm bánh',
+  'Mua thịt heo cá tươi về nấu món ăn bán', 'Nhập gạo nếp đậu xanh về bán tại sạp',
+  'Mua gia vị dầu ăn hạt nêm cho bếp quán', 'Lấy lô hàng quần áo từ xưởng may về bán',
+  'Mua trái cây tươi về xay sinh tố bán cho khách', 'Nhập mì gói bánh kẹo từ nhà phân phối',
+  'Mua trà khô trân châu và siro pha chế đồ uống', 'Lấy hàng hải sản tươi từ ghe về bán',
+  'Mua trứng gà trứng vịt về bán lẻ ngoài chợ', 'Nhập vật tư tiêu hao bao tay giấy ăn cho quán',
+  'Mua cà phê hạt và sữa đặc pha bán hàng ngày', 'Lấy hàng tạp hóa các loại về bày kệ bán',
+  'Mua than đá củi lửa phục vụ nấu nướng bán hàng', 'Nhập bia nước ngọt từ đại lý giao tới'],
+ 'rent': [
+  'Nộp tiền chỗ ngồi bán hàng tại chợ truyền thống', 'Đóng lệ phí chỗ bán hàng ngoài chợ cho ban quản lý',
+  'Chuyển khoản tiền thuê mặt bằng hàng tháng cho chủ nhà', 'Trả tiền thuê sạp bán thịt cá trong chợ',
+  'Đóng tiền thuê ki ốt bán hàng tại chợ đầu mối', 'Thanh toán tiền thuê gian hàng trong siêu thị',
+  'Gia hạn tiền thuê kho bãi chứa hàng hóa', 'Đặt cọc thuê mặt bằng mới để mở rộng tiệm',
+  'Trả tiền thuê nhà nguyên căn mở cửa hàng', 'Thuê vỉa hè trước nhà bày bán buổi sáng',
+  'Nộp tiền thuê quầy bán hàng lưu động cuối tuần', 'Chuyển tiền thuê chỗ bán cà phê vỉa hè',
+  'Thanh toán hợp đồng thuê xưởng sản xuất theo quý', 'Trả chủ trọ tiền thuê ki ốt kinh doanh',
+  'Đóng tiền thuê mặt tiền cửa hàng tháng này', 'Thuê thêm phòng bên cạnh làm kho chứa đồ',
+  'Trả phí thuê bãi đỗ xe giao hàng của tiệm', 'Nộp tiền thuê lô sạp bán quần áo chợ đêm',
+  'Thanh toán tiền thuê mặt bằng quý hai cho chủ', 'Chi tiền thuê sạp rau củ tại chợ phường',
+  'Trả tiền thuê chỗ đặt tủ bán nước mía', 'Đóng phí thuê địa điểm bán hàng hội chợ',
+  'Chuyển khoản tiền nhà thuê làm tiệm tóc', 'Gia hạn hợp đồng thuê cửa hàng thêm một năm'],
+ 'utilities': [
+  'Đóng tiền điện kinh doanh tháng này cho điện lực', 'Thanh toán hóa đơn tiền điện ba pha của xưởng',
+  'Nộp tiền nước sinh hoạt và phí thu gom rác', 'Đóng tiền nước máy theo đồng hồ cho cửa hàng',
+  'Trả cước internet cáp quang wifi cho tiệm', 'Gia hạn gói cước mạng viễn thông của quán',
+  'Nạp tiền điện thoại di động để gọi giao hàng', 'Đóng cước điện thoại bàn cố định tại quầy',
+  'Mua gói data di động dùng cho máy quẹt thẻ', 'Thanh toán tiền điện nước mặt bằng hàng tháng',
+  'Đóng phí vệ sinh môi trường và tiền rác chợ', 'Trả tiền điện chạy tủ đông bảo quản hàng',
+  'Thanh toán cước truyền hình cáp cho quán ăn', 'Nộp tiền điện chiếu sáng khu vực bán hàng',
+  'Chuyển khoản đóng tiền nước sạch hàng tháng', 'Trả phí thuê bao đường truyền mạng bán hàng',
+  'Đóng hóa đơn tiền điện nước của sạp chợ', 'Nạp thẻ cào điện thoại liên lạc với khách',
+  'Thanh toán tiền điện tháng trước còn thiếu', 'Trả tiền internet và truyền hình cho cửa hàng',
+  'Đóng phí cấp thoát nước hàng tháng của tiệm', 'Thanh toán cước viễn thông di động trả sau',
+  'Chi tiền điện điều hòa nhiệt độ cho quán', 'Nộp hóa đơn điện lực qua ví điện tử'],
+ 'shipping': [
+  'Trả tiền ship cho tài xế giao hàng cho khách', 'Thanh toán phí giao hàng tiết kiệm đơn online',
+  'Gửi chành xe lô hàng đi các tỉnh miền Tây', 'Trả cước nhà xe gửi thùng hàng về quê',
+  'Thuê xe ba gác chở hàng hóa từ chợ về kho', 'Thuê xe tải nhỏ chở nguyên liệu về cửa hàng',
+  'Trả tiền xe ôm giao gấp đơn hàng cho khách', 'Thanh toán phí chuyển phát nhanh bưu điện',
+  'Cước gửi bưu kiện hàng bán qua bưu cục', 'Phí vận chuyển hàng nhập từ nhà cung cấp',
+  'Trả tiền cước xe khách chở hàng lên phố', 'Thuê shipper giao mười đơn hàng trong ngày',
+  'Trả phí giao hàng nội thành qua ứng dụng công nghệ', 'Chi tiền chở hàng ra bến xe gửi đi tỉnh',
+  'Phí ship hàng hoàn trả về lại kho cửa hàng', 'Trả công cho người chở hàng thuê bằng xe máy',
+  'Thanh toán cước vận tải đường bộ lô hàng mới', 'Thuê xe lôi chở rau quả từ đầu mối về sạp',
+  'Chi phí giao đồ ăn tận nơi cho khách đặt', 'Trả phí gửi hàng hỏa tốc cho khách ở xa',
+  'Thanh toán tiền bốc dỡ và vận chuyển hàng hóa', 'Cước phí giao nhận đơn hàng thương mại điện tử',
+  'Trả tiền xe chở hàng từ cảng cá về chợ', 'Phí chuyển hàng liên tỉnh qua đơn vị vận tải'],
+ 'salary': [
+  'Trả lương hàng tháng cho nhân viên bán hàng', 'Phát lương cuối tháng cho bạn phụ quán',
+  'Ứng trước tiền lương giữa tháng cho thợ phụ', 'Trả tiền công theo ca cho nhân viên thu ngân',
+  'Thưởng doanh số bán hàng cho nhân viên xuất sắc', 'Chi tiền thưởng lễ tết cho người làm trong tiệm',
+  'Trả tiền công người rửa chén dọn dẹp quán ăn', 'Thanh toán tiền công cho thợ sửa chữa chính',
+  'Trả lương nhân viên pha chế và phục vụ bàn', 'Chi tiền công tăng ca buổi tối cho nhân viên',
+  'Trả tiền công người bốc xếp dỡ hàng hóa nhập', 'Thanh toán lương công nhật cho lao động thời vụ',
+  'Trả lương cho nhân viên giữ xe trước cửa hàng', 'Chi phụ cấp ăn trưa chuyên cần cho nhân viên',
+  'Trả tiền công người phụ bếp nấu ăn hàng ngày', 'Thanh toán tiền lương bảo vệ ca đêm của tiệm',
+  'Trả công cho bạn sinh viên làm bán thời gian', 'Chi lương cho nhân viên đóng gói giao đơn hàng',
+  'Trả tiền công người trông coi sạp hàng buổi trưa', 'Thanh toán lương cho kế toán làm bán thời gian',
+  'Thưởng thêm tiền công làm ngày lễ cho nhân viên', 'Trả lương thợ may gia công tại xưởng nhỏ',
+  'Chi tiền công thuê người đứng bán hộ một ngày', 'Ứng tiền công cho nhân viên giao hàng của quán'],
+ 'other_expense': [
+  'Hoàn tiền lại cho khách do giao sai mẫu hàng', 'Bồi thường cho khách do làm hỏng đồ của họ',
+  'Trả lại tiền cọc cho người thuê cũ rời sạp', 'Thanh toán kỳ nợ vay vốn hàng tháng',
+  'Trả nợ tiền gốc khoản vay kinh doanh', 'Trả lại tiền đã mượn của bạn bè tháng trước',
+  'Trả tiền lãi vay vốn định kỳ hàng tháng', 'Chi sửa tủ lạnh bị hỏng tại cửa hàng',
+  'Sửa máy lạnh bị chảy nước của quán', 'Sửa chữa tủ đông và bếp gas của tiệm',
+  'Bảo dưỡng xe đẩy hàng và máy pha cà phê', 'Mua máy quét mã vạch và hộp đựng tiền quầy',
+  'Sắm bộ dao thớt xoong nồi mới cho bếp quán', 'Mua đồ lau dọn thùng đựng rác vệ sinh tiệm',
+  'Mua bàn ghế nhựa và kệ trưng bày cho tiệm', 'Mua tủ mát và máy xay dùng trong bếp quán',
+  'Làm biển hiệu mới và mua dù che nắng cho sạp', 'Mua văn phòng phẩm sổ sách ghi chép quầy',
+  'Đóng thuế môn bài và thuế khoán kinh doanh', 'Nộp tiền thuế hộ kinh doanh hàng quý',
+  'Chạy quảng cáo mạng xã hội và in tờ rơi phát', 'Thanh toán phí duy trì phần mềm quản lý bán hàng',
+  'Trả phí dịch vụ kế toán và phí ngân hàng', 'Đóng bảo hiểm cháy nổ và phí kiểm định cân'],
+}
 # ── Augmentation helpers ───────────────────────────────────────────────
 
 # Common OCR errors for Vietnamese text
@@ -317,7 +452,7 @@ SPEECH_NOISE_MAP = {
     'lương': ['luong', 'lướng'],
     'hàng': ['hang', 'hàn'],
     'nhập': ['nhap', 'nhặp'],
-    'trả': ['tra', 'trà'],
+    'trả': ['tra', 'trà', 'chả'],
     'phí': ['phi', 'phì'],
     'tiệm': ['tiêm', 'tiem'],
     'quán': ['quan', 'quàn'],
@@ -442,17 +577,21 @@ def build():
     rows = []
     rng = random.Random(20261021)
     rng_v3 = random.Random(20261125)  # separate stream so v2 rows stay identical
+    rng_v4 = random.Random(20261128)
     for category, base_seeds in SEEDS.items():
         assert len(base_seeds) == 24, category
-        seeds = base_seeds + SEEDS_V3.get(category, [])
+        seeds = base_seeds + SEEDS_V3.get(category, []) + SEEDS_V4.get(category, [])
         for i, seed in enumerate(seeds):
             if i < 24:  # v2 seeds keep their original split
                 split = 'train' if i < 16 else 'validation' if i < 20 else 'test'
-            else:  # v3 seeds: 4 train, 1 validation, 1 test out of every 6
+            elif i < 48:  # v3 seeds: 4 train, 1 validation, 1 test out of every 6
                 k = (i - 24) % 6
                 split = 'train' if k < 4 else 'validation' if k == 4 else 'test'
+            else:  # v4 seeds: 4 train, 1 validation, 1 test out of every 6
+                k = (i - 48) % 6
+                split = 'train' if k < 4 else 'validation' if k == 4 else 'test'
             group = f'{category}-{i:02}'
-            g = rng if i < 24 else rng_v3
+            g = rng if i < 24 else rng_v3 if i < 48 else rng_v4
             amount = g.choice([85000, 150000, 350000, 650000, 1200000, 2500000])
             # ── Core variants (backward compatible) ──
             variants = [
@@ -479,9 +618,10 @@ def build():
                 # OCR noise variants
                 variants.append(_ocr_noise(f'{seed} {amount:,} đồng'.replace(',', '.'), g, 0.15))
                 variants.append(_ocr_noise(f'{seed} {amount:,} VND'.replace(',', '.'), g, 0.25))
-                # Speech noise variants
+                # Speech noise & colloquial typo variants
                 variants.append(_speech_noise(f'{seed.lower()} {amount // 1000} nghìn', g, 0.3))
                 variants.append(_speech_noise(f'hôm nay {seed.lower()} {amount} đồng', g, 0.4))
+                variants.append(_speech_noise(f'{seed.lower()} {amount // 1000}k', g, 0.5))
                 # Stripped diacritics (simulating no-accent Vietnamese / STT output)
                 variants.append(f'{_strip_diacritics(seed)} {amount} dong')
                 variants.append(f'{_strip_diacritics(seed.lower())} het {amount // 1000} nghin')
@@ -491,6 +631,9 @@ def build():
                 variants.append(_word_dropout(f'Hôm nay {seed.lower()} hết {amount:,} đồng chuyển khoản'.replace(',', '.'), g))
                 # Word shuffle (mild)
                 variants.append(_shuffle_words(f'{seed} hết {amount // 1000} nghìn tiền mặt', g))
+                # Terse short notes (common in quick manual/voice entries)
+                variants.append(f'{seed.lower()}')
+                variants.append(f'{_strip_diacritics(seed.lower())} {amount // 1000}k')
             elif split == 'validation':
                 # Fewer augmentations for validation — still unseen patterns
                 variants.append(f'ghi nhé: {seed.lower()} {amount:,} đồng'.replace(',', '.'))
@@ -508,7 +651,7 @@ def build():
                 rows.append({'id': f'{group}-{j}', 'text': text,
                              'kind': 'income' if category in INCOME else 'expense',
                              'category': category, 'group_id': group, 'split': split,
-                             'origin': 'synthetic_authored_template_v2' if i < 24 else 'synthetic_authored_template_v3'})
+                             'origin': 'synthetic_authored_template_v2' if i < 24 else 'synthetic_authored_template_v3' if i < 48 else 'synthetic_authored_template_v4'})
     fields = list(rows[0])
     for split in ('train', 'validation', 'test'):
         with (out / f'{split}.csv').open('w', encoding='utf-8-sig', newline='') as f:
